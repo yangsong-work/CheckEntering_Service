@@ -110,7 +110,7 @@ public class APPWebController {
         Map map = appService.getDetails(detailRequest);
         return ResponseUtil.ok(map);
     }
-    /*
+    /**
      *   根据警号查询警员信息
      * */
     @PostMapping(value = "/checkpoliceInfo")

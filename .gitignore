@@ -21,6 +21,7 @@ target/
 out
 gen
 .log
+.error
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

@@ -67,11 +67,10 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
         String IDCard = verifyIDCardRequest.getpCardNo();
         // 人证核验
-        //TODO  国家常量
-        if (verifyIDCardRequest.getCheckFrom() == 0) {
+        if (verifyIDCardRequest.getCheckFrom() == 0&&verifyIDCardRequest.getCompareStatus()==1) {
             String compareValue = verifyIDCardRequest.getCompareValue();
             //TODO 测试代码 上线删除
-            UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
+           // UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
             String score = UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getDeviceScore();
             int compareResult = compareValue.compareTo(score);
             if (compareResult < 0) {
@@ -167,6 +166,10 @@ public class CheckEnterServiceImpl implements CheckEnterService {
      */
     @Override
     public Object verifyOcr(VerifyOcrRequest ocrRequest) {
+
+        Properties p = new Properties();
+        ocrRequest.setNationality(p.getProperty(ocrRequest.getNationality()));
+
         CheckForeignPersonInfoRequest infoRequest = new CheckForeignPersonInfoRequest();
         infoRequest.setGj(ocrRequest.getNationality());
         infoRequest.setZjlb(ocrRequest.getCardType());
@@ -314,15 +317,15 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             e.printStackTrace();
         }
         Map map = JSONObject.parseObject(data, Map.class);
-        if (!"200".equals(map.get("code"))) {
-            log.info("核录桩登录失败:{}" + map.get("code"));
+        if ( 200 !=((Integer)map.get("code"))) {
+            log.info("核录桩登录失败: {}" , map.get("code"));
         }
         Map dataMap = (Map) map.get("data");
         Integer status = (Integer) dataMap.get("status");
         if (status == 1) {
             log.info("核录桩登录成功");
         } else {
-            log.info("核录桩登录失败:{}" + status);
+            log.info("核录桩登录失败: {}" , status);
         }
         String verifyScore = (String) dataMap.get("verifyScore");
         if (!StringUtils.isBlank(verifyScore)) {

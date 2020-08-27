@@ -31,6 +31,9 @@ public class VerifyIDCardRequest {
     @NotBlank(message = "证件号不能为空")
     private String pCardNo;
 
+    @NotNull(message = "人工核验状态不能为空")
+    private Integer compareStatus;
+
     public String getDeviceNo() {
         return deviceNo;
     }
@@ -79,6 +82,14 @@ public class VerifyIDCardRequest {
         this.pCardNo = pCardNo;
     }
 
+    public Integer getCompareStatus() {
+        return compareStatus;
+    }
+
+    public void setCompareStatus(Integer compareStatus) {
+        this.compareStatus = compareStatus;
+    }
+
     @Override
     public String toString() {
         return "VerifyIDCardRequest{" +
@@ -88,6 +99,7 @@ public class VerifyIDCardRequest {
                 ", compareValue='" + compareValue + '\'' +
                 ", checkFrom=" + checkFrom +
                 ", pCardNo='" + pCardNo + '\'' +
+                ", compareStatus=" + compareStatus +
                 '}';
     }
 }
