@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.CheckAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.CheckAddress" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="key_info" property="key" jdbcType="VARCHAR" />
+    <result column="tree_type" property="treeType" jdbcType="INTEGER" />
+    <result column="value_info" property="value" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="BIGINT" />
+    <result column="update_date" property="updateDate" jdbcType="BIGINT" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, del_flag, description, key_info, tree_type, value_info, level, parent_id, latitude, 
+    longitude, create_date, update_date, create_user, update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_check_address
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tbl_check_address
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.CheckAddress" >
+    insert into tbl_check_address (id, del_flag, description, 
+      key_info, tree_type, value_info, 
+      level, parent_id, latitude, 
+      longitude, create_date, update_date, 
+      create_user, update_user)
+    values (#{id,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, 
+      #{key,jdbcType=VARCHAR}, #{treeType,jdbcType=INTEGER}, #{value,jdbcType=VARCHAR}, 
+      #{level,jdbcType=INTEGER}, #{parentId,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{createDate,jdbcType=BIGINT}, #{updateDate,jdbcType=BIGINT}, 
+      #{createUser,jdbcType=VARCHAR}, #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.CheckAddress" >
+    insert into tbl_check_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="key != null" >
+        key_info,
+      </if>
+      <if test="treeType != null" >
+        tree_type,
+      </if>
+      <if test="value != null" >
+        value_info,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="treeType != null" >
+        #{treeType,jdbcType=INTEGER},
+      </if>
+      <if test="value != null" >
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=BIGINT},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckAddress" >
+    update tbl_check_address
+    <set >
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        key_info = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="treeType != null" >
+        tree_type = #{treeType,jdbcType=INTEGER},
+      </if>
+      <if test="value != null" >
+        value_info = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=BIGINT},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=BIGINT},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.CheckAddress" >
+    update tbl_check_address
+    set del_flag = #{delFlag,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      key_info = #{key,jdbcType=VARCHAR},
+      tree_type = #{treeType,jdbcType=INTEGER},
+      value_info = #{value,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=BIGINT},
+      update_date = #{updateDate,jdbcType=BIGINT},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectForLevelByParentId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <!--    <include refid="Base_Column_List" />-->
+    id,value_info,parent_id,latitude,longitude
+    from tbl_check_address
+    where parent_id = #{parentId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectParentLevel" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    id,value_info,parent_id,latitude,longitude
+    from tbl_check_address
+    where parent_id is NULL
+  </select>
+
+  <insert id="insertBatch" parameterType="list" >
+    insert into tbl_check_address (id,del_flag,description,key_info,tree_type,value_info,level,parent_id,latitude,longitude,create_date,update_date,create_user,update_user)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.id},#{item.delFlag},#{item.description},#{item.key},#{item.treeType},#{item.value},#{item.level},#{item.parentId},#{item.latitude},#{item.longitude},
+      #{item.createDate},#{item.updateDate},#{item.createUser},#{item.updateUser})
+    </foreach>
+  </insert>
+
+</mapper>

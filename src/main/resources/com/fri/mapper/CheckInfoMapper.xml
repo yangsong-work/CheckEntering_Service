@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.CheckInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.CheckInfo" >
+    <id column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+    <result column="source_cn" property="sourceCn" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="xzqh" property="xzqh" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="guo_ji" property="guoJi" jdbcType="VARCHAR" />
+    <result column="house_holds" property="houseHolds" jdbcType="VARCHAR" />
+    <result column="guo_ji_en" property="guoJiEn" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="minzu" property="minzu" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="card_type_cn" property="cardTypeCn" jdbcType="VARCHAR" />
+    <result column="guo_ji_cn" property="guoJiCn" jdbcType="VARCHAR" />
+    <result column="cuo_hao" property="cuoHao" jdbcType="VARCHAR" />
+    <result column="minzu_cn" property="minzuCn" jdbcType="VARCHAR" />
+    <result column="xzqh_cn" property="xzqhCn" jdbcType="VARCHAR" />
+    <result column="sex_cn" property="sexCn" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.fri.model.CheckInfo" extends="BaseResultMap" >
+    <result column="zp" property="zp" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    card_number, source_cn, source, card_type, xzqh, flag, guo_ji, house_holds, guo_ji_en, 
+    sex, minzu, name, card_type_cn, guo_ji_cn, cuo_hao, minzu_cn, xzqh_cn, sex_cn
+  </sql>
+  <sql id="Blob_Column_List" >
+    zp
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tbl_check_info
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tbl_check_info
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.CheckInfo" >
+    insert into tbl_check_info (card_number, source_cn, source, 
+      card_type, xzqh, flag, 
+      guo_ji, house_holds, guo_ji_en, 
+      sex, minzu, name, card_type_cn, 
+      guo_ji_cn, cuo_hao, minzu_cn, 
+      xzqh_cn, sex_cn, zp
+      )
+    values (#{cardNumber,jdbcType=VARCHAR}, #{sourceCn,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
+      #{cardType,jdbcType=VARCHAR}, #{xzqh,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR}, 
+      #{guoJi,jdbcType=VARCHAR}, #{houseHolds,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{minzu,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR}, 
+      #{guoJiCn,jdbcType=VARCHAR}, #{cuoHao,jdbcType=VARCHAR}, #{minzuCn,jdbcType=VARCHAR}, 
+      #{xzqhCn,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{zp,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.CheckInfo" >
+    insert into tbl_check_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardNumber != null" >
+        card_number,
+      </if>
+      <if test="sourceCn != null" >
+        source_cn,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="xzqh != null" >
+        xzqh,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="guoJi != null" >
+        guo_ji,
+      </if>
+      <if test="houseHolds != null" >
+        house_holds,
+      </if>
+      <if test="guoJiEn != null" >
+        guo_ji_en,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="minzu != null" >
+        minzu,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cardTypeCn != null" >
+        card_type_cn,
+      </if>
+      <if test="guoJiCn != null" >
+        guo_ji_cn,
+      </if>
+      <if test="cuoHao != null" >
+        cuo_hao,
+      </if>
+      <if test="minzuCn != null" >
+        minzu_cn,
+      </if>
+      <if test="xzqhCn != null" >
+        xzqh_cn,
+      </if>
+      <if test="sexCn != null" >
+        sex_cn,
+      </if>
+      <if test="zp != null" >
+        zp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceCn != null" >
+        #{sourceCn,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqh != null" >
+        #{xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJi != null" >
+        #{guoJi,jdbcType=VARCHAR},
+      </if>
+      <if test="houseHolds != null" >
+        #{houseHolds,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiEn != null" >
+        #{guoJiEn,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="minzu != null" >
+        #{minzu,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeCn != null" >
+        #{cardTypeCn,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiCn != null" >
+        #{guoJiCn,jdbcType=VARCHAR},
+      </if>
+      <if test="cuoHao != null" >
+        #{cuoHao,jdbcType=VARCHAR},
+      </if>
+      <if test="minzuCn != null" >
+        #{minzuCn,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqhCn != null" >
+        #{xzqhCn,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCn != null" >
+        #{sexCn,jdbcType=VARCHAR},
+      </if>
+      <if test="zp != null" >
+        #{zp,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckInfo" >
+    update tbl_check_info
+    <set >
+      <if test="sourceCn != null" >
+        source_cn = #{sourceCn,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqh != null" >
+        xzqh = #{xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJi != null" >
+        guo_ji = #{guoJi,jdbcType=VARCHAR},
+      </if>
+      <if test="houseHolds != null" >
+        house_holds = #{houseHolds,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiEn != null" >
+        guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="minzu != null" >
+        minzu = #{minzu,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeCn != null" >
+        card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiCn != null" >
+        guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      </if>
+      <if test="cuoHao != null" >
+        cuo_hao = #{cuoHao,jdbcType=VARCHAR},
+      </if>
+      <if test="minzuCn != null" >
+        minzu_cn = #{minzuCn,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqhCn != null" >
+        xzqh_cn = #{xzqhCn,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCn != null" >
+        sex_cn = #{sexCn,jdbcType=VARCHAR},
+      </if>
+      <if test="zp != null" >
+        zp = #{zp,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.fri.model.CheckInfo" >
+    update tbl_check_info
+    set source_cn = #{sourceCn,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      xzqh = #{xzqh,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR},
+      guo_ji = #{guoJi,jdbcType=VARCHAR},
+      house_holds = #{houseHolds,jdbcType=VARCHAR},
+      guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      minzu = #{minzu,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+      guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      cuo_hao = #{cuoHao,jdbcType=VARCHAR},
+      minzu_cn = #{minzuCn,jdbcType=VARCHAR},
+      xzqh_cn = #{xzqhCn,jdbcType=VARCHAR},
+      sex_cn = #{sexCn,jdbcType=VARCHAR},
+      zp = #{zp,jdbcType=LONGVARCHAR}
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.CheckInfo" >
+    update tbl_check_info
+    set source_cn = #{sourceCn,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      xzqh = #{xzqh,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=VARCHAR},
+      guo_ji = #{guoJi,jdbcType=VARCHAR},
+      house_holds = #{houseHolds,jdbcType=VARCHAR},
+      guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      minzu = #{minzu,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+      guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      cuo_hao = #{cuoHao,jdbcType=VARCHAR},
+      minzu_cn = #{minzuCn,jdbcType=VARCHAR},
+      xzqh_cn = #{xzqhCn,jdbcType=VARCHAR},
+      sex_cn = #{sexCn,jdbcType=VARCHAR}
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </update>
+  <!--无则插入。有则更改-->
+  <insert id="insertUser"  useGeneratedKeys="true" keyProperty="cardNumber" keyColumn="card_number"
+          parameterType="com.fri.model.CheckInfo">
+    insert INTO
+    tbl_check_info (card_number, source_cn, source,
+    card_type, xzqh, flag,
+    guo_ji, house_holds, guo_ji_en,
+    sex, minzu, name, card_type_cn,
+    guo_ji_cn, cuo_hao, minzu_cn,
+    xzqh_cn, sex_cn, zp
+    )
+    values (#{cardNumber,jdbcType=VARCHAR}, #{sourceCn,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR},
+    #{cardType,jdbcType=VARCHAR}, #{xzqh,jdbcType=VARCHAR}, #{flag,jdbcType=VARCHAR},
+    #{guoJi,jdbcType=VARCHAR}, #{houseHolds,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR},
+    #{sex,jdbcType=VARCHAR}, #{minzu,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR},
+    #{guoJiCn,jdbcType=VARCHAR}, #{cuoHao,jdbcType=VARCHAR}, #{minzuCn,jdbcType=VARCHAR},
+    #{xzqhCn,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{zp,jdbcType=LONGVARCHAR}
+    )
+    ON DUPLICATE KEY UPDATE
+    source_cn = #{sourceCn,jdbcType=VARCHAR},
+    source = #{source,jdbcType=VARCHAR},
+    card_type = #{cardType,jdbcType=VARCHAR},
+    xzqh = #{xzqh,jdbcType=VARCHAR},
+    flag = #{flag,jdbcType=VARCHAR},
+    guo_ji = #{guoJi,jdbcType=VARCHAR},
+    house_holds = #{houseHolds,jdbcType=VARCHAR},
+    guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+    sex = #{sex,jdbcType=VARCHAR},
+    minzu = #{minzu,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR},
+    card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+    guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+    cuo_hao = #{cuoHao,jdbcType=VARCHAR},
+    minzu_cn = #{minzuCn,jdbcType=VARCHAR},
+    xzqh_cn = #{xzqhCn,jdbcType=VARCHAR},
+    sex_cn = #{sexCn,jdbcType=VARCHAR},
+    zp = #{zp,jdbcType=VARCHAR}
+
+  </insert>
+
+</mapper>

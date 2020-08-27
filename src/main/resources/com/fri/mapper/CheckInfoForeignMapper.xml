@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.CheckInfoForeignMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.CheckInfoForeign" >
+    <id column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+    <result column="birth_day" property="birthDay" jdbcType="VARCHAR" />
+    <result column="guo_ji_en" property="guoJiEn" jdbcType="VARCHAR" />
+    <result column="guo_ji" property="guoJi" jdbcType="VARCHAR" />
+    <result column="guo_ji_cn" property="guoJiCn" jdbcType="VARCHAR" />
+    <result column="identify" property="identify" jdbcType="VARCHAR" />
+    <result column="foreigner_name" property="foreignerName" jdbcType="VARCHAR" />
+    <result column="sex_cn" property="sexCn" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="card_type_cn" property="cardTypeCn" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    card_number, birth_day, guo_ji_en, guo_ji, guo_ji_cn, identify, foreigner_name, sex_cn, 
+    sex, card_type, card_type_cn
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_check_info_foreign
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tbl_check_info_foreign
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.CheckInfoForeign" >
+    insert into tbl_check_info_foreign (card_number, birth_day, guo_ji_en, 
+      guo_ji, guo_ji_cn, identify, 
+      foreigner_name, sex_cn, sex, 
+      card_type, card_type_cn)
+    values (#{cardNumber,jdbcType=VARCHAR}, #{birthDay,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR}, 
+      #{guoJi,jdbcType=VARCHAR}, #{guoJiCn,jdbcType=VARCHAR}, #{identify,jdbcType=VARCHAR}, 
+      #{foreignerName,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.CheckInfoForeign" >
+    insert into tbl_check_info_foreign
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="cardNumber != null" >
+        card_number,
+      </if>
+      <if test="birthDay != null" >
+        birth_day,
+      </if>
+      <if test="guoJiEn != null" >
+        guo_ji_en,
+      </if>
+      <if test="guoJi != null" >
+        guo_ji,
+      </if>
+      <if test="guoJiCn != null" >
+        guo_ji_cn,
+      </if>
+      <if test="identify != null" >
+        identify,
+      </if>
+      <if test="foreignerName != null" >
+        foreigner_name,
+      </if>
+      <if test="sexCn != null" >
+        sex_cn,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardTypeCn != null" >
+        card_type_cn,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="birthDay != null" >
+        #{birthDay,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiEn != null" >
+        #{guoJiEn,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJi != null" >
+        #{guoJi,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiCn != null" >
+        #{guoJiCn,jdbcType=VARCHAR},
+      </if>
+      <if test="identify != null" >
+        #{identify,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignerName != null" >
+        #{foreignerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCn != null" >
+        #{sexCn,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeCn != null" >
+        #{cardTypeCn,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckInfoForeign" >
+    update tbl_check_info_foreign
+    <set >
+      <if test="birthDay != null" >
+        birth_day = #{birthDay,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiEn != null" >
+        guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJi != null" >
+        guo_ji = #{guoJi,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiCn != null" >
+        guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      </if>
+      <if test="identify != null" >
+        identify = #{identify,jdbcType=VARCHAR},
+      </if>
+      <if test="foreignerName != null" >
+        foreigner_name = #{foreignerName,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCn != null" >
+        sex_cn = #{sexCn,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeCn != null" >
+        card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.CheckInfoForeign" >
+    update tbl_check_info_foreign
+    set birth_day = #{birthDay,jdbcType=VARCHAR},
+      guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+      guo_ji = #{guoJi,jdbcType=VARCHAR},
+      guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      identify = #{identify,jdbcType=VARCHAR},
+      foreigner_name = #{foreignerName,jdbcType=VARCHAR},
+      sex_cn = #{sexCn,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      card_type_cn = #{cardTypeCn,jdbcType=VARCHAR}
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </update>
+
+  <!--无则插入。有则更改-->
+  <insert id="insertUser"  useGeneratedKeys="true" keyProperty="cardNumber" keyColumn="card_number"
+          parameterType="com.fri.model.CheckInfoForeign">
+    insert into tbl_check_info_foreign (card_number, birth_day, guo_ji_en,
+    guo_ji, guo_ji_cn, identify,
+    foreigner_name, sex_cn, sex,
+    card_type, card_type_cn)
+    values (#{cardNumber,jdbcType=VARCHAR}, #{birthDay,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR},
+    #{guoJi,jdbcType=VARCHAR}, #{guoJiCn,jdbcType=VARCHAR}, #{identify,jdbcType=VARCHAR},
+    #{foreignerName,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},
+    #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR})
+
+    ON DUPLICATE KEY UPDATE
+
+    guo_ji_en = #{guoJiEn,jdbcType=VARCHAR},
+    guo_ji = #{guoJi,jdbcType=VARCHAR},
+    guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+    identify = #{identify,jdbcType=VARCHAR},
+    foreigner_name = #{foreignerName,jdbcType=VARCHAR},
+    sex_cn = #{sexCn,jdbcType=VARCHAR},
+    sex = #{sex,jdbcType=VARCHAR},
+    card_type = #{cardType,jdbcType=VARCHAR},
+    card_type_cn = #{cardTypeCn,jdbcType=VARCHAR}
+
+  </insert>
+</mapper>

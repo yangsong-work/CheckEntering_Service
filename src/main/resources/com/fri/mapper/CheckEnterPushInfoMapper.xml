@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.CheckEnterPushInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.CheckEnterPushInfo" >
+    <id column="police_id_card" property="policeIDCard" jdbcType="VARCHAR" />
+    <id column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="pad_id" property="padId" jdbcType="VARCHAR" />
+    <result column="check_number" property="checkNumber" jdbcType="INTEGER" />
+    <result column="verify_number" property="verifyNumber" jdbcType="INTEGER" />
+    <result column="warning_number" property="warningNumber" jdbcType="INTEGER" />
+    <result column="red_warning_number" property="redWarningNumber" jdbcType="INTEGER" />
+    <result column="yellow_warning_number" property="yellowWarningNumber" jdbcType="INTEGER" />
+    <result column="green_warning_number" property="greenWarningNumber" jdbcType="INTEGER" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    police_id_card, created_time, pad_id, check_number, verify_number, warning_number, 
+    red_warning_number, yellow_warning_number, green_warning_number, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.fri.model.CheckEnterPushInfoKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_check_enter_push
+    where police_id_card = #{policeIDCard,jdbcType=VARCHAR}
+      and created_time = #{createdTime,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.fri.model.CheckEnterPushInfoKey" >
+    delete from tbl_check_enter_push
+    where police_id_card = #{policeIDCard,jdbcType=VARCHAR}
+      and created_time = #{createdTime,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.CheckEnterPushInfo" >
+    insert into tbl_check_enter_push (police_id_card, created_time, pad_id, 
+      check_number, verify_number, warning_number, 
+      red_warning_number, yellow_warning_number, 
+      green_warning_number, updated_time)
+    values (#{policeIDCard,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{padId,jdbcType=VARCHAR}, 
+      #{checkNumber,jdbcType=INTEGER}, #{verifyNumber,jdbcType=INTEGER}, #{warningNumber,jdbcType=INTEGER}, 
+      #{redWarningNumber,jdbcType=INTEGER}, #{yellowWarningNumber,jdbcType=INTEGER}, 
+      #{greenWarningNumber,jdbcType=INTEGER}, #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.CheckEnterPushInfo" >
+    insert into tbl_check_enter_push
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="policeIDCard != null" >
+        police_id_card,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="padId != null" >
+        pad_id,
+      </if>
+      <if test="checkNumber != null" >
+        check_number,
+      </if>
+      <if test="verifyNumber != null" >
+        verify_number,
+      </if>
+      <if test="warningNumber != null" >
+        warning_number,
+      </if>
+      <if test="redWarningNumber != null" >
+        red_warning_number,
+      </if>
+      <if test="yellowWarningNumber != null" >
+        yellow_warning_number,
+      </if>
+      <if test="greenWarningNumber != null" >
+        green_warning_number,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="policeIDCard != null" >
+        #{policeIDCard,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="padId != null" >
+        #{padId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkNumber != null" >
+        #{checkNumber,jdbcType=INTEGER},
+      </if>
+      <if test="verifyNumber != null" >
+        #{verifyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="warningNumber != null" >
+        #{warningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="redWarningNumber != null" >
+        #{redWarningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="yellowWarningNumber != null" >
+        #{yellowWarningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="greenWarningNumber != null" >
+        #{greenWarningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckEnterPushInfo" >
+    update tbl_check_enter_push
+    <set >
+      <if test="padId != null" >
+        pad_id = #{padId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkNumber != null" >
+        check_number = #{checkNumber,jdbcType=INTEGER},
+      </if>
+      <if test="verifyNumber != null" >
+        verify_number = #{verifyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="warningNumber != null" >
+        warning_number = #{warningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="redWarningNumber != null" >
+        red_warning_number = #{redWarningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="yellowWarningNumber != null" >
+        yellow_warning_number = #{yellowWarningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="greenWarningNumber != null" >
+        green_warning_number = #{greenWarningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where police_id_card = #{policeIDCard,jdbcType=VARCHAR}
+      and created_time = #{createdTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.CheckEnterPushInfo" >
+    update tbl_check_enter_push
+    set pad_id = #{padId,jdbcType=VARCHAR},
+      check_number = #{checkNumber,jdbcType=INTEGER},
+      verify_number = #{verifyNumber,jdbcType=INTEGER},
+      warning_number = #{warningNumber,jdbcType=INTEGER},
+      red_warning_number = #{redWarningNumber,jdbcType=INTEGER},
+      yellow_warning_number = #{yellowWarningNumber,jdbcType=INTEGER},
+      green_warning_number = #{greenWarningNumber,jdbcType=INTEGER},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where police_id_card = #{policeIDCard,jdbcType=VARCHAR}
+      and created_time = #{createdTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateRecord" parameterType="com.fri.model.CheckEnterPushInfo">
+    update tbl_check_enter_push
+    check_number = #{checkNumber,jdbcType=INTEGER},
+    verify_number = #{verifyNumber,jdbcType=INTEGER},
+    warning_number = #{warningNumber,jdbcType=INTEGER},
+    red_warning_number = #{redWarningNumber,jdbcType=INTEGER},
+    yellow_warning_number = #{yellowWarningNumber,jdbcType=INTEGER},
+    green_warning_number = #{greenWarningNumber,jdbcType=INTEGER},
+    updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where police_id_card = #{policeIDCard,jdbcType=VARCHAR}
+    and
+    DATE_FORMAT(created_time,'%Y%m%d') = DATE_FORMAT(#{createdTime},'%Y%m%d')
+
+
+  </update>
+</mapper>

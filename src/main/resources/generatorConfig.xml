@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry
+            location="D:\Users\86130\.m2\repository\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar"/>
+    <context id="sqlserverTables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+
+
+            <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/checkenter?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true"
+                        userId="root" password="root"/>
+        <javaModelGenerator targetPackage="com.fri.model"
+                            targetProject="src/main/java"/>
+        <sqlMapGenerator targetPackage="com.fri.mapper"
+                         targetProject="src/main/resources"/>
+        <javaClientGenerator targetPackage="com.fri.dao"
+                             targetProject="src/main/java" type="XMLMAPPER"/>
+        <!-- shema 数据库 tableName表名 -->
+<!--        		 <table schema="checkenter" tableName="tbl_login_police" domainObjectName="PoliceLoginRecord"-->
+<!--        				enableCountByExample="false"-->
+<!--        				enableUpdateByExample="false"-->
+<!--        				enableDeleteByExample="false"-->
+<!--        				enableSelectByExample="false"-->
+<!--        				selectByExampleQueryId="false"-->
+<!--        		 >-->
+
+<!--        			 <columnOverride column="police_id_card" property = "policeIDCard"/>-->
+<!--        			 &lt;!&ndash; 使用property属性来指定列要生成的属性名称 &ndash;&gt;-->
+
+<!--        			 <columnOverride column="created_time" javaType = "java.time.LocalDateTime"/>-->
+<!--        			 <columnOverride column="updated_time"  javaType = "java.time.LocalDateTime"/>-->
+<!--        			 <columnOverride column="login_time"  javaType = "java.time.LocalDateTime"/>-->
+<!--        			 <columnOverride column="logout_time"  javaType = "java.time.LocalDateTime"/>-->
+
+<!--        		 </table>-->
+
+        <!--			<table schema="checkenter" tableName="tbl_check_address" domainObjectName="CheckAddress"-->
+        <!--				enableCountByExample="false"-->
+        <!--				enableUpdateByExample="false"-->
+        <!--				enableDeleteByExample="false"-->
+        <!--				enableSelectByExample="false"-->
+        <!--				selectByExampleQueryId="false"-->
+        <!--		 >-->
+        <!--						 <columnOverride column="key_info" property = "key"/>-->
+        <!--						 <columnOverride column="value_info" property = "value"/>-->
+        <!--		 </table>-->
+
+
+<!--        <table schema="checkenter" tableName="tbl_check_enter_push" domainObjectName="CheckEnterPushInfo"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"-->
+<!--        >-->
+<!--            <columnOverride column="created_time" javaType="java.time.LocalDateTime"/>-->
+<!--            <columnOverride column="updated_time" javaType="java.time.LocalDateTime"/>-->
+<!--            <columnOverride column="police_id_card" property = "policeIDCard"/>-->
+<!--        </table>-->
+<!--        <table schema="checkenter" tableName="tbl_check_image" domainObjectName="CheckImage"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"-->
+<!--        ></table>-->
+
+<!--		<table schema="checkenter" tableName="tbl_check_info" domainObjectName="CheckInfo"-->
+<!--			   enableCountByExample="false"-->
+<!--			   enableUpdateByExample="false"-->
+<!--			   enableDeleteByExample="false"-->
+<!--			   enableSelectByExample="false"-->
+<!--			   selectByExampleQueryId="false"-->
+
+<!--		>-->
+<!--            <columnOverride column="zp" javaType = "java.lang.String"/>-->
+<!--		</table>-->
+<!--        <table schema="checkenter" tableName="test1" domainObjectName="Test1"-->
+<!--			   enableCountByExample="false"-->
+<!--			   enableUpdateByExample="false"-->
+<!--			   enableDeleteByExample="false"-->
+<!--			   enableSelectByExample="false"-->
+<!--			   selectByExampleQueryId="false"-->
+
+<!--		>-->
+<!--		</table>-->
+<!--        <table schema="checkenter" tableName="tbl_check_warn_info" domainObjectName="CheckWarnInfo"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"-->
+<!--        >-->
+
+<!--            <columnOverride column="key_info" property = "key"/>-->
+<!--            <columnOverride column="value_info" property = "value"/>-->
+<!--            <columnOverride column="order_info" property = "order"/>-->
+<!--        </table>-->
+<!--		<table schema="checkenter" tableName="tbl_check_info_foreign" domainObjectName="CheckInfoForeign"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"-->
+<!--        >-->
+<!--        </table>-->
+        <table schema="checkenter" tableName="tbl_police_info" domainObjectName="PoliceInfo"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
+
+        >
+        </table>
+
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.Test1Mapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.Test1" >
+    <result column="key" property="key" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.fri.model.Test1" extends="BaseResultMap" >
+    <result column="ttt" property="ttt" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Blob_Column_List" >
+    ttt
+  </sql>
+  <insert id="insert" parameterType="com.fri.model.Test1" >
+    insert into test1 (key, ttt)
+    values (#{key,jdbcType=VARCHAR}, #{ttt,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.Test1" >
+    insert into test1
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="key != null" >
+        key,
+      </if>
+      <if test="ttt != null" >
+        ttt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="key != null" >
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="ttt != null" >
+        #{ttt,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="select1" resultMap="BaseResultMap" resultType="String">
+    select ttt  from test1 where keyv = #{key}
+  </select>
+</mapper>

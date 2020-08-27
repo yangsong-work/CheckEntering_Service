@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.CheckWarnInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.CheckWarnInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="card_number" property="cardNumber" jdbcType="VARCHAR" />
+    <result column="key_info" property="key" jdbcType="VARCHAR" />
+    <result column="order_info" property="order" jdbcType="VARCHAR" />
+    <result column="value_info" property="value" jdbcType="VARCHAR" />
+    <result column="disposal_way" property="disposalWay" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="resource_name" property="resourceName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, card_number, key_info, order_info, value_info, disposal_way, color, resource_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_check_warn_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_check_warn_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.CheckWarnInfo" >
+    insert into tbl_check_warn_info (id, card_number, key_info, 
+      order_info, value_info, disposal_way, 
+      color, resource_name)
+    values (#{id,jdbcType=BIGINT}, #{cardNumber,jdbcType=VARCHAR}, #{key,jdbcType=VARCHAR}, 
+      #{order,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{disposalWay,jdbcType=VARCHAR}, 
+      #{color,jdbcType=VARCHAR}, #{resourceName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.CheckWarnInfo" >
+    insert into tbl_check_warn_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cardNumber != null" >
+        card_number,
+      </if>
+      <if test="key != null" >
+        key_info,
+      </if>
+      <if test="order != null" >
+        order_info,
+      </if>
+      <if test="value != null" >
+        value_info,
+      </if>
+      <if test="disposalWay != null" >
+        disposal_way,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="resourceName != null" >
+        resource_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="cardNumber != null" >
+        #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="order != null" >
+        #{order,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="disposalWay != null" >
+        #{disposalWay,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceName != null" >
+        #{resourceName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckWarnInfo" >
+    update tbl_check_warn_info
+    <set >
+      <if test="cardNumber != null" >
+        card_number = #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        key_info = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="order != null" >
+        order_info = #{order,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        value_info = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="disposalWay != null" >
+        disposal_way = #{disposalWay,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceName != null" >
+        resource_name = #{resourceName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.CheckWarnInfo" >
+    update tbl_check_warn_info
+    set card_number = #{cardNumber,jdbcType=VARCHAR},
+      key_info = #{key,jdbcType=VARCHAR},
+      order_info = #{order,jdbcType=VARCHAR},
+      value_info = #{value,jdbcType=VARCHAR},
+      disposal_way = #{disposalWay,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      resource_name = #{resourceName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByCardNumber" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select value,color from tbl_check_warn_info where card_number = #{cardNumber}
+  </select>
+
+  <delete id="deleteByCardNumber" parameterType="java.lang.String">
+    delete from tbl_check_warn_info
+    where card_number = #{cardNumber,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertBatch" parameterType="list">
+    insert into tbl_check_warn_info ( card_number, key_info,
+    order_info, value_info, disposal_way,
+    color)
+    VALUES
+    <foreach collection="list" item="item" separator=",">
+      (#{item.cardNumber,jdbcType=VARCHAR}, #{item.key,jdbcType=VARCHAR},
+      #{item.order}, #{item.value,jdbcType=VARCHAR}, #{item.disposalWay,jdbcType=VARCHAR},
+      #{item.color,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.PoliceLoginRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.PoliceLoginRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="police_name" property="policeName" jdbcType="VARCHAR" />
+    <result column="police_number" property="policeNumber" jdbcType="VARCHAR" />
+    <result column="police_id_card" property="policeIDCard" jdbcType="VARCHAR" />
+    <result column="police_org" property="policeOrg" jdbcType="VARCHAR" />
+    <result column="pad_id" property="padId" jdbcType="VARCHAR" />
+    <result column="device_no" property="deviceNo" jdbcType="VARCHAR" />
+    <result column="device_score" property="deviceScore" jdbcType="VARCHAR" />
+    <result column="lon" property="lon" jdbcType="VARCHAR" />
+    <result column="lat" property="lat" jdbcType="VARCHAR" />
+    <result column="check_address" property="checkAddress" jdbcType="VARCHAR" />
+    <result column="check_reason" property="checkReason" jdbcType="VARCHAR" />
+    <result column="check_task" property="checkTask" jdbcType="VARCHAR" />
+    <result column="verifyScore" property="verifyscore" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="logout_time" property="logoutTime" jdbcType="TIMESTAMP" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, police_name, police_number, police_id_card, police_org, pad_id, device_no, device_score, 
+    lon, lat, check_address, check_reason, check_task, verifyScore, login_time, logout_time, 
+    created_time, updated_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_login_police
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_login_police
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.PoliceLoginRecord" >
+    insert into tbl_login_police (id, police_name, police_number, 
+      police_id_card, police_org, pad_id, 
+      device_no, device_score, lon, 
+      lat, check_address, check_reason, 
+      check_task, verifyScore, login_time, 
+      logout_time, created_time, updated_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{policeName,jdbcType=VARCHAR}, #{policeNumber,jdbcType=VARCHAR}, 
+      #{policeIDCard,jdbcType=VARCHAR}, #{policeOrg,jdbcType=VARCHAR}, #{padId,jdbcType=VARCHAR}, 
+      #{deviceNo,jdbcType=VARCHAR}, #{deviceScore,jdbcType=VARCHAR}, #{lon,jdbcType=VARCHAR}, 
+      #{lat,jdbcType=VARCHAR}, #{checkAddress,jdbcType=VARCHAR}, #{checkReason,jdbcType=VARCHAR}, 
+      #{checkTask,jdbcType=VARCHAR}, #{verifyscore,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP}, 
+      #{logoutTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.PoliceLoginRecord" >
+    insert into tbl_login_police
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="policeName != null" >
+        police_name,
+      </if>
+      <if test="policeNumber != null" >
+        police_number,
+      </if>
+      <if test="policeIDCard != null" >
+        police_id_card,
+      </if>
+      <if test="policeOrg != null" >
+        police_org,
+      </if>
+      <if test="padId != null" >
+        pad_id,
+      </if>
+      <if test="deviceNo != null" >
+        device_no,
+      </if>
+      <if test="deviceScore != null" >
+        device_score,
+      </if>
+      <if test="lon != null" >
+        lon,
+      </if>
+      <if test="lat != null" >
+        lat,
+      </if>
+      <if test="checkAddress != null" >
+        check_address,
+      </if>
+      <if test="checkReason != null" >
+        check_reason,
+      </if>
+      <if test="checkTask != null" >
+        check_task,
+      </if>
+      <if test="verifyscore != null" >
+        verifyScore,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+      <if test="logoutTime != null" >
+        logout_time,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="policeName != null" >
+        #{policeName,jdbcType=VARCHAR},
+      </if>
+      <if test="policeNumber != null" >
+        #{policeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="policeIDCard != null" >
+        #{policeIDCard,jdbcType=VARCHAR},
+      </if>
+      <if test="policeOrg != null" >
+        #{policeOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="padId != null" >
+        #{padId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceNo != null" >
+        #{deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceScore != null" >
+        #{deviceScore,jdbcType=VARCHAR},
+      </if>
+      <if test="lon != null" >
+        #{lon,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null" >
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="checkAddress != null" >
+        #{checkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="checkReason != null" >
+        #{checkReason,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTask != null" >
+        #{checkTask,jdbcType=VARCHAR},
+      </if>
+      <if test="verifyscore != null" >
+        #{verifyscore,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logoutTime != null" >
+        #{logoutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.PoliceLoginRecord" >
+    update tbl_login_police
+    <set >
+      <if test="policeName != null" >
+        police_name = #{policeName,jdbcType=VARCHAR},
+      </if>
+      <if test="policeNumber != null" >
+        police_number = #{policeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="policeIDCard != null" >
+        police_id_card = #{policeIDCard,jdbcType=VARCHAR},
+      </if>
+      <if test="policeOrg != null" >
+        police_org = #{policeOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="padId != null" >
+        pad_id = #{padId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceNo != null" >
+        device_no = #{deviceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceScore != null" >
+        device_score = #{deviceScore,jdbcType=VARCHAR},
+      </if>
+      <if test="lon != null" >
+        lon = #{lon,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null" >
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="checkAddress != null" >
+        check_address = #{checkAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="checkReason != null" >
+        check_reason = #{checkReason,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTask != null" >
+        check_task = #{checkTask,jdbcType=VARCHAR},
+      </if>
+      <if test="verifyscore != null" >
+        verifyScore = #{verifyscore,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logoutTime != null" >
+        logout_time = #{logoutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.PoliceLoginRecord" >
+    update tbl_login_police
+    set police_name = #{policeName,jdbcType=VARCHAR},
+      police_number = #{policeNumber,jdbcType=VARCHAR},
+      police_id_card = #{policeIDCard,jdbcType=VARCHAR},
+      police_org = #{policeOrg,jdbcType=VARCHAR},
+      pad_id = #{padId,jdbcType=VARCHAR},
+      device_no = #{deviceNo,jdbcType=VARCHAR},
+      device_score = #{deviceScore,jdbcType=VARCHAR},
+      lon = #{lon,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      check_address = #{checkAddress,jdbcType=VARCHAR},
+      check_reason = #{checkReason,jdbcType=VARCHAR},
+      check_task = #{checkTask,jdbcType=VARCHAR},
+      verifyScore = #{verifyscore,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      logout_time = #{logoutTime,jdbcType=TIMESTAMP},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPadIdDeviceNo" parameterType="com.fri.model.PoliceLoginRecord">
+    update tbl_login_police
+    set logout_time = NOW()
+    WHERE device_no = #{deviceNo}
+    AND pad_id = #{padId} and  DATE_FORMAT(created_time,'%Y%m%d') = DATE_FORMAT(now(),'%Y%m%d') order by created_time DESC limit 1
+  </update>
+  <update id="updateCheckOption" parameterType="com.fri.pojo.bo.app.request.CheckOptionRequest">
+    update tbl_login_police
+    set updated_time= NOW(),
+    check_address = #{checkAddress},
+    check_task = #{checkTask},
+    check_reason = #{checkReason}
+    WHERE pad_id = #{padId} and device_No = #{deviceNo} AND DATE_FORMAT(created_time,'%Y%m%d') = DATE_FORMAT(NOW(),'%Y%m%d') order by created_time DESC limit 1
+  </update>
+  <select id="selectDeviceNoByPadId" resultType="String" parameterType="java.lang.String">
+    select device_no from tbl_login_police where pad_id = #{padId} and DATE_FORMAT(created_time,'%Y%m%d') = DATE_FORMAT(NOW(),'%Y%m%d')
+    order by created_time DESC limit 1
+  </select>
+
+  <update id="updateVerifyScore" parameterType="java.lang.String">
+    update tbl_login_police
+    set device_score = #{deviceScore}
+    where pad_id = #{padId} and device_no = #{deviceNo} and pad_id = #{padId} and DATE_FORMAT(created_time,'%Y%m%d') = DATE_FORMAT(NOW(),'%Y%m%d')
+    order by created_time DESC limit 1
+  </update>
+</mapper>

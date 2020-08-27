@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.PoliceInfoMapper" >
+    <resultMap id="BaseResultMap" type="com.fri.model.PoliceInfo" >
+        <result column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="USER_ACCOUNT" property="userAccount" jdbcType="VARCHAR" />
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+        <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR" />
+        <result column="USER_IDENTITY" property="userIdentity" jdbcType="VARCHAR" />
+        <result column="USER_ID_CARD" property="userIdCard" jdbcType="VARCHAR" />
+        <result column="USER_PHONE" property="userPhone" jdbcType="VARCHAR" />
+        <result column="IS_EFFECTIVE" property="isEffective" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+        <result column="CH_SPELL" property="chSpell" jdbcType="VARCHAR" />
+        <result column="USER_SEX" property="userSex" jdbcType="VARCHAR" />
+        <result column="USER_ADDRESS" property="userAddress" jdbcType="VARCHAR" />
+    </resultMap>
+    <insert id="insert" parameterType="com.fri.model.PoliceInfo" >
+        insert into tbl_police_info (ID, USER_ACCOUNT, USER_NAME,
+        USER_PASSWORD, USER_IDENTITY, USER_ID_CARD,
+        USER_PHONE, IS_EFFECTIVE, CREATE_TIME,
+        MODIFY_TIME, ORG_CODE, CH_SPELL,
+        USER_SEX, USER_ADDRESS)
+        values (#{id,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+        #{userPassword,jdbcType=VARCHAR}, #{userIdentity,jdbcType=VARCHAR}, #{userIdCard,jdbcType=VARCHAR},
+        #{userPhone,jdbcType=VARCHAR}, #{isEffective,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+        #{modifyTime,jdbcType=TIMESTAMP}, #{orgCode,jdbcType=VARCHAR}, #{chSpell,jdbcType=VARCHAR},
+        #{userSex,jdbcType=VARCHAR}, #{userAddress,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.fri.model.PoliceInfo" >
+        insert into tbl_police_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="userAccount != null" >
+                USER_ACCOUNT,
+            </if>
+            <if test="userName != null" >
+                USER_NAME,
+            </if>
+            <if test="userPassword != null" >
+                USER_PASSWORD,
+            </if>
+            <if test="userIdentity != null" >
+                USER_IDENTITY,
+            </if>
+            <if test="userIdCard != null" >
+                USER_ID_CARD,
+            </if>
+            <if test="userPhone != null" >
+                USER_PHONE,
+            </if>
+            <if test="isEffective != null" >
+                IS_EFFECTIVE,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="modifyTime != null" >
+                MODIFY_TIME,
+            </if>
+            <if test="orgCode != null" >
+                ORG_CODE,
+            </if>
+            <if test="chSpell != null" >
+                CH_SPELL,
+            </if>
+            <if test="userSex != null" >
+                USER_SEX,
+            </if>
+            <if test="userAddress != null" >
+                USER_ADDRESS,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userAccount != null" >
+                #{userAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null" >
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null" >
+                #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="userIdentity != null" >
+                #{userIdentity,jdbcType=VARCHAR},
+            </if>
+            <if test="userIdCard != null" >
+                #{userIdCard,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null" >
+                #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="isEffective != null" >
+                #{isEffective,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null" >
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="orgCode != null" >
+                #{orgCode,jdbcType=VARCHAR},
+            </if>
+            <if test="chSpell != null" >
+                #{chSpell,jdbcType=VARCHAR},
+            </if>
+            <if test="userSex != null" >
+                #{userSex,jdbcType=VARCHAR},
+            </if>
+            <if test="userAddress != null" >
+                #{userAddress,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectName">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_police_info where USER_ID_CARD = #{userIdCard,jdbcType=VARCHAR}
+    </select>
+    <sql id="Base_Column_List">
+        id,userAccount,userName,userPassword,userIdentity,userIdCard, userPhone,isEffective,createTime
+        modifyTime, orgCode,chSpell,userSex,userAddress
+    </sql>
+    <select id="selectByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select  USER_ACCOUNT,USER_NAME,USER_ID_CARD,ORG_CODE from  tbl_police_info where
+        USER_ACCOUNT =#{userAccount}  limit 1
+    </select>
+</mapper>
