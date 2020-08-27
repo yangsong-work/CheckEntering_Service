@@ -12,7 +12,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -22,6 +21,7 @@ out
 gen
 *.log
 *.error
+*.mvn
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -34,3 +34,6 @@ build/
 
 ### VS Code ###
 .vscode/
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
+/src/main/resources/application-dev.properties
