@@ -20,8 +20,8 @@ target/
 *.ipr
 out
 gen
-.log
-.error
+*.log
+*.error
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
