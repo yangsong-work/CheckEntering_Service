@@ -12,7 +12,9 @@ import com.fri.model.CheckImage;
 import com.fri.model.CheckPersonJs;
 import com.fri.model.PoliceLoginRecord;
 import com.fri.pojo.bo.app.push.CheckInfo;
+import com.fri.pojo.bo.app.push.FacePhoneInfo;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
+import com.fri.pojo.bo.pinen.VerifyImageRequest;
 import com.fri.pojo.bo.pinen.VerifyOcrRequest;
 import com.fri.pojo.bo.xicheng.request.CheckForeignPersonInfoRequest;
 import com.fri.pojo.bo.xicheng.response.*;
@@ -56,7 +58,10 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     String socketUrl;
     @Value("${server.port}")
     String port;
-
+    @Value("${xicheng.appid}")
+    String appid;
+    @Value("${xicheng.appType}")
+    String appType;
     @Override
     public Map verifyIDCard(VerifyIDCardRequest verifyIDCardRequest) {
         //品恩核录桩抓取相片入库
@@ -252,8 +257,66 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         return returMap;
     }
 
-    public Result verifyFacePhoto() {
-        return null;
+    public Map verifyFacePhoto(VerifyImageRequest request) {
+        String img = request.getImg();
+        String deviceNo = request.getDeviceNo();
+        PoliceLoginRecord record = UserUtil.getUserMap().get(deviceNo);
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("appid", appid);
+        hashMap.put("deviceid", deviceNo);
+        hashMap.put("policesfzh", record.getPoliceIDCard());
+        hashMap.put("policename", record.getPoliceName());
+        hashMap.put("policeorg", record.getPoliceOrg());
+        hashMap.put("apptype", appType);
+        hashMap.put("lon", record.getLon());
+        hashMap.put("lat", record.getLat());
+        hashMap.put("img", img);
+        Map returnMap = new HashMap<>();
+        try {
+//            HttpHeaders requestHeaders = new HttpHeaders();
+//            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+//            requestHeaders.setContentType(type);
+//            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+//            HttpEntity<Map> requestEntity = new HttpEntity<Map>(dataMap, requestHeaders);
+            String data = restTemplate.postForObject("http://14.28.2.32:8080/helu/checkPersonFace", hashMap, String.class);
+            log.info("总线返回报文：{}", data);
+            returnMap = JSON.parseObject(data, Map.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("二类区服务返回数据：{}", returnMap.toString());
+        List<JSONObject> JSONObjects = (List) returnMap.get("results");
+        List<FacePhoneInfo> facePhoneInfos = new ArrayList<>();
+      //  List<CheckPersonFaceResponse> CheckPersonFaceResponseList = new ArrayList<>();
+        for (JSONObject jsonObject : JSONObjects) {
+            CheckPersonFaceResponse checkPersonFaceResponse = JSON.parseObject(jsonObject.toString(), CheckPersonFaceResponse.class);
+         //   CheckPersonFaceResponseList.add(checkPersonFaceResponse);
+            String idnumber = checkPersonFaceResponse.getIdnumber();
+            CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = xiChengService.checkPersonBasicInfo(idnumber, deviceNo);
+            CheckPersonPhotoResponse checkPersonPhotoResponse = xiChengService.checkPersonPhoto(idnumber, deviceNo);
+            FacePhoneInfo facePhoneInfo = new FacePhoneInfo();
+            facePhoneInfo.setCardNumber(checkPersonBasicInfoResponse.getCardNumber());
+            facePhoneInfo.setName(checkPersonBasicInfoResponse.getName());
+            facePhoneInfo.setImg(checkPersonPhotoResponse.getZp());
+            facePhoneInfo.setSimilarityDegree(checkPersonFaceResponse.getSimilaritydegree());
+            facePhoneInfos.add(facePhoneInfo);
+        }
+        //推送至PAD
+        Map pushMap = new HashMap();
+        pushMap.put("messageType", 2);
+        pushMap.put("data", facePhoneInfos);
+        boolean flag = pushMessage(UserUtil.getUserMap().get(request.getDeviceNo()).getPadId(), "face", pushMap, "");
+
+        //TODO 发送至二类区服务
+        System.out.println(JSON.toJSONString(pushMap));
+        if (!flag) {
+            throw new RuntimeException();
+        }
+        Map returMap = new HashMap();
+        // returMap.put("status", status);
+         returMap.put("deviceNo", request.getDeviceNo());
+        return returMap;
+       // return null;
     }
 
 
