@@ -127,7 +127,7 @@
   </update>
 
   <select id="selectByCardNumber" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select value,color from tbl_check_warn_info where card_number = #{cardNumber}
+    select value_info,color from tbl_check_warn_info where card_number = #{cardNumber}
   </select>
 
   <delete id="deleteByCardNumber" parameterType="java.lang.String">
@@ -137,12 +137,12 @@
   <insert id="insertBatch" parameterType="list">
     insert into tbl_check_warn_info ( card_number, key_info,
     order_info, value_info, disposal_way,
-    color)
+    color,resource_name)
     VALUES
     <foreach collection="list" item="item" separator=",">
       (#{item.cardNumber,jdbcType=VARCHAR}, #{item.key,jdbcType=VARCHAR},
       #{item.order}, #{item.value,jdbcType=VARCHAR}, #{item.disposalWay,jdbcType=VARCHAR},
-      #{item.color,jdbcType=VARCHAR})
+      #{item.color,jdbcType=VARCHAR},#{resourceName,jdbcType=VARCHAR})
     </foreach>
   </insert>
 </mapper>
