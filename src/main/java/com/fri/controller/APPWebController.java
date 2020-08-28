@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -117,7 +118,23 @@ public class APPWebController {
         }
         return ResponseUtil.ok(policeManRequest);
     }
-
+    /*
+     *   请求人的警示详细信息
+     * */
+        @PostMapping(value = "/checkPersonJsDetail")
+    public Object getPersonJsDetail(@RequestBody CheckPersonJsDetailRequest request) {
+        //设备号未绑定报错
+        /*if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
+            return ResponseUtil.fail("1", "核录桩未绑定");
+        }*/
+        log.info("核录桩传送警示详细信息接收:{},{}", request.toString(), LocalDateTime.now());
+        Map map = appService.CheckPersonJsDetail(request);
+        if (map == null || map.isEmpty()) {
+            return ResponseUtil.fail();
+        }
+        log.info("核录桩传送警示详细信息:{},{}", request.toString(), LocalDateTime.now());
+        return  ResponseUtil.ok(map);
+    }
     /**
      * 录入
      */
