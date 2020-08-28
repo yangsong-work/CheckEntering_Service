@@ -7,6 +7,7 @@ import com.fri.dao.CheckInfoMapper;
 import com.fri.dao.CheckWarnInfoMapper;
 import com.fri.dao.Test1Mapper;
 import com.fri.model.*;
+import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.xicheng.request.*;
 import com.fri.service.XiChengService;
 import com.fri.pojo.bo.xicheng.response.*;
@@ -103,7 +104,12 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public String checkPersonJsDetail(String IDCard) {
+    public String checkPersonJsDetail(CheckPersonJsDetailRequest request) {
+        UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckPersonJsDetail");
+        builder.queryParam("sfzh", request.getCardNumber());
+        builder.queryParam("resname", request.getResName());
+        String url = builder.build().toUri().toString();
+        String data = restTemplateForGet(url);
 
         return null;
     }

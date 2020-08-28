@@ -1,6 +1,7 @@
 package com.fri.service;
 
 import com.fri.common.Result;
+import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.pojo.bo.pinen.VerifyImageRequest;
 import com.fri.pojo.bo.pinen.VerifyOcrRequest;
@@ -18,4 +19,5 @@ public interface CheckEnterService {
 
     public void notifyLogin(String deviceNo);
 
+    Map CheckPersonJsDetail(CheckPersonJsDetailRequest request);
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fri.common.Result;
 import com.fri.model.PoliceLoginRecord;
+import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.pojo.bo.pinen.VerifyImageRequest;
 import com.fri.pojo.bo.pinen.VerifyOcrRequest;
@@ -77,6 +78,13 @@ public class CheckEnterWebController {
         log.info("核录桩传送身份证信息:{},{}", request.toString(), LocalDateTime.now());
         return ResponseUtil.ok();
     }
+    /*
+     *   请求人的警示详细信息
+     * */
+    /*@PostMapping(value = "/checkDetailPoliceInfo")
+    public Object getDetailPoliceInfo(@RequestBody CheckPersonJsDetailRequest request) {
+         checkEnterService.CheckPersonJsDetail(request);
+    }*/
 
     //ocr证件查询
     @PostMapping("/ocr")
@@ -91,39 +99,5 @@ public class CheckEnterWebController {
         return ResponseUtil.ok();
     }
 
-    public static void main(String[] args) {
-        String s = "{\n" +
-                "    \"status\": 0,\n" +
-                "    \"msg\": \"OK\",\n" +
-                "    \"results\": [\n" +
-                "        {\n" +
-                "            \"similaritydegree\": \"0.98391753\",\n" +
-                "            \"idnumber\": \"14012891225116111X\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"similaritydegree\": \"0.9025098681\",\n" +
-                "            \"idnumber\": \"210188888840050\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"similaritydegree\": \"0.9018577337\",\n" +
-                "            \"idnumber\": \"888888888888888888\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"similaritydegree\": \"0.8954774737\",\n" +
-                "            \"idnumber\": \"14223323233011\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"similaritydegree\": \"0.8945494294\",\n" +
-                "            \"idnumber\": \"身份证号码5\"\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        Map returnMap = JSON.parseObject(s, Map.class);
-        List<JSONObject> checkPersonFaceResponses = (List) returnMap.get("results");
-        for (JSONObject checkPersonFaceResponseb : checkPersonFaceResponses) {
-            CheckPersonFaceResponse checkPersonFaceResponse = JSON.parseObject(checkPersonFaceResponseb.toString(), CheckPersonFaceResponse.class);
-            System.out.println(checkPersonFaceResponse.getIdnumber());
-        }
-    }
 
 }

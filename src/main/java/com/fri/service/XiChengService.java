@@ -3,6 +3,7 @@ package com.fri.service;
 import com.alibaba.fastjson.JSONObject;
 import com.fri.model.CheckAddress;
 import com.fri.model.CheckPersonJs;
+import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.xicheng.request.CheckForeignPersonInfoRequest;
 import com.fri.pojo.bo.xicheng.request.CheckInfoHistoryResquest;
 import com.fri.pojo.bo.xicheng.request.CheckInfoListPoliceRequest;
@@ -22,7 +23,7 @@ public interface XiChengService {
     List<CheckPersonJs> checkPersonJs(String IDCard, String deviceNo);
 
     //7.请求人的警示详细信息
-    String checkPersonJsDetail(String IDCard);
+    String checkPersonJsDetail(CheckPersonJsDetailRequest request);
 
     //9.请求境外人员基本信息(ocr)
     CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request);
