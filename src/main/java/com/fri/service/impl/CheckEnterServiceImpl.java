@@ -7,10 +7,7 @@ import com.fri.contants.CommonContants;
 import com.fri.dao.CheckEnterPushInfoMapper;
 import com.fri.dao.CheckImageMapper;
 import com.fri.dao.PoliceLoginRecordMapper;
-import com.fri.model.CheckEnterPushInfo;
-import com.fri.model.CheckImage;
-import com.fri.model.CheckPersonJs;
-import com.fri.model.PoliceLoginRecord;
+import com.fri.model.*;
 import com.fri.pojo.bo.app.push.CheckInfo;
 import com.fri.pojo.bo.app.push.FacePhoneInfo;
 import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
@@ -299,10 +296,27 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             facePhoneInfo.setSimilarityDegree(checkPersonFaceResponse.getSimilaritydegree());
             facePhoneInfos.add(facePhoneInfo);
         }
+        //根据相似度从大大小排序
+        for (int i = 0; i < facePhoneInfos.size(); i++) {
+            int k = i;
+            for (int j = i + 1; j < facePhoneInfos.size(); j++) {
+
+                if ((Double.parseDouble(facePhoneInfos.get(j).getSimilarityDegree())) >
+                        (Double.parseDouble(facePhoneInfos.get(k).getSimilarityDegree()))) {
+                    k = j;
+                }
+            }
+            if (i != k) {
+                FacePhoneInfo facePhoneInfo1 = facePhoneInfos.get(i);
+                facePhoneInfos.set(i, facePhoneInfos.get(k));
+                facePhoneInfos.set(k, facePhoneInfo1);
+            }
+        }
         //推送至PAD
         Map pushMap = new HashMap();
         pushMap.put("messageType", 2);
         pushMap.put("data", facePhoneInfos);
+
         boolean flag = pushMessage(UserUtil.getUserMap().get(request.getDeviceNo()).getPadId(), "face", pushMap, "");
 
         //TODO 发送至二类区服务
@@ -397,8 +411,15 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
     @Override
     public Map CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
-        xiChengService.checkPersonJsDetail(request);
-        return null;
+        //请求    拿信息
+        List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkPersonJsDetail(request);
+        if(checkPersonJsDetail2s==null){
+            return  null;
+        }
+        Map returnMap = new HashMap();
+        returnMap.put("data",checkPersonJsDetail2s);
+
+        return returnMap;
     }
 
     /**

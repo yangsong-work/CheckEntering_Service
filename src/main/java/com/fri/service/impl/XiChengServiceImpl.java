@@ -23,9 +23,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class XiChengServiceImpl implements XiChengService {
@@ -104,14 +102,41 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public String checkPersonJsDetail(CheckPersonJsDetailRequest request) {
+    public List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request) {
+        //拼接url
         UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckPersonJsDetail");
         builder.queryParam("sfzh", request.getCardNumber());
         builder.queryParam("resname", request.getResName());
         String url = builder.build().toUri().toString();
+        System.out.println(url);
+        //获取的json信息
         String data = restTemplateForGet(url);
+      //  List<CheckPersonJs> returnList = new ArrayList<>();
+        Map<String, Object> map = JSON.parseObject(data, Map.class);
+        //查询失败直接返回
+        if (map == null || !(map.get("status").toString().equals("0"))) {
+            return null;
+        }
+        Map results = JSON.parseObject(map.get("results").toString(), Map.class);
+        if(results==null){
+            return null;
+        }
+        Object dataset = results.get("dataset");
+       List<CheckPersonJsDetail> returnList = JSON.parseArray(dataset.toString(), CheckPersonJsDetail.class);
+        List<CheckPersonJsDetail2> returnList2 = new ArrayList<>();
+        for(CheckPersonJsDetail checkPersonJsDetail:returnList){
+            CheckPersonJsDetail2 checkPersonJsDetail2 = new CheckPersonJsDetail2();
+            checkPersonJsDetail2.setResource(checkPersonJsDetail.getResource());
+            HashMap<String,String> hashMap =(HashMap) returnList.get(0).getRecord();
+            StringBuffer s =new StringBuffer();
+            Set<Map.Entry<String, String>> entries = hashMap.entrySet();
+            for(Map.Entry<String,String> entry:entries)
+                s.append(entry.getKey()+":"+entry.getValue()+"\n");
+            checkPersonJsDetail2.setRecord(s.toString());
+            returnList2.add(checkPersonJsDetail2);
+        }
+        return  returnList2;
 
-        return null;
     }
 
     @Override
@@ -273,6 +298,7 @@ public class XiChengServiceImpl implements XiChengService {
 
 
     }
+
 
 
 }
