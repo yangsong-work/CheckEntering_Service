@@ -21,5 +21,5 @@ public interface APPService {
     Map getDetails(DetailRequest detailRequest);
 
     PoliceManRequest getPoliceMessage(String userAccount);
-
+    Map CheckPersonJsDetail(CheckPersonJsDetailRequest request);
 }

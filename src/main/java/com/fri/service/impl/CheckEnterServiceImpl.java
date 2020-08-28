@@ -256,24 +256,25 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         String img = request.getImg();
         String deviceNo = request.getDeviceNo();
         PoliceLoginRecord record = UserUtil.getUserMap().get(deviceNo);
-        HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("appid", appid);
-        hashMap.put("deviceid", deviceNo);
-        hashMap.put("policesfzh", record.getPoliceIDCard());
-        hashMap.put("policename", record.getPoliceName());
-        hashMap.put("policeorg", record.getPoliceOrg());
-        hashMap.put("apptype", appType);
-        hashMap.put("lon", record.getLon());
-        hashMap.put("lat", record.getLat());
-        hashMap.put("img", img);
+        JSONObject json = new JSONObject();
+       // HashMap<String, String> hashMap = new HashMap<String, String>();
+        json.put("appid", appid);
+        json.put("deviceid", deviceNo);
+        json.put("policesfzh", record.getPoliceIDCard());
+        json.put("policename", record.getPoliceName());
+        json.put("policeorg", record.getPoliceOrg());
+        json.put("apptype", appType);
+        json.put("lon", record.getLon());
+        json.put("lat", record.getLat());
+        json.put("img", img);
         Map returnMap = new HashMap<>();
         try {
-//            HttpHeaders requestHeaders = new HttpHeaders();
-//            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
-//            requestHeaders.setContentType(type);
-//            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
-//            HttpEntity<Map> requestEntity = new HttpEntity<Map>(dataMap, requestHeaders);
-            String data = restTemplate.postForObject("http://14.28.2.32:8080/helu/checkPersonFace", hashMap, String.class);
+           HttpHeaders requestHeaders = new HttpHeaders();
+           MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            requestHeaders.setContentType(type);
+           requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+           HttpEntity<String> requestEntity = new HttpEntity<String>(json.toString(), requestHeaders);
+            String data = restTemplate.postForEntity("http  ://14.28.2.32:8080/helu/checkPersonFace", requestEntity, String.class).getBody();
             log.info("总线返回报文：{}", data);
             returnMap = JSON.parseObject(data, Map.class);
         } catch (Exception e) {
@@ -409,18 +410,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         UserUtil.getUserMap().get(deviceNo).setDeviceScore(verifyScore);
     }
 
-    @Override
-    public Map CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
-        //请求    拿信息
-        List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkPersonJsDetail(request);
-        if(checkPersonJsDetail2s==null){
-            return  null;
-        }
-        Map returnMap = new HashMap();
-        returnMap.put("data",checkPersonJsDetail2s);
 
-        return returnMap;
-    }
 
     /**
      * 推送至二类区

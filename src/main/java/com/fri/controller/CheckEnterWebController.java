@@ -70,31 +70,15 @@ public class CheckEnterWebController {
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");
         }
-        log.info("核录桩传送身份证信息接收:{},{}", request.toString(), LocalDateTime.now());
+        log.info("核录桩传送人脸信息接收:{},{}", request.toString(), LocalDateTime.now());
         Map map = checkEnterService.verifyFacePhoto(request);
         if (map == null || map.isEmpty()) {
             return ResponseUtil.fail();
         }
-        log.info("核录桩传送身份证信息:{},{}", request.toString(), LocalDateTime.now());
+        log.info("核录桩传送人脸信息推送完毕:{},{}", request.toString(), LocalDateTime.now());
         return ResponseUtil.ok();
     }
-    /*
-     *   请求人的警示详细信息
-     * */
-    @PostMapping(value = "/checkPersonJsDetail")
-    public Object getDetailPoliceInfo(@RequestBody CheckPersonJsDetailRequest request) {
-        //设备号未绑定报错
-        if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
-            return ResponseUtil.fail("1", "核录桩未绑定");
-        }
-        log.info("核录桩传送警示详细信息接收:{},{}", request.toString(), LocalDateTime.now());
-        Map map = checkEnterService.CheckPersonJsDetail(request);
-        if (map == null || map.isEmpty()) {
-            return ResponseUtil.fail();
-        }
-        log.info("核录桩传送警示详细信息:{},{}", request.toString(), LocalDateTime.now());
-        return  ResponseUtil.ok(map);
-    }
+
 
     //ocr证件查询
     @PostMapping("/ocr")

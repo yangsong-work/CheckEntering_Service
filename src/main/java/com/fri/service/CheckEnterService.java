@@ -19,5 +19,5 @@ public interface CheckEnterService {
 
     public void notifyLogin(String deviceNo);
 
-    Map CheckPersonJsDetail(CheckPersonJsDetailRequest request);
+
 }
