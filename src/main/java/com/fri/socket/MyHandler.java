@@ -87,7 +87,6 @@ public class MyHandler extends TextWebSocketHandler {
             session.sendMessage(returnMessage);
             session.getAttributes().put("padId",padId);
             //TODO 通知核录桩绑定成功
-          //  checkEnterService.notifyLogin(padId);
         } catch (JSONException e) {
             e.printStackTrace();
             //JSON格式不正确，绑定失败

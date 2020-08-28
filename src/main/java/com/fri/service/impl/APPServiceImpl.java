@@ -53,7 +53,6 @@ public class APPServiceImpl implements APPService {
         BeanUtils.copyProperties(loginRequest,record);
         record.setCreatedTime(LocalDateTime.now());
         record.setUpdatedTime(record.getCreatedTime());
-        //TODO  查询警员名字暂时由pad传送
       //  PoliceInfo policeInfo = policeInfoMapper.selectName(loginRequest.getPoliceIDCard());
        // record.setPoliceOrg(policeInfo.getOrgCode());
         //删除遗留数据
@@ -83,7 +82,9 @@ public class APPServiceImpl implements APPService {
     public int checkOption(CheckOptionRequest checkOptionRequest) {
         UserUtil.getUserMap().get(checkOptionRequest.getDeviceNo()).setCheckAddress(checkOptionRequest.getCheckAddress());
         // 通知核录桩
-        checkEnterService.notifyLogin(checkOptionRequest.getPadId());
+        //TODO 测试代码 上线删除
+        //
+         checkEnterService.notifyLogin(checkOptionRequest.getPadId());
         return policeLoginRecordMapper.updateCheckOption(checkOptionRequest);
     }
 

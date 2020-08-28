@@ -48,6 +48,7 @@ public class CheckEnterWebController {
      */
     @PostMapping("/idcard")
     public String verifyIDCard(@Valid @RequestBody VerifyIDCardRequest request) {
+        log.info("接收核录桩身份证接口时间：{}",LocalDateTime.now());
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");
@@ -62,10 +63,9 @@ public class CheckEnterWebController {
         return ResponseUtil.ok(map);
     }
 
-    //TODO 人像相似列表请求 接口有问题
     @PostMapping("/face")
     public String verifyImage(@Valid @RequestBody VerifyImageRequest request) {
-
+        log.info("接收人像相似接口时间：{}",LocalDateTime.now());
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");
@@ -89,6 +89,7 @@ public class CheckEnterWebController {
     //ocr证件查询
     @PostMapping("/ocr")
     public String verifyOcr(@Valid @RequestBody VerifyOcrRequest request) {
+        log.info("接收OCR接口时间：{}",LocalDateTime.now());
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");

@@ -58,8 +58,6 @@ public class XiChengServiceImpl implements XiChengService {
         builder.queryParam("sfzh", IDCard);
         String url = builder.build().toUri().toString();
         String result = restTemplateForGet(url);
-//        //TODO 测试代码
-//        String result = test1Mapper.select1("5").getTtt();
         JSONObject o = JSON.parseObject(result);
         CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = JSON.parseArray(o.getString("results"), CheckPersonBasicInfoResponse.class).get(0);
         CheckInfo checkInfo = new CheckInfo();
@@ -75,9 +73,6 @@ public class XiChengServiceImpl implements XiChengService {
         builder.queryParam("sfzh", IDCard);
         String url = builder.build().toUri().toString();
         String data = restTemplateForGet(url);
-//        //TODO 测试代码
-//
-//        String  data = test1Mapper.select1("4").getTtt();
 
         List<CheckPersonJs> returnList = new ArrayList<>();
         Map<String, Object> map = JSON.parseObject(data, Map.class);
@@ -116,7 +111,7 @@ public class XiChengServiceImpl implements XiChengService {
 
     @Override
     public CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request) {
-        UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckPersonJs");
+        UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckForeignPersonBasicInfo");
         builder.queryParam("gj", request.getGj());
         builder.queryParam("zjlb", request.getZjlb());
         builder.queryParam("zjhm", request.getZjhm());
@@ -124,11 +119,9 @@ public class XiChengServiceImpl implements XiChengService {
         String url = builder.build().toUri().toString();
         String data = restTemplateForGet(url);
 
-//        //TODO 测试代码
-//
-//        String  data = test1Mapper.select1("6").getTtt();
 
         JSONObject o = JSON.parseObject(data);
+        System.out.println(o);
         CheckForeignPersonBasicReponse checkForeignPersonBasicReponse = JSON.parseArray(o.getString("results"), CheckForeignPersonBasicReponse.class).get(0);
 
         CheckInfoForeign checkInfo = new CheckInfoForeign();
@@ -147,8 +140,6 @@ public class XiChengServiceImpl implements XiChengService {
         String url = builder.build().toUri().toString();
         String data = restTemplateForGet(url);
 
-//        //TODO 测试代码
-//        String  data = test1Mapper.select1("7").getTtt();
 
         List<CheckForeignPersonJsReponse> returnList = new ArrayList<>();
         Map<String, Object> map = JSON.parseObject(data, Map.class);
@@ -188,9 +179,6 @@ public class XiChengServiceImpl implements XiChengService {
         builder.queryParam("sfzh", IDCard);
         String url = builder.build().toUri().toString();
         String data = restTemplateForGet(url);
-//        //TODO 测试代码
-//
-//        String  data = test1Mapper.select1("8").getTtt();
 
         CheckPersonPhotoResponse response = new CheckPersonPhotoResponse();
         Map<String, Object> map = JSON.parseObject(data, Map.class);
@@ -199,14 +187,16 @@ public class XiChengServiceImpl implements XiChengService {
             return response;
         }
         JSONObject o = JSON.parseObject(data);
-        response = JSON.parseArray(o.getString("results"), CheckPersonPhotoResponse.class).get(0);
-
+        List list = JSON.parseArray(o.getString("results"), CheckPersonPhotoResponse.class);
+        if(list!=null&&!list.isEmpty()) {
+            response = (CheckPersonPhotoResponse) list.get(0);
         //入库
         CheckInfo checkInfo = new CheckInfo();
         checkInfo.setCardNumber(IDCard);
         checkInfo.setZp(response.getZp());
         int i = checkInfoMapper.updateByPrimaryKeySelective(checkInfo);
-        System.out.println(i);
+        logger.info("照片插入数据库:{}",i);
+        }
         return response;
     }
 
@@ -244,7 +234,7 @@ public class XiChengServiceImpl implements XiChengService {
             HttpHeaders requestHeaders = new HttpHeaders();
             MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
             requestHeaders.setContentType(type);
-            HttpEntity<String> requestEntity = new HttpEntity<String>("", requestHeaders);
+            HttpEntity<String> requestEntity = new HttpEntity<String>(null, requestHeaders);
             ResponseEntity postForEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
             returndata = (String) postForEntity.getBody();
             logger.info("西城接口返回数据：{}",returndata);

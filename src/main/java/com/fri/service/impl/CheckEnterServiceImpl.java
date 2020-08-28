@@ -6,6 +6,7 @@ import com.fri.common.Result;
 import com.fri.contants.CommonContants;
 import com.fri.dao.CheckEnterPushInfoMapper;
 import com.fri.dao.CheckImageMapper;
+import com.fri.dao.CountryInfoMapper;
 import com.fri.dao.PoliceLoginRecordMapper;
 import com.fri.model.CheckEnterPushInfo;
 import com.fri.model.CheckImage;
@@ -53,6 +54,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     CheckEnterPushInfoMapper checkEnterPushInfoMapper;
     @Autowired
     CheckImageMapper checkImageMapper;
+    @Autowired
+    CountryInfoMapper countryInfoMapper;
     @Value("${heluzhuang.url}")
     String heluzhuangUrl;
     @Value("${socket.url}")
@@ -76,7 +79,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         if (verifyIDCardRequest.getCheckFrom() == 0&&verifyIDCardRequest.getCompareStatus()==1) {
             String compareValue = verifyIDCardRequest.getCompareValue();
             //TODO 测试代码 上线删除
-           // UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
+//            UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
             String score = UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getDeviceScore();
             int compareResult = compareValue.compareTo(score);
             if (compareResult < 0) {
@@ -151,7 +154,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         pushMap.put("data", JSON.toJSON(checkInfo));
         boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
-        //TODO 发送至二类区服务
+        // 发送至二类区服务
         System.out.println(JSON.toJSONString(pushMap));
         if (!flag) {
             throw new RuntimeException();
@@ -173,8 +176,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     @Override
     public Object verifyOcr(VerifyOcrRequest ocrRequest) {
 
-        Properties p = new Properties();
-        ocrRequest.setNationality(p.getProperty(ocrRequest.getNationality()));
+        ocrRequest.setNationality(countryInfoMapper.selectCountryEn(ocrRequest.getNationality()));
 
         CheckForeignPersonInfoRequest infoRequest = new CheckForeignPersonInfoRequest();
         infoRequest.setGj(ocrRequest.getNationality());
@@ -247,7 +249,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         pushMap.put("data", checkInfo);
         boolean flag = pushMessage(UserUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPadId(), "ocr", pushMap, CommonContants.OCR_METHOD);
         // socketUtil.sendMessage(MyUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
-        //TODO 发送至二类区服务
+        // 发送至二类区服务
         System.out.println(JSON.toJSONString(pushMap));
         if (!flag) {
             throw new RuntimeException();
@@ -263,26 +265,27 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         String deviceNo = request.getDeviceNo();
         PoliceLoginRecord record = UserUtil.getUserMap().get(deviceNo);
         HashMap<String, String> hashMap = new HashMap<String, String>();
-        hashMap.put("appid", appid);
-        hashMap.put("deviceid", deviceNo);
-        hashMap.put("policesfzh", record.getPoliceIDCard());
-        hashMap.put("policename", record.getPoliceName());
-        hashMap.put("policeorg", record.getPoliceOrg());
-        hashMap.put("apptype", appType);
-        hashMap.put("lon", record.getLon());
-        hashMap.put("lat", record.getLat());
-        hashMap.put("img", img);
+        JSONObject json = new JSONObject();
+        json.put("appid", appid);
+        json.put("deviceid", deviceNo);
+        json.put("policesfzh", record.getPoliceIDCard());
+        json.put("policename", record.getPoliceName());
+        json.put("policeorg", record.getPoliceOrg());
+        json.put("apptype", appType);
+        json.put("lon", record.getLon());
+        json.put("lat", record.getLat());
+        json.put("img", img);
         Map returnMap = new HashMap<>();
         try {
-//            HttpHeaders requestHeaders = new HttpHeaders();
-//            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
-//            requestHeaders.setContentType(type);
-//            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
-//            HttpEntity<Map> requestEntity = new HttpEntity<Map>(dataMap, requestHeaders);
-            String data = restTemplate.postForObject("http://14.28.2.32:8080/helu/checkPersonFace", hashMap, String.class);
+            HttpHeaders requestHeaders = new HttpHeaders();
+            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            requestHeaders.setContentType(type);
+            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+            HttpEntity<String> requestEntity = new HttpEntity<String>(json.toString(), requestHeaders);
+            String data = restTemplate.postForEntity("http://14.28.2.32:8080/helu/checkPersonFace", requestEntity, String.class).getBody();
             log.info("总线返回报文：{}", data);
             returnMap = JSON.parseObject(data, Map.class);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         log.info("二类区服务返回数据：{}", returnMap.toString());
@@ -294,21 +297,23 @@ public class CheckEnterServiceImpl implements CheckEnterService {
          //   CheckPersonFaceResponseList.add(checkPersonFaceResponse);
             String idnumber = checkPersonFaceResponse.getIdnumber();
             CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = xiChengService.checkPersonBasicInfo(idnumber, deviceNo);
-            CheckPersonPhotoResponse checkPersonPhotoResponse = xiChengService.checkPersonPhoto(idnumber, deviceNo);
-            FacePhoneInfo facePhoneInfo = new FacePhoneInfo();
-            facePhoneInfo.setCardNumber(checkPersonBasicInfoResponse.getCardNumber());
-            facePhoneInfo.setName(checkPersonBasicInfoResponse.getName());
-            facePhoneInfo.setImg(checkPersonPhotoResponse.getZp());
-            facePhoneInfo.setSimilarityDegree(checkPersonFaceResponse.getSimilaritydegree());
-            facePhoneInfos.add(facePhoneInfo);
+            CheckPersonPhotoResponse checkPersonPhotoResponse = xiChengService.checkPersonPhoto(deviceNo,idnumber);
+            if(checkPersonPhotoResponse!=null) {
+                FacePhoneInfo facePhoneInfo = new FacePhoneInfo();
+                facePhoneInfo.setCardNumber(checkPersonBasicInfoResponse.getCardNumber());
+                facePhoneInfo.setName(checkPersonBasicInfoResponse.getName());
+                facePhoneInfo.setImg(checkPersonPhotoResponse.getZp());
+                facePhoneInfo.setSimilarityDegree(checkPersonFaceResponse.getSimilaritydegree());
+                facePhoneInfos.add(facePhoneInfo);
+            }
         }
         //推送至PAD
-        Map pushMap = new HashMap();
+        Map<String,Object> pushMap = new HashMap<String,Object>();
         pushMap.put("messageType", 2);
         pushMap.put("data", facePhoneInfos);
-        boolean flag = pushMessage(UserUtil.getUserMap().get(request.getDeviceNo()).getPadId(), "face", pushMap, "");
+        boolean flag = pushMessage(UserUtil.getUserMap().get(request.getDeviceNo()).getPadId(), "face", pushMap, "FUN003");
 
-        //TODO 发送至二类区服务
+        // 发送至二类区服务
         System.out.println(JSON.toJSONString(pushMap));
         if (!flag) {
             throw new RuntimeException();
@@ -369,7 +374,11 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         String data = "";
         Map request = new HashMap();
         request.put("deviceNo", deviceNo);
+        request.put("account",UserUtil.getUserMap().get(deviceNo).getPoliceNumber());
+        request.put("userName",UserUtil.getUserMap().get(deviceNo).getPoliceName());
+        request.put("photo","");
         String paramString = JSON.toJSONString(request);
+        log.info("服务器推送数据时间：{}",LocalDateTime.now());
         try {
             HttpHeaders requestHeaders = new HttpHeaders();
             MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
@@ -383,6 +392,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         Map map = JSONObject.parseObject(data, Map.class);
         if ( 200 !=((Integer)map.get("code"))) {
             log.info("核录桩登录失败: {}" , map.get("code"));
+            //TODO 自定义异常
+            throw new RuntimeException();
         }
         Map dataMap = (Map) map.get("data");
         Integer status = (Integer) dataMap.get("status");
@@ -390,12 +401,15 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             log.info("核录桩登录成功");
         } else {
             log.info("核录桩登录失败: {}" , status);
+            //TODO 自定义异常
+            throw new RuntimeException();
         }
         String verifyScore = (String) dataMap.get("verifyScore");
         if (!StringUtils.isBlank(verifyScore)) {
             policeLoginRecordMapper.updateVerifyScore(padId, deviceNo, verifyScore);
         }
         UserUtil.getUserMap().get(deviceNo).setDeviceScore(verifyScore);
+        log.info("推送数据完毕：{}",LocalDateTime.now());
     }
 
     @Override
@@ -413,10 +427,13 @@ public class CheckEnterServiceImpl implements CheckEnterService {
      * @return
      */
     public boolean pushMessage(String padId, String method, Map mapData, String FFBS) {
+        //TODO 测试代码
+//        String url = socketUrl+method;
+
         String url = socketUrl;
         Map dataMap = new HashMap();
         dataMap.put("padId", padId);
-        dataMap.put("json", mapData);
+        dataMap.put("json", JSON.toJSONString(mapData));
         //拼装总线参数
 
         Map sendMap = new HashMap();
@@ -455,7 +472,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 //            requestHeaders.setContentType(type);
 //            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
 //            HttpEntity<Map> requestEntity = new HttpEntity<Map>(dataMap, requestHeaders);
-            String data = restTemplate.postForObject(url, sendMap, String.class);
+            log.info("总线发送报文：{}", sendMap);
+            String data = restTemplate.postForObject(url,sendMap, String.class);
             log.info("总线返回报文：{}", data);
             returnMap = JSON.parseObject(data, Map.class);
         } catch (Exception e) {

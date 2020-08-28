@@ -56,4 +56,9 @@ public class MyExceptionHandler {
         logger.info(returnMsg);
         return returnMsg;
     }
+
+    @ExceptionHandler(NullResultExecption.class)
+    public String handleNullResultExecption(NullResultExecption ex) {
+        return "";
+    }
 }
