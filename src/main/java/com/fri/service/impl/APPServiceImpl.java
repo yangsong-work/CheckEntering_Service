@@ -162,10 +162,12 @@ public class APPServiceImpl implements APPService {
     public PoliceManRequest getPoliceMessage(String userAccount) {
         PoliceInfo policeInfo = policeInfoMapper.selectByAccount(userAccount);
         PoliceManRequest policeManRequest = new PoliceManRequest();
-        policeManRequest.setOrgCode(policeInfo.getOrgCode());
-        policeManRequest.setUserAccount(policeInfo.getUserAccount());
-        policeManRequest.setUserIdCard(policeInfo.getUserIdCard());
-        policeManRequest.setUserName(policeInfo.getUserName());
+        if(policeInfo!=null) {
+            policeManRequest.setOrgCode(policeInfo.getOrgCode());
+            policeManRequest.setUserAccount(policeInfo.getUserAccount());
+            policeManRequest.setUserIdCard(policeInfo.getUserIdCard());
+            policeManRequest.setUserName(policeInfo.getUserName());
+        }
         return  policeManRequest;
     }
 

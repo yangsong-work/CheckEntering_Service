@@ -13,6 +13,7 @@ import com.fri.model.CheckPersonJs;
 import com.fri.model.PoliceLoginRecord;
 import com.fri.pojo.bo.app.push.CheckInfo;
 import com.fri.pojo.bo.app.push.FacePhoneInfo;
+import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.pojo.bo.pinen.VerifyImageRequest;
 import com.fri.pojo.bo.pinen.VerifyOcrRequest;
@@ -395,6 +396,12 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             policeLoginRecordMapper.updateVerifyScore(padId, deviceNo, verifyScore);
         }
         UserUtil.getUserMap().get(deviceNo).setDeviceScore(verifyScore);
+    }
+
+    @Override
+    public Map CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
+        xiChengService.checkPersonJsDetail(request);
+        return null;
     }
 
     /**
