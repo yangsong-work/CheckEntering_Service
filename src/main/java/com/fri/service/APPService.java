@@ -1,6 +1,7 @@
 package com.fri.service;
 
 import com.fri.model.CheckAddress;
+import com.fri.model.CheckPersonJsDetail2;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.app.response.CheckAddressResponse;
 import com.fri.pojo.bo.app.response.DetailsResponse;
@@ -21,5 +22,5 @@ public interface APPService {
     Map getDetails(DetailRequest detailRequest);
 
     PoliceManRequest getPoliceMessage(String userAccount);
-    Map CheckPersonJsDetail(CheckPersonJsDetailRequest request);
+    List<CheckPersonJsDetail2>  CheckPersonJsDetail(CheckPersonJsDetailRequest request);
 }
