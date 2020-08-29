@@ -6,6 +6,15 @@ public class CheckPersonJs {
     private String order;
     private String value;
     private String disposalWay;
+    private String resourceName;
+
+    public String getResourceName() {
+        return resourceName;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
 
     public String getKey() {
         return key;
@@ -55,6 +64,7 @@ public class CheckPersonJs {
                 ", order='" + order + '\'' +
                 ", value='" + value + '\'' +
                 ", disposalWay='" + disposalWay + '\'' +
+                ", resourceName='" + resourceName + '\'' +
                 '}';
     }
 }

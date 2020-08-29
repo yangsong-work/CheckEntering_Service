@@ -1,9 +1,11 @@
 package com.fri.controller;
 
+import com.fri.model.CheckPersonJsDetail2;
 import com.fri.model.PoliceInfo;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.service.APPService;
 import com.fri.utils.ResponseUtil;
+import com.fri.utils.UserUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,9 +126,9 @@ public class APPWebController {
         @PostMapping(value = "/checkPersonJsDetail")
     public Object getPersonJsDetail(@RequestBody CheckPersonJsDetailRequest request) {
         //设备号未绑定报错
-        /*if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
+        if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");
-        }*/
+        }
         log.info("核录桩传送警示详细信息接收:{},{}", request.toString(), LocalDateTime.now());
         Map map = appService.CheckPersonJsDetail(request);
         if (map == null || map.isEmpty()) {
