@@ -11,6 +11,16 @@ public class CheckPersonJsDetailRequest {
     //预警人员身份证号
     @NotBlank(message = "预警人员身份证号不能为空")
     private String cardNumber;
+    //判断参数，0为请求人的警示详情，1为本地警示详情
+    private String isLocal;
+
+    public String getIsLocal() {
+        return isLocal;
+    }
+
+    public void setIsLocal(String isLocal) {
+        this.isLocal = isLocal;
+    }
 
     public String getResName() {
         return resName;

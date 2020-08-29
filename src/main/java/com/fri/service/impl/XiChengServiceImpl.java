@@ -135,6 +135,44 @@ public class XiChengServiceImpl implements XiChengService {
         return  returnList2;
 
     }
+    @Override
+    public List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request) {
+        JSONObject jsonObject =new JSONObject();
+        JSONObject jsonObject1 =new JSONObject();
+        JSONObject jsonObject2 =new JSONObject();
+        jsonObject1.put("method","/qbfx/checkV2/getPersonJsDetail");
+        jsonObject1.put("params",jsonObject2);
+        jsonObject2.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI4YThiYjU1MDVkNWUwM2E0MDE1ZWI3ZGQ5MmY2MDE2ZCIsImltZWkiOiI4Njk2NjEwMjAzMDk3OTQiLCJpYXQiOjE1ODg4MTQwMjA2MjksIm9yZ2lkIjoiMTEwMTAyNzYwMDAwIiwiYWNjb3VudCI6Ijg4ODgwMyIsInVybCI6IjEwLjExLjUzLjIwNSJ9.Zgkj88ha4Wn3yxM8eSS7_B6aumneqfjAaNLldG5vC3Q");
+        jsonObject2.put("sfzh",request.getCardNumber());
+        jsonObject2.put("resname",request.getResName());
+        jsonObject.put("FFBS","FUN001");
+        jsonObject.put("FWQQ_NR",jsonObject1);
+        Map returnMap = new HashMap<>();
+        List<CheckPersonJsDetail2> returnList2 = new ArrayList<>();
+        try {
+            HttpHeaders requestHeaders = new HttpHeaders();
+            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            requestHeaders.setContentType(type);
+            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+            HttpEntity<String> requestEntity = new HttpEntity<String>(jsonObject.toString(), requestHeaders);
+            String data = restTemplate.postForEntity("http://10.11.53.207:7979/terminal/request", requestEntity, String.class).getBody();
+            returnMap = JSON.parseObject(data, Map.class);
+            Map results = JSON.parseObject(returnMap.get("FWTG_NR").toString(), Map.class);
+            Object data1 = results.get("data");
+            Map map = JSON.parseObject(data1.toString(), Map.class);
+            Set<Map.Entry<String, String>> entries = map.entrySet();
+            StringBuffer s =new StringBuffer();
+            for(Map.Entry<String,String> entry:entries)
+                s.append(entry.getKey()+":"+entry.getValue()+"\n");
+            CheckPersonJsDetail2 checkPersonJsDetail2 = new CheckPersonJsDetail2();
+            checkPersonJsDetail2.setResource(request.getResName());
+            checkPersonJsDetail2.setRecord(s.toString());
+            returnList2.add(checkPersonJsDetail2);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return returnList2;
+    }
 
     @Override
     public CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request) {
@@ -246,6 +284,7 @@ public class XiChengServiceImpl implements XiChengService {
     public List<CheckPersonFaceResponse> checkPersonFace(String BASE64img) {
         return null;
     }
+
 
     /**
      *   西城公安提供警示信息接口（优先级大于市局接口）

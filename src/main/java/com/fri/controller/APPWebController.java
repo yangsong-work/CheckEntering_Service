@@ -121,7 +121,7 @@ public class APPWebController {
         return ResponseUtil.ok(policeManRequest);
     }
     /*
-     *   请求人的警示详细信息
+     *   请求人的警示详细信息和本地警示信息详情
      * */
         @PostMapping(value = "/checkPersonJsDetail")
     public Object getPersonJsDetail(@RequestBody CheckPersonJsDetailRequest request) {
@@ -130,13 +130,41 @@ public class APPWebController {
             return ResponseUtil.fail("1", "核录桩未绑定");
         }
         log.info("核录桩传送警示详细信息接收:{},{}", request.toString(), LocalDateTime.now());
+        if(request.getIsLocal().equals("0")) {
+            List<CheckPersonJsDetail2> checkPersonJsDetail2s = appService.CheckPersonJsDetail(request);
+           /* if (map == null || map.isEmpty()) {
+                return ResponseUtil.fail();
+            }*/
+            log.info("核录桩传送市局警示详细信息:{},{}", request.toString(), LocalDateTime.now());
+            return  ResponseUtil.ok(checkPersonJsDetail2s);
+        }
+        if(request.getIsLocal().equals("1")){
+            List<CheckPersonJsDetail2> checkPersonJsDetail2s = appService.CheckLocalJsDetail(request);
+            /*if (map == null || map.isEmpty()) {
+                return ResponseUtil.fail();
+            }*/
+            log.info("核录桩传送西城警示详细信息:{},{}", request.toString(), LocalDateTime.now());
+            return  ResponseUtil.ok(checkPersonJsDetail2s);
+        }
+        return  ResponseUtil.fail();
+    }
+    /*
+     *   本地警示详细信息
+     * */
+   /* @PostMapping(value = "/checkPersonJsDetail")
+    public Object getPersonJsDetail(@RequestBody CheckPersonJsDetailRequest request) {
+        //设备号未绑定报错
+        *//*if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
+            return ResponseUtil.fail("1", "核录桩未绑定");
+        }*//*
+        log.info("核录桩传送警示详细信息接收:{},{}", request.toString(), LocalDateTime.now());
         Map map = appService.CheckPersonJsDetail(request);
         if (map == null || map.isEmpty()) {
             return ResponseUtil.fail();
         }
         log.info("核录桩传送警示详细信息:{},{}", request.toString(), LocalDateTime.now());
         return  ResponseUtil.ok(map);
-    }
+    }*/
     /**
      * 录入
      */
