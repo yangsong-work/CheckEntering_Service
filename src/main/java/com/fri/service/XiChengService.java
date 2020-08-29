@@ -51,7 +51,7 @@ public interface XiChengService {
     //7.市局的警示详细信息
     List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request);
     //西城公安提供警示信息接口（优先级大于市局接口）
-    List<Object> checkPersonJs4XiCheng(Map data);
+    List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map data);
 
 
 }

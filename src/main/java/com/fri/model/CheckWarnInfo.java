@@ -17,6 +17,16 @@ public class CheckWarnInfo {
 
     private String resourceName;
 
+    public String getIsLocal() {
+        return isLocal;
+    }
+
+    public void setIsLocal(String isLocal) {
+        this.isLocal = isLocal;
+    }
+
+    private String isLocal;
+
     public Long getId() {
         return id;
     }
@@ -79,5 +89,20 @@ public class CheckWarnInfo {
 
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckWarnInfo{" +
+                "id=" + id +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", key='" + key + '\'' +
+                ", order='" + order + '\'' +
+                ", value='" + value + '\'' +
+                ", disposalWay='" + disposalWay + '\'' +
+                ", color='" + color + '\'' +
+                ", resourceName='" + resourceName + '\'' +
+                ", isLocal='" + isLocal + '\'' +
+                '}';
     }
 }

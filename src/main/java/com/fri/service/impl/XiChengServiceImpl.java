@@ -1,6 +1,7 @@
 package com.fri.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fri.dao.CheckInfoForeignMapper;
 import com.fri.dao.CheckInfoMapper;
@@ -292,7 +293,7 @@ public class XiChengServiceImpl implements XiChengService {
      * @return
      */
     @Override
-    public List<Object> checkPersonJs4XiCheng(Map dataMap) {
+    public List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map dataMap) {
         String url = "http://10.11.53.207:7979/terminal/request";
         dataMap.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI4YThiYjU1MDVkNWUwM2E0MDE1ZWI3ZGQ5MmY2MDE2ZCIsImltZWkiOiI4Njk2NjEwMjAzMDk3OTQiLCJpYXQiOjE1ODg4MTQwMjA2MjksIm9yZ2lkIjoiMTEwMTAyNzYwMDAwIiwiYWNjb3VudCI6Ijg4ODgwMyIsInVybCI6IjEwLjExLjUzLjIwNSJ9.Zgkj88ha4Wn3yxM8eSS7_B6aumneqfjAaNLldG5vC3Q");
         dataMap.put("checkType","person");
@@ -327,7 +328,7 @@ public class XiChengServiceImpl implements XiChengService {
             e.printStackTrace();
         }
 
-        List<Object> returnList = new ArrayList<>();
+        List<CheckPersonJs4XiCheng> returnList = new ArrayList<>();
         //查询失败直接返回空list
         if (returnMap == null||returnMap.get("FWTG_NR")==null ) {
             return returnList;
@@ -338,8 +339,9 @@ public class XiChengServiceImpl implements XiChengService {
         if(resultDataMap==null||!resultDataMap.get("status").equals("成功")){
             return  returnList;
         }
-      //  returnList = resultDataMap.get("resultData");
-
+        List<JSONObject> list = (List<JSONObject>) JSON.parseObject(FWTG_NR, JSONObject.class).get("resultData");
+        for (JSONObject object : list) {
+        }
         return  null;
     }
 

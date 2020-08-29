@@ -5,6 +5,7 @@ import com.fri.model.*;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.app.response.CheckAddressResponse;
 import com.fri.pojo.bo.app.response.DetailsResponse;
+import com.fri.pojo.bo.xicheng.response.CheckPersonJs4XiCheng;
 import com.fri.service.APPService;
 import com.fri.service.CheckEnterService;
 import com.fri.service.XiChengService;
@@ -50,27 +51,27 @@ public class APPServiceImpl implements APPService {
     @Override
     public Integer login(LoginRequest loginRequest) {
         PoliceLoginRecord record = new PoliceLoginRecord();
-        BeanUtils.copyProperties(loginRequest,record);
+        BeanUtils.copyProperties(loginRequest, record);
         record.setCreatedTime(LocalDateTime.now());
         record.setUpdatedTime(record.getCreatedTime());
-      //  PoliceInfo policeInfo = policeInfoMapper.selectName(loginRequest.getPoliceIDCard());
-       // record.setPoliceOrg(policeInfo.getOrgCode());
+        //  PoliceInfo policeInfo = policeInfoMapper.selectName(loginRequest.getPoliceIDCard());
+        // record.setPoliceOrg(policeInfo.getOrgCode());
         //删除遗留数据
-        if(UserUtil.getUserMap().containsKey(loginRequest.getDeviceNo())){
+        if (UserUtil.getUserMap().containsKey(loginRequest.getDeviceNo())) {
             UserUtil.getUserMap().remove(loginRequest.getDeviceNo());
         }
-        if(UserUtil.getPadPushMap().containsKey(loginRequest.getPadId())){
+        if (UserUtil.getPadPushMap().containsKey(loginRequest.getPadId())) {
             UserUtil.getPadPushMap().remove(loginRequest.getPadId());
         }
 
-        UserUtil.getUserMap().put(loginRequest.getDeviceNo(),record);
+        UserUtil.getUserMap().put(loginRequest.getDeviceNo(), record);
         //创建推送记录表信息
         CheckEnterPushInfo pushInfo = new CheckEnterPushInfo();
         pushInfo.setPadId(loginRequest.getPadId());
         pushInfo.setPoliceIDCard(loginRequest.getPoliceIDCard());
         pushInfo.setCreatedTime(LocalDateTime.now());
         checkEnterPushInfoMapper.insertSelective(pushInfo);
-        UserUtil.getPadPushMap().put(loginRequest.getPadId(),pushInfo);
+        UserUtil.getPadPushMap().put(loginRequest.getPadId(), pushInfo);
 
         int i = policeLoginRecordMapper.insert(record);
 
@@ -84,7 +85,7 @@ public class APPServiceImpl implements APPService {
         // 通知核录桩
         //TODO 测试代码 上线删除
         //
-         checkEnterService.notifyLogin(checkOptionRequest.getPadId());
+        checkEnterService.notifyLogin(checkOptionRequest.getPadId());
         return policeLoginRecordMapper.updateCheckOption(checkOptionRequest);
     }
 
@@ -104,16 +105,16 @@ public class APPServiceImpl implements APPService {
 
 
     @Override
-    public List getCheckAddress(String deviceNo,String parentId) {
-        List<CheckAddress> checkAddressList = addressUtil.checkAddress(deviceNo,parentId);
+    public List getCheckAddress(String deviceNo, String parentId) {
+        List<CheckAddress> checkAddressList = addressUtil.checkAddress(deviceNo, parentId);
         List<CheckAddressResponse> returnList = new ArrayList<>();
-        for(CheckAddress checkAddress : checkAddressList){
-        CheckAddressResponse res = new CheckAddressResponse();
+        for (CheckAddress checkAddress : checkAddressList) {
+            CheckAddressResponse res = new CheckAddressResponse();
             res.setId(checkAddress.getId());
             res.setValue(checkAddress.getValue());
-            res.setParentId(checkAddress.getParentId()==null?"":checkAddress.getParentId());
-            res.setLatitude(checkAddress.getLatitude()==null?"":checkAddress.getLatitude());
-            res.setLongitude(checkAddress.getLongitude()==null?"":checkAddress.getLongitude());
+            res.setParentId(checkAddress.getParentId() == null ? "" : checkAddress.getParentId());
+            res.setLatitude(checkAddress.getLatitude() == null ? "" : checkAddress.getLatitude());
+            res.setLongitude(checkAddress.getLongitude() == null ? "" : checkAddress.getLongitude());
             returnList.add(res);
         }
         return returnList;
@@ -125,48 +126,59 @@ public class APPServiceImpl implements APPService {
         CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(detailRequest.getCardNumber());
         //人员警示信息排序
         List<CheckWarnInfo> list = checkWarnInfoMapper.selectByCardNumber(detailRequest.getCardNumber());
-        list = myCompareList(list);
+        //西城警示信息
+        Map jsXiChengMap = new HashMap();
+        jsXiChengMap.put("cardId", detailRequest.getCardNumber());
+        jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPadId());
+        jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPoliceNumber());
+        List<CheckPersonJs4XiCheng> personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+        List<CheckWarnInfo> list4XiCheng = new ArrayList<>();
+        list4XiCheng = transferList(personJsList4XiCheng);
+        list4XiCheng = myCompareList(list4XiCheng,"1");
+
+        list = myCompareList(list,"0");
+
+        list.addAll(list4XiCheng);
         Map map = new HashMap();
         DetailsResponse detailsResponse = new DetailsResponse();
-        BeanUtils.copyProperties(checkInfo,detailsResponse);
+        BeanUtils.copyProperties(checkInfo, detailsResponse);
         //封装response信息
-        int age = LocalDateTime.now().getYear()-Integer.valueOf(checkInfo.getCardNumber().substring(6,10));
-            String checkAddressId = "";
+        int age = LocalDateTime.now().getYear() - Integer.valueOf(checkInfo.getCardNumber().substring(6, 10));
+        String checkAddressId = "";
         try {
             checkAddressId = UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getCheckAddress();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-            log.info("此核录桩未绑定:{}",detailRequest.getDeviceNo());
+            log.info("此核录桩未绑定:{}", detailRequest.getDeviceNo());
         }
         //以防没有数据
         detailsResponse.setCheckArea("");
-        if(checkAddressId!=null) {
+        if (checkAddressId != null) {
             CheckAddress checkAddress = checkAddressMapper.selectByPrimaryKey(checkAddressId);
             detailsResponse.setCheckArea(checkAddress.getValue());
         }
-        detailsResponse.setAge(age+"");
+        detailsResponse.setAge(age + "");
         detailsResponse.setCheckChannel(detailRequest.getDeviceNo());
-        detailsResponse.setZp(checkInfo.getZp()==null?"":checkInfo.getZp());
-        LocalDateTime localDateTime =  LocalDateTime.now();
+        detailsResponse.setZp(checkInfo.getZp() == null ? "" : checkInfo.getZp());
+        LocalDateTime localDateTime = LocalDateTime.now();
         DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
-        String time  = localDateTime.format(dt);
+        String time = localDateTime.format(dt);
         detailsResponse.setWarnTime(time);
 
-        map.put("detailsResponse",detailsResponse);
-        map.put("warnList",list);
-        return  map;
+        map.put("detailsResponse", detailsResponse);
+        map.put("warnList", list);
+        return map;
     }
+
     @Override
-    public List<CheckPersonJsDetail2>  CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
+    public List<CheckPersonJsDetail2> CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
         //请求    拿信息
         List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkPersonJsDetail(request);
-        if(checkPersonJsDetail2s==null){
-            return  null;
+        if (checkPersonJsDetail2s == null) {
+            return null;
         }
-      // Map returnMap = new HashMap();
-      //  returnMap.put("data",checkPersonJsDetail2s);
+        // Map returnMap = new HashMap();
+        //  returnMap.put("data",checkPersonJsDetail2s);
 
         return checkPersonJsDetail2s;
     }
@@ -174,10 +186,10 @@ public class APPServiceImpl implements APPService {
     @Override
     public List<CheckPersonJsDetail2> CheckLocalJsDetail(CheckPersonJsDetailRequest request) {
         List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkLocalJsDetail(request);
-        if(checkPersonJsDetail2s==null){
-            return  null;
+        if (checkPersonJsDetail2s == null) {
+            return null;
         }
-       // Map returnMap = new HashMap();
+        // Map returnMap = new HashMap();
         //returnMap.put("data",checkPersonJsDetail2s);
         return checkPersonJsDetail2s;
     }
@@ -186,29 +198,30 @@ public class APPServiceImpl implements APPService {
     public PoliceManRequest getPoliceMessage(String userAccount) {
         PoliceInfo policeInfo = policeInfoMapper.selectByAccount(userAccount);
         PoliceManRequest policeManRequest = new PoliceManRequest();
-        if(policeInfo!=null) {
+        if (policeInfo != null) {
             policeManRequest.setOrgCode(policeInfo.getOrgCode());
             policeManRequest.setUserAccount(policeInfo.getUserAccount());
             policeManRequest.setUserIdCard(policeInfo.getUserIdCard());
             policeManRequest.setUserName(policeInfo.getUserName());
         }
-        return  policeManRequest;
+        return policeManRequest;
     }
 
 
-    private List myCompareList(List<CheckWarnInfo> list){
+    private List myCompareList(List<CheckWarnInfo> list,String isLocal) {
         List<CheckWarnInfo> returnList = new ArrayList<>();
         //按红黄绿paixv
         List<CheckWarnInfo> yellowList = new ArrayList<>();
         List<CheckWarnInfo> greenList = new ArrayList<>();
-        for(CheckWarnInfo checkWarnInfo: list){
-            if(checkWarnInfo.getColor().equals("red")){
+        for (CheckWarnInfo checkWarnInfo : list) {
+            checkWarnInfo.setIsLocal(isLocal);
+            if (checkWarnInfo.getColor().equals("red")) {
                 returnList.add(checkWarnInfo);
             }
-            if(checkWarnInfo.getColor().equals("yellow")){
+            if (checkWarnInfo.getColor().equals("yellow")) {
                 yellowList.add(checkWarnInfo);
             }
-            if(checkWarnInfo.getColor().equals("green")){
+            if (checkWarnInfo.getColor().equals("green")) {
                 greenList.add(checkWarnInfo);
             }
         }
@@ -216,5 +229,30 @@ public class APPServiceImpl implements APPService {
         returnList.addAll(greenList);
         return returnList;
     }
+
+    private List<CheckWarnInfo> transferList(List<CheckPersonJs4XiCheng> list) {
+        List<CheckWarnInfo> returnList = new ArrayList<>();
+        for (CheckPersonJs4XiCheng checkPersonJs4XiCheng : list) {
+            CheckPersonJs checkPersonJs = new CheckPersonJs();
+            checkPersonJs.setValue(checkPersonJs4XiCheng.getDATA_CLASS());
+            checkPersonJs.setResourceName(checkPersonJs4XiCheng.getResourceName());
+
+            String color = "white";
+            switch (checkPersonJs4XiCheng.getALARM_LEVEL()) {
+                case "1":
+                    color = "green";
+                    break;
+                case "2":
+                    color = "yellow";
+                    break;
+                case "3":
+                    color = "red";
+                    break;
+            }
+            checkPersonJs.setColor(color);
+        }
+        return  returnList;
+    }
+
 
 }
