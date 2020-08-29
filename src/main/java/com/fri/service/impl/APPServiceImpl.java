@@ -165,21 +165,21 @@ public class APPServiceImpl implements APPService {
         if(checkPersonJsDetail2s==null){
             return  null;
         }
-     //   Map returnMap = new HashMap();
+      // Map returnMap = new HashMap();
       //  returnMap.put("data",checkPersonJsDetail2s);
 
         return checkPersonJsDetail2s;
     }
 
     @Override
-    public Map CheckLocalJsDetail(CheckPersonJsDetailRequest request) {
+    public List<CheckPersonJsDetail2> CheckLocalJsDetail(CheckPersonJsDetailRequest request) {
         List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkLocalJsDetail(request);
         if(checkPersonJsDetail2s==null){
             return  null;
         }
-        Map returnMap = new HashMap();
-        returnMap.put("data",checkPersonJsDetail2s);
-        return returnMap;
+       // Map returnMap = new HashMap();
+        //returnMap.put("data",checkPersonJsDetail2s);
+        return checkPersonJsDetail2s;
     }
 
     @Override

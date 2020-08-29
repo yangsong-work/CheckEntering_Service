@@ -47,7 +47,7 @@ public interface XiChengService {
     //25.人脸识别接口
     List<CheckPersonFaceResponse> checkPersonFace(String BASE64img);
 
-
+    //7.市局的警示详细信息
     List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request);
 
 }

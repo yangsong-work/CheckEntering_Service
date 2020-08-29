@@ -131,20 +131,20 @@ public class APPWebController {
         }
         log.info("核录桩传送警示详细信息接收:{},{}", request.toString(), LocalDateTime.now());
         if(request.getIsLocal().equals("0")) {
-            Map map = appService.CheckPersonJsDetail(request);
-            if (map == null || map.isEmpty()) {
+            List<CheckPersonJsDetail2> checkPersonJsDetail2s = appService.CheckPersonJsDetail(request);
+           /* if (map == null || map.isEmpty()) {
                 return ResponseUtil.fail();
-            }
+            }*/
             log.info("核录桩传送市局警示详细信息:{},{}", request.toString(), LocalDateTime.now());
-            return  ResponseUtil.ok(map);
+            return  ResponseUtil.ok(checkPersonJsDetail2s);
         }
         if(request.getIsLocal().equals("1")){
-            Map map = appService.CheckLocalJsDetail(request);
-            if (map == null || map.isEmpty()) {
+            List<CheckPersonJsDetail2> checkPersonJsDetail2s = appService.CheckLocalJsDetail(request);
+            /*if (map == null || map.isEmpty()) {
                 return ResponseUtil.fail();
-            }
+            }*/
             log.info("核录桩传送西城警示详细信息:{},{}", request.toString(), LocalDateTime.now());
-            return  ResponseUtil.ok(map);
+            return  ResponseUtil.ok(checkPersonJsDetail2s);
         }
         return  ResponseUtil.fail();
     }
