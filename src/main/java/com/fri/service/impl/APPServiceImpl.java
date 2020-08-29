@@ -170,6 +170,18 @@ public class APPServiceImpl implements APPService {
 
         return returnMap;
     }
+
+    @Override
+    public Map CheckLocalJsDetail(CheckPersonJsDetailRequest request) {
+        List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkLocalJsDetail(request);
+        if(checkPersonJsDetail2s==null){
+            return  null;
+        }
+        Map returnMap = new HashMap();
+        returnMap.put("data",checkPersonJsDetail2s);
+        return returnMap;
+    }
+
     @Override
     public PoliceManRequest getPoliceMessage(String userAccount) {
         PoliceInfo policeInfo = policeInfoMapper.selectByAccount(userAccount);

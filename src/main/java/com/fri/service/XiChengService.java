@@ -48,4 +48,6 @@ public interface XiChengService {
     List<CheckPersonFaceResponse> checkPersonFace(String BASE64img);
 
 
+    List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request);
+
 }
