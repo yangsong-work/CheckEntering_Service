@@ -12,6 +12,7 @@ import com.fri.pojo.bo.xicheng.request.CheckInfoListRequest;
 import com.fri.pojo.bo.xicheng.response.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface XiChengService {
     //2.请求核查对象历史统计信息
@@ -46,6 +47,9 @@ public interface XiChengService {
 
     //25.人脸识别接口
     List<CheckPersonFaceResponse> checkPersonFace(String BASE64img);
+
+    //西城公安提供警示信息接口（优先级大于市局接口）
+    List<Object> checkPersonJs4XiCheng(Map data);
 
 
 }

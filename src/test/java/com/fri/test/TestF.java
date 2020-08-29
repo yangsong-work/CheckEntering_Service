@@ -5,19 +5,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 public class TestF {
     @Autowired
     CountryInfoMapper countryInfoMapper;
     public static void main(String[] args) throws IOException {
-        int i = 0;
-             try {
-                 int b  = 2/0;
-             }catch (NullPointerException e){
-                 e.printStackTrace();
-             }
-        System.out.println("hello");
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter fdt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String s = fdt.format(time);
+        System.out.println(s);
     }
 
 }

@@ -23,6 +23,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -244,6 +246,64 @@ public class XiChengServiceImpl implements XiChengService {
     public List<CheckPersonFaceResponse> checkPersonFace(String BASE64img) {
         return null;
     }
+
+    /**
+     *   西城公安提供警示信息接口（优先级大于市局接口）
+     * @param dataMap
+     * @return
+     */
+    @Override
+    public List<Object> checkPersonJs4XiCheng(Map dataMap) {
+        String url = "http://10.11.53.207:7979/terminal/request";
+        dataMap.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI4YThiYjU1MDVkNWUwM2E0MDE1ZWI3ZGQ5MmY2MDE2ZCIsImltZWkiOiI4Njk2NjEwMjAzMDk3OTQiLCJpYXQiOjE1ODg4MTQwMjA2MjksIm9yZ2lkIjoiMTEwMTAyNzYwMDAwIiwiYWNjb3VudCI6Ijg4ODgwMyIsInVybCI6IjEwLjExLjUzLjIwNSJ9.Zgkj88ha4Wn3yxM8eSS7_B6aumneqfjAaNLldG5vC3Q");
+        dataMap.put("checkType","person");
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter fdt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String checkTime = fdt.format(time);
+        dataMap.put("checkTime", checkTime);
+
+        Map subMap = new HashMap();
+        subMap.put("params",dataMap);
+        subMap.put("method","/qbfx/checkV2/getLocalAlarm");
+
+
+        Map sendMap = new HashMap();
+        sendMap.put("FWQQ_NR",subMap);
+        sendMap.put("FWBS","FUN001");
+
+
+
+        Map returnMap = new HashMap();
+        try {
+//            HttpHeaders requestHeaders = new HttpHeaders();
+//            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+//            requestHeaders.setContentType(type);
+//            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+//            HttpEntity<Map> requestEntity = new HttpEntity<Map>(dataMap, requestHeaders);
+            logger.info("总线发送报文：{}", sendMap);
+            String data = restTemplate.postForObject(url,sendMap, String.class);
+            logger.info("总线返回报文：{}", data);
+            returnMap = JSON.parseObject(data, Map.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        List<Object> returnList = new ArrayList<>();
+        //查询失败直接返回空list
+        if (returnMap == null||returnMap.get("FWTG_NR")==null ) {
+            return returnList;
+        }
+        String  FWTG_NR  = (String) returnMap.get("FWTG_NR");
+        Map resultDataMap  = JSON.parseObject(FWTG_NR,Map.class);
+
+        if(resultDataMap==null||!resultDataMap.get("status").equals("成功")){
+            return  returnList;
+        }
+      //  returnList = resultDataMap.get("resultData");
+
+        return  null;
+    }
+
 
     /**
      * restTemplate get请求封装
