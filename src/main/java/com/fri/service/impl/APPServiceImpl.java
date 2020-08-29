@@ -159,16 +159,16 @@ public class APPServiceImpl implements APPService {
         return  map;
     }
     @Override
-    public Map CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
+    public List<CheckPersonJsDetail2>  CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
         //请求    拿信息
         List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkPersonJsDetail(request);
         if(checkPersonJsDetail2s==null){
             return  null;
         }
-        Map returnMap = new HashMap();
-        returnMap.put("data",checkPersonJsDetail2s);
+     //   Map returnMap = new HashMap();
+      //  returnMap.put("data",checkPersonJsDetail2s);
 
-        return returnMap;
+        return checkPersonJsDetail2s;
     }
 
     @Override

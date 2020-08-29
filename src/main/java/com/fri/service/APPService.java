@@ -22,7 +22,5 @@ public interface APPService {
 
     PoliceManRequest getPoliceMessage(String userAccount);
     Map CheckPersonJsDetail(CheckPersonJsDetailRequest request);
-
     Map CheckLocalJsDetail(CheckPersonJsDetailRequest request);
-
 }
