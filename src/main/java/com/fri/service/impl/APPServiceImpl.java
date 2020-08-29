@@ -28,24 +28,24 @@ import java.util.Map;
 public class APPServiceImpl implements APPService {
     public static Logger log = LoggerFactory.getLogger(APPService.class);
     @Autowired
-    PoliceLoginRecordMapper policeLoginRecordMapper;
+    private PoliceLoginRecordMapper policeLoginRecordMapper;
     @Autowired
-    XiChengService xiChengService;
+    private XiChengService xiChengService;
     @Autowired
-    AddressUtil addressUtil;
+    private AddressUtil addressUtil;
 
     @Autowired
-    CheckEnterPushInfoMapper checkEnterPushInfoMapper;
+    private CheckEnterPushInfoMapper checkEnterPushInfoMapper;
     @Autowired
-    CheckInfoMapper checkInfoMapper;
+    private CheckInfoMapper checkInfoMapper;
     @Autowired
-    CheckWarnInfoMapper checkWarnInfoMapper;
+    private CheckWarnInfoMapper checkWarnInfoMapper;
     @Autowired
-    CheckAddressMapper checkAddressMapper;
+    private CheckAddressMapper checkAddressMapper;
     @Autowired
-    CheckEnterService checkEnterService;
+    private CheckEnterService checkEnterService;
     @Autowired
-    PoliceInfoMapper policeInfoMapper;
+    private PoliceInfoMapper policeInfoMapper;
 
 
     @Override
@@ -84,7 +84,6 @@ public class APPServiceImpl implements APPService {
         UserUtil.getUserMap().get(checkOptionRequest.getDeviceNo()).setCheckAddress(checkOptionRequest.getCheckAddress());
         // 通知核录桩
         //TODO 测试代码 上线删除
-        //
         checkEnterService.notifyLogin(checkOptionRequest.getPadId());
         return policeLoginRecordMapper.updateCheckOption(checkOptionRequest);
     }
@@ -125,13 +124,29 @@ public class APPServiceImpl implements APPService {
         //人员基本信息
         CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(detailRequest.getCardNumber());
         //人员警示信息排序
-        List<CheckWarnInfo> list = checkWarnInfoMapper.selectByCardNumber(detailRequest.getCardNumber());
+        List<CheckWarnInfo> list = new ArrayList<>();
+        try {
+            list = checkWarnInfoMapper.selectByCardNumber(detailRequest.getCardNumber());
+            System.out.println("公安3.0返回数据"+list);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            log.info("公安3.0警示信息接口请求异常");
+        }
         //西城警示信息
         Map jsXiChengMap = new HashMap();
         jsXiChengMap.put("cardId", detailRequest.getCardNumber());
         jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPadId());
         jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPoliceNumber());
-        List<CheckPersonJs4XiCheng> personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+        List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
+        try {
+            personJsList4XiCheng =  xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+            System.out.println("西城接口返回数据"+list);
+        }catch (Exception e){
+            e.printStackTrace();
+            log.info("西城分局警示信息接口请求异常");
+        }
+
         List<CheckWarnInfo> list4XiCheng = new ArrayList<>();
         list4XiCheng = transferList(personJsList4XiCheng);
         list4XiCheng = myCompareList(list4XiCheng,"1");
@@ -142,6 +157,7 @@ public class APPServiceImpl implements APPService {
         Map map = new HashMap();
         DetailsResponse detailsResponse = new DetailsResponse();
         BeanUtils.copyProperties(checkInfo, detailsResponse);
+        detailsResponse.setMinzu(checkInfo.getMinzuCn());
         //封装response信息
         int age = LocalDateTime.now().getYear() - Integer.valueOf(checkInfo.getCardNumber().substring(6, 10));
         String checkAddressId = "";
@@ -230,26 +246,27 @@ public class APPServiceImpl implements APPService {
         return returnList;
     }
 
-    private List<CheckWarnInfo> transferList(List<CheckPersonJs4XiCheng> list) {
+    public List<CheckWarnInfo> transferList(List<CheckPersonJs4XiCheng> list) {
         List<CheckWarnInfo> returnList = new ArrayList<>();
         for (CheckPersonJs4XiCheng checkPersonJs4XiCheng : list) {
-            CheckPersonJs checkPersonJs = new CheckPersonJs();
-            checkPersonJs.setValue(checkPersonJs4XiCheng.getDATA_CLASS());
-            checkPersonJs.setResourceName(checkPersonJs4XiCheng.getResourceName());
+            CheckWarnInfo checkWarnInfo = new CheckWarnInfo();
+            checkWarnInfo.setValue(checkPersonJs4XiCheng.getDATA_CLASS());
+            checkWarnInfo.setResourceName(checkPersonJs4XiCheng.getResourceName());
 
             String color = "white";
             switch (checkPersonJs4XiCheng.getALARM_LEVEL()) {
-                case "1":
+                case "3":
                     color = "green";
                     break;
                 case "2":
                     color = "yellow";
                     break;
-                case "3":
+                case "1":
                     color = "red";
                     break;
             }
-            checkPersonJs.setColor(color);
+            checkWarnInfo.setColor(color);
+            returnList.add(checkWarnInfo);
         }
         return  returnList;
     }

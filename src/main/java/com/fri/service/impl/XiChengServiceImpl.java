@@ -320,9 +320,9 @@ public class XiChengServiceImpl implements XiChengService {
 //            requestHeaders.setContentType(type);
 //            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
 //            HttpEntity<Map> requestEntity = new HttpEntity<Map>(dataMap, requestHeaders);
-            logger.info("总线发送报文：{}", sendMap);
+            logger.info("发送报文：{}", sendMap);
             String data = restTemplate.postForObject(url,sendMap, String.class);
-            logger.info("总线返回报文：{}", data);
+            logger.info("返回报文：{}", data);
             returnMap = JSON.parseObject(data, Map.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -333,16 +333,16 @@ public class XiChengServiceImpl implements XiChengService {
         if (returnMap == null||returnMap.get("FWTG_NR")==null ) {
             return returnList;
         }
-        String  FWTG_NR  = (String) returnMap.get("FWTG_NR");
-        Map resultDataMap  = JSON.parseObject(FWTG_NR,Map.class);
-
-        if(resultDataMap==null||!resultDataMap.get("status").equals("成功")){
+        JSONObject  FWTG_NR  = (JSONObject) returnMap.get("FWTG_NR");
+        if(FWTG_NR==null||!FWTG_NR.get("status").equals("成功")){
             return  returnList;
         }
-        List<JSONObject> list = (List<JSONObject>) JSON.parseObject(FWTG_NR, JSONObject.class).get("resultData");
-        for (JSONObject object : list) {
-        }
-        return  null;
+        List<CheckPersonJs4XiCheng> list = JSON.parseArray(FWTG_NR.getString("resultData"),CheckPersonJs4XiCheng.class);
+
+//        List<JSONObject> list = (List<JSONObject>) JSON.parseObject(FWTG_NR, JSONObject.class).get("resultData");
+//        for (JSONObject object : list) {
+//        }
+        return  list;
     }
 
 

@@ -17,6 +17,7 @@ import com.fri.pojo.bo.pinen.VerifyImageRequest;
 import com.fri.pojo.bo.pinen.VerifyOcrRequest;
 import com.fri.pojo.bo.xicheng.request.CheckForeignPersonInfoRequest;
 import com.fri.pojo.bo.xicheng.response.*;
+import com.fri.service.APPService;
 import com.fri.service.CheckEnterService;
 import com.fri.service.XiChengService;
 import com.fri.utils.UserUtil;
@@ -41,6 +42,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     public static Logger log = LoggerFactory.getLogger(CheckEnterService.class);
     @Autowired
     XiChengService xiChengService;
+    @Autowired
+    APPService appService;
     @Autowired
     TrsUtil trsUtil;
     @Autowired
@@ -84,6 +87,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 return map;
             }
         }
+
+
         //人证核验通过流程与手工输入身份证号流程
         CheckPersonBasicInfoResponse personBasicInfoResponse = xiChengService.checkPersonBasicInfo(IDCard, verifyIDCardRequest.getDeviceNo());
         List<CheckPersonJs> personJsList = xiChengService.checkPersonJs(IDCard, verifyIDCardRequest.getDeviceNo());
@@ -97,6 +102,51 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         String warningColor = "white";
         String status = "1";
         for (CheckPersonJs personJs : personJsList) {
+            String color = personJs.getColor();
+            if (("red").equals(color)) {
+                warningColor = color;
+                status = "2";
+                break;
+            }
+            if (("yellow").equals(color)) {
+                warningColor = color;
+                status = "2";
+            }
+            if (("green").equals(color) && !warningColor.equals("yellow")) {
+                warningColor = color;
+                status = "1";
+            }
+        }
+        List<CheckWarnInfo> checkWarnInfoList = new ArrayList<>();
+        try {
+            Map jsXiChengMap = new HashMap();
+            jsXiChengMap.put("cardId", verifyIDCardRequest.getpCardNo());
+            jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId());
+            jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPoliceNumber());
+            List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+            checkWarnInfoList = appService.transferList(personJsList4XiCheng);
+            for (CheckWarnInfo personJs : checkWarnInfoList) {
+                String color = personJs.getColor();
+                if (("red").equals(color)) {
+                    warningColor = color;
+                    status = "2";
+                    break;
+                }
+                if (("yellow").equals(color)) {
+                    warningColor = color;
+                    status = "2";
+                }
+                if (("green").equals(color) && !warningColor.equals("yellow")) {
+                    warningColor = color;
+                    status = "1";
+                }
+            }
+            System.out.println("西城公安网数据"+checkWarnInfoList);
+        }catch (Exception e){
+            log.info("西城接口发送失败");
+        }
+        for (CheckWarnInfo personJs : checkWarnInfoList) {
             String color = personJs.getColor();
             if (("red").equals(color)) {
                 warningColor = color;
@@ -149,10 +199,10 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         Map pushMap = new HashMap();
         pushMap.put("messageType", 1);
         pushMap.put("data", JSON.toJSON(checkInfo));
+        System.out.println(JSON.toJSONString(pushMap));
         boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
         // 发送至二类区服务
-        System.out.println(JSON.toJSONString(pushMap));
         if (!flag) {
             throw new RuntimeException();
         }
