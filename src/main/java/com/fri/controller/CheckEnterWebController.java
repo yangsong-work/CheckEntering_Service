@@ -73,7 +73,7 @@ public class CheckEnterWebController {
         log.info("核录桩传送人脸信息接收:{},{}", request.toString(), LocalDateTime.now());
         Map map = checkEnterService.verifyFacePhoto(request);
         if (map == null || map.isEmpty()) {
-            return ResponseUtil.fail();
+            return ResponseUtil.fail("1","查无信息");
         }
         log.info("核录桩传送人脸信息推送完毕:{},{}", request.toString(), LocalDateTime.now());
         return ResponseUtil.ok();

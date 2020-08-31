@@ -116,7 +116,7 @@ public class APPWebController {
      //deviceNo    身份证号      resname
         PoliceManRequest policeManRequest = appService.getPoliceMessage(policeInfo.getUserAccount());
         if(policeManRequest==null){
-            return ResponseUtil.fail();
+            return ResponseUtil.fail("1","查无此警员信息");
         }
         return ResponseUtil.ok(policeManRequest);
     }
@@ -135,6 +135,9 @@ public class APPWebController {
            /* if (map == null || map.isEmpty()) {
                 return ResponseUtil.fail();
             }*/
+           if(checkPersonJsDetail2s==null||checkPersonJsDetail2s.isEmpty()){
+               return ResponseUtil.fail("1","查无信息");
+           }
             log.info("核录桩传送市局警示详细信息:{},{}", request.toString(), LocalDateTime.now());
             return  ResponseUtil.ok(checkPersonJsDetail2s);
         }
@@ -143,6 +146,9 @@ public class APPWebController {
             /*if (map == null || map.isEmpty()) {
                 return ResponseUtil.fail();
             }*/
+            if(checkPersonJsDetail2s==null||checkPersonJsDetail2s.isEmpty()){
+                return  ResponseUtil.fail("1","查无信息");
+            }
             log.info("核录桩传送西城警示详细信息:{},{}", request.toString(), LocalDateTime.now());
             return  ResponseUtil.ok(checkPersonJsDetail2s);
         }
