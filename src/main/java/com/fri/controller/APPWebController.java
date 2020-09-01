@@ -142,7 +142,7 @@ public class APPWebController {
                checkPersonJsDetail22.setRecord("暂无相关信息");
                checkPersonJsDetail22.setResource(request.getResName());
                checkPersonJsDetail2s1.add(checkPersonJsDetail22);
-               return  ResponseUtil.ok1(checkPersonJsDetail2s1);
+               return  ResponseUtil.ok(checkPersonJsDetail2s1);
            }
             log.info("核录桩传送市局警示详细信息:{},{}", request.toString(), LocalDateTime.now());
             return  ResponseUtil.ok(checkPersonJsDetail2s);
@@ -158,7 +158,7 @@ public class APPWebController {
                 checkPersonJsDetail22.setRecord("暂无相关信息");
                 checkPersonJsDetail22.setResource(request.getResName());
                 checkPersonJsDetail2s1.add(checkPersonJsDetail22);
-                return  ResponseUtil.ok1(checkPersonJsDetail2s1);
+                return  ResponseUtil.ok(checkPersonJsDetail2s1);
             }
             log.info("核录桩传送西城警示详细信息:{},{}", request.toString(), LocalDateTime.now());
             return  ResponseUtil.ok(checkPersonJsDetail2s);
