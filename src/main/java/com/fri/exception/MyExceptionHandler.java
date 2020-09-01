@@ -5,6 +5,7 @@ import com.fri.utils.ResponseUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,8 +58,14 @@ public class MyExceptionHandler {
         return returnMsg;
     }
 
-    @ExceptionHandler(NullResultExecption.class)
-    public String handleNullResultExecption(NullResultExecption ex) {
-        return "";
+    @ExceptionHandler(value = NoMessageException.class)
+    public String noMessageExceptionHandler(NoMessageException e) {
+        String errMsg = e.getMessage();
+        if (StringUtils.isBlank(errMsg)) {
+           errMsg =  "暂无相关信息";
+         }
+        String returnMsg = ResponseUtil.fail("2", errMsg);
+        logger.info(returnMsg);
+        return returnMsg;
     }
 }

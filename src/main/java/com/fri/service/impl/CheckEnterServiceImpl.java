@@ -72,7 +72,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         CheckImage checkImage = new CheckImage();
         checkImage.setImg(verifyIDCardRequest.getpCaptureImage());
         checkImage.setCardNo(verifyIDCardRequest.getpCardNo());
-        checkImageMapper.insertSelective(checkImage);
+        //checkImageMapper.insertSelective(checkImage);
 
         String IDCard = verifyIDCardRequest.getpCardNo();
         // 人证核验
@@ -182,15 +182,20 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         pushInfo.setWarningNumber(pushInfo.getGreenWarningNumber() + pushInfo.getYellowWarningNumber() + pushInfo.getRedWarningNumber());
         pushInfo.setUpdatedTime(LocalDateTime.now());
         checkEnterPushInfoMapper.updateByPrimaryKeySelective(pushInfo);
-
+        int age = LocalDateTime.now().getYear() - Integer.valueOf(personBasicInfoResponse.getCardNumber().substring(6, 10));
 
         CheckInfo checkInfo = new CheckInfo();
         checkInfo.setCheckNumber(pushInfo.getCheckNumber());
-        checkInfo.setWarningNumber(pushInfo.getWarningNumber());
-        checkInfo.setRedWarningNumber(pushInfo.getRedWarningNumber());
-        checkInfo.setYellowWarningNumber(pushInfo.getYellowWarningNumber());
-        checkInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber());
-        checkInfo.setVerifyNumber(pushInfo.getVerifyNumber());
+       // checkInfo.setWarningNumber(pushInfo.getWarningNumber());
+        //checkInfo.setRedWarningNumber(pushInfo.getRedWarningNumber());
+        //checkInfo.setYellowWarningNumber(pushInfo.getYellowWarningNumber());
+        //checkInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber());
+        //checkInfo.setVerifyNumber(pushInfo.getVerifyNumber());
+        checkInfo.setName(personBasicInfoResponse.getName());
+        checkInfo.setSex(personBasicInfoResponse.getSex());
+        checkInfo.setAge(age+"");
+        checkInfo.setMinzuCn(personBasicInfoResponse.getMinzuCn());
+        checkInfo.setHouseHolds(personBasicInfoResponse.getHouseHolds());
         checkInfo.setWarningColor(warningColor);
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
@@ -273,6 +278,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 break;
         }
 
+        int age = LocalDateTime.now().getYear() - Integer.valueOf(checkForeignPersonBasic.getIdentify().substring(0, 4));
+
         //更新push表的信息
         pushInfo.setWarningNumber(pushInfo.getGreenWarningNumber() + pushInfo.getYellowWarningNumber() + pushInfo.getRedWarningNumber());
         pushInfo.setUpdatedTime(LocalDateTime.now());
@@ -281,11 +288,16 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
         CheckInfo checkInfo = new CheckInfo();
         checkInfo.setCheckNumber(pushInfo.getCheckNumber());
-        checkInfo.setWarningNumber(pushInfo.getWarningNumber());
-        checkInfo.setRedWarningNumber(pushInfo.getRedWarningNumber());
-        checkInfo.setYellowWarningNumber(pushInfo.getYellowWarningNumber());
-        checkInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber());
-        checkInfo.setVerifyNumber(pushInfo.getVerifyNumber());
+//        checkInfo.setWarningNumber(pushInfo.getWarningNumber());
+//        checkInfo.setRedWarningNumber(pushInfo.getRedWarningNumber());
+//        checkInfo.setYellowWarningNumber(pushInfo.getYellowWarningNumber());
+//        checkInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber());
+//        checkInfo.setVerifyNumber(pushInfo.getVerifyNumber());
+        checkInfo.setName(checkForeignPersonBasic.getForeignerName());
+        checkInfo.setSex(checkForeignPersonBasic.getSex());
+        checkInfo.setAge(age+"");
+        checkInfo.setMinzuCn("");
+        checkInfo.setHouseHolds("");
         checkInfo.setWarningColor(warningColor);
         checkInfo.setImg("");
         checkInfo.setCardNumber(checkForeignPersonBasic.getIdentify());
@@ -402,16 +414,22 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         pushInfo.setVerifyNumber(pushInfo.getVerifyNumber() + 1);
         pushInfo.setUpdatedTime(LocalDateTime.now());
 
+        int age = LocalDateTime.now().getYear() - Integer.valueOf(personBasicInfoResponse.getCardNumber().substring(6, 10));
         //更新push表
         checkEnterPushInfoMapper.updateByPrimaryKeySelective(pushInfo);
         //组合推送信息
         CheckInfo checkInfo = new CheckInfo();
         checkInfo.setCheckNumber(pushInfo.getCheckNumber());
-        checkInfo.setWarningNumber(pushInfo.getWarningNumber());
-        checkInfo.setRedWarningNumber(pushInfo.getRedWarningNumber());
-        checkInfo.setYellowWarningNumber(pushInfo.getYellowWarningNumber());
-        checkInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber());
-        checkInfo.setVerifyNumber(pushInfo.getVerifyNumber());
+//        checkInfo.setWarningNumber(pushInfo.getWarningNumber());
+//        checkInfo.setRedWarningNumber(pushInfo.getRedWarningNumber());
+//        checkInfo.setYellowWarningNumber(pushInfo.getYellowWarningNumber());
+//        checkInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber());
+//        checkInfo.setVerifyNumber(pushInfo.getVerifyNumber());
+        checkInfo.setName(personBasicInfoResponse.getName());
+        checkInfo.setSex(personBasicInfoResponse.getSex());
+        checkInfo.setAge(age+"");
+        checkInfo.setMinzuCn(personBasicInfoResponse.getMinzuCn());
+        checkInfo.setHouseHolds(personBasicInfoResponse.getHouseHolds());
         checkInfo.setWarningColor("orange");
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());

@@ -1,6 +1,7 @@
 package com.fri.service.impl;
 
 import com.fri.dao.*;
+import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.app.response.CheckAddressResponse;

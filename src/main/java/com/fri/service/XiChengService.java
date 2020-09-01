@@ -1,6 +1,7 @@
 package com.fri.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fri.exception.NoMessageException;
 import com.fri.model.CheckAddress;
 import com.fri.model.CheckPersonJs;
 import com.fri.model.CheckPersonJsDetail2;
@@ -19,13 +20,13 @@ public interface XiChengService {
     List<CheckInfoHistoryResponse> checkInfoHistory(CheckInfoHistoryResquest data);
 
     //5.请求人的基本信息
-    CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo);
+    CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo) ;
 
     //6.请求人的警示信息
-    List<CheckPersonJs> checkPersonJs(String IDCard, String deviceNo);
+    List<CheckPersonJs> checkPersonJs(String IDCard, String deviceNo) ;
 
     //7.请求人的警示详细信息
-    List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request);
+    List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request) ;
 
     //9.请求境外人员基本信息(ocr)
     CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request);

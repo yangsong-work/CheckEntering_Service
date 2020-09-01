@@ -1,5 +1,6 @@
 package com.fri.service;
 
+import com.fri.exception.NoMessageException;
 import com.fri.model.CheckAddress;
 import com.fri.model.CheckPersonJsDetail2;
 import com.fri.model.CheckWarnInfo;
@@ -25,7 +26,7 @@ public interface APPService {
 
     PoliceManRequest getPoliceMessage(String userAccount);
 
-    List<CheckPersonJsDetail2> CheckPersonJsDetail(CheckPersonJsDetailRequest request);
+    List<CheckPersonJsDetail2> CheckPersonJsDetail(CheckPersonJsDetailRequest request) ;
 
     List<CheckPersonJsDetail2> CheckLocalJsDetail(CheckPersonJsDetailRequest request);
 

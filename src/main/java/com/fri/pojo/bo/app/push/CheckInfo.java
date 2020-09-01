@@ -10,6 +10,52 @@ public class CheckInfo {
     private String warningColor;
     private String img;
     private String cardNumber;
+    //2020.09.01新增需求保留核查人数，增添基本信息
+    private String name;
+    private String sex;
+    private String age;
+    private String minzuCn;
+    private String  houseHolds;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getMinzuCn() {
+        return minzuCn;
+    }
+
+    public void setMinzuCn(String minzuCn) {
+        this.minzuCn = minzuCn;
+    }
+
+    public String getHouseHolds() {
+        return houseHolds;
+    }
+
+    public void setHouseHolds(String houseHolds) {
+        this.houseHolds = houseHolds;
+    }
 
     public Integer getCheckNumber() {
         return checkNumber;
@@ -95,6 +141,11 @@ public class CheckInfo {
                 ", warningColor='" + warningColor + '\'' +
                 ", img='" + img + '\'' +
                 ", cardNumber='" + cardNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age='" + age + '\'' +
+                ", minzuCn='" + minzuCn + '\'' +
+                ", houseHolds='" + houseHolds + '\'' +
                 '}';
     }
 }

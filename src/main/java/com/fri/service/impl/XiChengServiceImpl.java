@@ -7,6 +7,7 @@ import com.fri.dao.CheckInfoForeignMapper;
 import com.fri.dao.CheckInfoMapper;
 import com.fri.dao.CheckWarnInfoMapper;
 import com.fri.dao.Test1Mapper;
+import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.xicheng.request.*;
@@ -28,6 +29,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * 警示信息分为西城和公安3.0 一方有数据则不报错
+ */
 @Service
 public class XiChengServiceImpl implements XiChengService {
     private static Logger logger = LoggerFactory.getLogger(XiChengServiceImpl.class);
@@ -54,12 +58,19 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo) {
+    public CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo)  {
         UriComponentsBuilder builder = createBaseUri(deviceNo, baseUrl + "CheckPersonBasicInfo");
         builder.queryParam("sfzh", IDCard);
         String url = builder.build().toUri().toString();
         String result = restTemplateForGet(url);
         JSONObject o = JSON.parseObject(result);
+        if(o.getString("results")==null||o.getString("results").equals("")){
+            try {
+                throw new NoMessageException();
+            } catch (NoMessageException e) {
+                e.printStackTrace();
+            }
+        }
         CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = JSON.parseArray(o.getString("results"), CheckPersonBasicInfoResponse.class).get(0);
         CheckInfo checkInfo = new CheckInfo();
         BeanUtils.copyProperties(checkPersonBasicInfoResponse,checkInfo);
@@ -67,9 +78,14 @@ public class XiChengServiceImpl implements XiChengService {
         return checkPersonBasicInfoResponse;
     }
 
-
+    /**
+     * 此方法可能返回空list，使用注意判空
+     * @param IDCard
+     * @param deviceNo
+     * @return
+     */
     @Override
-    public List<CheckPersonJs> checkPersonJs(String IDCard, String deviceNo) {
+    public List<CheckPersonJs> checkPersonJs(String IDCard, String deviceNo)  {
         UriComponentsBuilder builder = createBaseUri(deviceNo, baseUrl + "CheckPersonJs");
         builder.queryParam("sfzh", IDCard);
         String url = builder.build().toUri().toString();
@@ -79,28 +95,41 @@ public class XiChengServiceImpl implements XiChengService {
         Map<String, Object> map = JSON.parseObject(data, Map.class);
         //查询失败直接返回空list
         if (map == null || !(map.get("status").toString().equals("0"))) {
-            return returnList;
+           // throw new NoMessageException();
+            logger.info("公安3.0接口报错");
+            return  returnList;
         }
         JSONObject o = JSON.parseObject(data);
+        if(o.getString("results").equals("")||o.getString("results")==null){
+            //throw new NoMessageException();
+            logger.info("公安3.0接口数据为空");
+            return  returnList;
+        }
         returnList = JSON.parseArray(o.getString("results"), CheckPersonJs.class);
-
+        if(returnList==null||returnList.isEmpty()){
+            logger.info("公安3.0接口数据为空");
+            return  returnList;
+        }
         //先删除再插入
         checkWarnInfoMapper.deleteByCardNumber(IDCard);
         List<CheckWarnInfo> list = new ArrayList<>();
-        if(returnList!=null&&!returnList.isEmpty()){
         for(CheckPersonJs checkPersonJs:returnList){
         CheckWarnInfo checkWarnInfo = new CheckWarnInfo();
              BeanUtils.copyProperties(checkPersonJs,checkWarnInfo);
              checkWarnInfo.setCardNumber(IDCard);
              list.add(checkWarnInfo);
-        }
         checkWarnInfoMapper.insertBatch(list);
         }
         return returnList;
     }
 
+    /**
+     * 公安3.0警示详细
+     * @param request
+     * @return
+     */
     @Override
-    public List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request) {
+    public List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request)  {
         //拼接url
         UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckPersonJsDetail");
         builder.queryParam("sfzh", request.getCardNumber());
@@ -115,11 +144,21 @@ public class XiChengServiceImpl implements XiChengService {
         if (map == null || !(map.get("status").toString().equals("0"))) {
             return null;
         }
+        if(map.get("results").toString().equals("")||map.get("results").toString()==null){
+       //     throw new NoMessageException();
+        }
         Map results = JSON.parseObject(map.get("results").toString(), Map.class);
         if(results==null){
-            return null;
+         //   throw new NoMessageException();
         }
         Object dataset = results.get("dataset");
+        if(dataset.toString().equals("")||data.toString()==null){
+            try {
+                throw new NoMessageException();
+            } catch (NoMessageException e) {
+                e.printStackTrace();
+            }
+        }
        List<CheckPersonJsDetail> returnList = JSON.parseArray(dataset.toString(), CheckPersonJsDetail.class);
         List<CheckPersonJsDetail2> returnList2 = new ArrayList<>();
         for(CheckPersonJsDetail checkPersonJsDetail:returnList){
@@ -134,8 +173,13 @@ public class XiChengServiceImpl implements XiChengService {
             returnList2.add(checkPersonJsDetail2);
         }
         return  returnList2;
-
     }
+
+    /**
+     * 西城公安警示详细信息
+     * @param request
+     * @return
+     */
     @Override
     public List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request) {
         JSONObject jsonObject =new JSONObject();
@@ -161,6 +205,13 @@ public class XiChengServiceImpl implements XiChengService {
             Map results = JSON.parseObject(returnMap.get("FWTG_NR").toString(), Map.class);
             Object data1 = results.get("data");
             Map map = JSON.parseObject(data1.toString(), Map.class);
+            if(map == null||map.get("data")==null){
+                try {
+                    throw new NoMessageException();
+                } catch (NoMessageException e) {
+                    e.printStackTrace();
+                }
+            }
             Set<Map.Entry<String, String>> entries = map.entrySet();
             StringBuffer s =new StringBuffer();
             for(Map.Entry<String,String> entry:entries)
@@ -187,7 +238,13 @@ public class XiChengServiceImpl implements XiChengService {
 
 
         JSONObject o = JSON.parseObject(data);
-        System.out.println(o);
+        if(!o.getString("").equals("0")){
+            try {
+                throw new NoMessageException();
+            } catch (NoMessageException e) {
+                e.printStackTrace();
+            }
+        }
         CheckForeignPersonBasicReponse checkForeignPersonBasicReponse = JSON.parseArray(o.getString("results"), CheckForeignPersonBasicReponse.class).get(0);
 
         CheckInfoForeign checkInfo = new CheckInfoForeign();
