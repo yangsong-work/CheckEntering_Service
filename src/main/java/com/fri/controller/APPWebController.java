@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -116,7 +117,7 @@ public class APPWebController {
      //deviceNo    身份证号      resname
         PoliceManRequest policeManRequest = appService.getPoliceMessage(policeInfo.getUserAccount());
         if(policeManRequest==null){
-            return ResponseUtil.fail();
+            return ResponseUtil.fail("1","查无此警员信息");
         }
         return ResponseUtil.ok(policeManRequest);
     }
@@ -135,6 +136,14 @@ public class APPWebController {
            /* if (map == null || map.isEmpty()) {
                 return ResponseUtil.fail();
             }*/
+           if(checkPersonJsDetail2s==null||checkPersonJsDetail2s.isEmpty()){
+               List<CheckPersonJsDetail2> checkPersonJsDetail2s1 = new ArrayList<>();
+               CheckPersonJsDetail2 checkPersonJsDetail22 = new CheckPersonJsDetail2();
+               checkPersonJsDetail22.setRecord("暂无相关信息");
+               checkPersonJsDetail22.setResource(request.getResName());
+               checkPersonJsDetail2s1.add(checkPersonJsDetail22);
+               return  ResponseUtil.ok1(checkPersonJsDetail2s1);
+           }
             log.info("核录桩传送市局警示详细信息:{},{}", request.toString(), LocalDateTime.now());
             return  ResponseUtil.ok(checkPersonJsDetail2s);
         }
@@ -143,6 +152,14 @@ public class APPWebController {
             /*if (map == null || map.isEmpty()) {
                 return ResponseUtil.fail();
             }*/
+            if(checkPersonJsDetail2s==null||checkPersonJsDetail2s.isEmpty()){
+                List<CheckPersonJsDetail2> checkPersonJsDetail2s1 = new ArrayList<>();
+                CheckPersonJsDetail2 checkPersonJsDetail22 = new CheckPersonJsDetail2();
+                checkPersonJsDetail22.setRecord("暂无相关信息");
+                checkPersonJsDetail22.setResource(request.getResName());
+                checkPersonJsDetail2s1.add(checkPersonJsDetail22);
+                return  ResponseUtil.ok1(checkPersonJsDetail2s1);
+            }
             log.info("核录桩传送西城警示详细信息:{},{}", request.toString(), LocalDateTime.now());
             return  ResponseUtil.ok(checkPersonJsDetail2s);
         }

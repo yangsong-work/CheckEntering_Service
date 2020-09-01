@@ -21,6 +21,13 @@ public class ResponseUtil {
     obj.put("data", data);
     return JSON.toJSONString(obj);
   }
+  public static String ok1(Object data) {
+    Map<String, Object> obj = new HashMap<String, Object>();
+    obj.put("code", "1");
+    obj.put("msg", "成功");
+    obj.put("data", data);
+    return JSON.toJSONString(obj);
+  }
 
   public static String ok(String errmsg, Object data) {
     Map<String, Object> obj = new HashMap<String, Object>();
