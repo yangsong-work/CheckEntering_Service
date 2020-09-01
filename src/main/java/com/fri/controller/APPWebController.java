@@ -1,5 +1,6 @@
 package com.fri.controller;
 
+import com.fri.exception.NoMessageException;
 import com.fri.model.CheckPersonJsDetail2;
 import com.fri.model.PoliceInfo;
 import com.fri.pojo.bo.app.request.*;
@@ -125,7 +126,7 @@ public class APPWebController {
      *   请求人的警示详细信息和本地警示信息详情
      * */
         @PostMapping(value = "/checkPersonJsDetail")
-    public Object getPersonJsDetail(@RequestBody CheckPersonJsDetailRequest request) {
+    public Object getPersonJsDetail(@RequestBody CheckPersonJsDetailRequest request) throws NoMessageException {
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");

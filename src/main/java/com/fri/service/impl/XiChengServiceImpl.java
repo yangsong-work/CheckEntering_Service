@@ -58,18 +58,14 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo)  {
+    public CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo) throws NoMessageException {
         UriComponentsBuilder builder = createBaseUri(deviceNo, baseUrl + "CheckPersonBasicInfo");
         builder.queryParam("sfzh", IDCard);
         String url = builder.build().toUri().toString();
         String result = restTemplateForGet(url);
         JSONObject o = JSON.parseObject(result);
         if(o.getString("results")==null||o.getString("results").equals("")){
-            try {
                 throw new NoMessageException();
-            } catch (NoMessageException e) {
-                e.printStackTrace();
-            }
         }
         CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = JSON.parseArray(o.getString("results"), CheckPersonBasicInfoResponse.class).get(0);
         CheckInfo checkInfo = new CheckInfo();
@@ -129,7 +125,7 @@ public class XiChengServiceImpl implements XiChengService {
      * @return
      */
     @Override
-    public List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request)  {
+    public List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request) throws NoMessageException {
         //拼接url
         UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckPersonJsDetail");
         builder.queryParam("sfzh", request.getCardNumber());
@@ -153,11 +149,7 @@ public class XiChengServiceImpl implements XiChengService {
         }
         Object dataset = results.get("dataset");
         if(dataset.toString().equals("")||data.toString()==null){
-            try {
                 throw new NoMessageException();
-            } catch (NoMessageException e) {
-                e.printStackTrace();
-            }
         }
        List<CheckPersonJsDetail> returnList = JSON.parseArray(dataset.toString(), CheckPersonJsDetail.class);
         List<CheckPersonJsDetail2> returnList2 = new ArrayList<>();
@@ -206,11 +198,7 @@ public class XiChengServiceImpl implements XiChengService {
             Object data1 = results.get("data");
             Map map = JSON.parseObject(data1.toString(), Map.class);
             if(map == null||map.get("data")==null){
-                try {
                     throw new NoMessageException();
-                } catch (NoMessageException e) {
-                    e.printStackTrace();
-                }
             }
             Set<Map.Entry<String, String>> entries = map.entrySet();
             StringBuffer s =new StringBuffer();
@@ -220,14 +208,14 @@ public class XiChengServiceImpl implements XiChengService {
             checkPersonJsDetail2.setResource(request.getResName());
             checkPersonJsDetail2.setRecord(s.toString());
             returnList2.add(checkPersonJsDetail2);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | NoMessageException e) {
             e.printStackTrace();
         }
         return returnList2;
     }
 
     @Override
-    public CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request) {
+    public CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request) throws NoMessageException {
         UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckForeignPersonBasicInfo");
         builder.queryParam("gj", request.getGj());
         builder.queryParam("zjlb", request.getZjlb());
@@ -239,11 +227,7 @@ public class XiChengServiceImpl implements XiChengService {
 
         JSONObject o = JSON.parseObject(data);
         if(!o.getString("").equals("0")){
-            try {
                 throw new NoMessageException();
-            } catch (NoMessageException e) {
-                e.printStackTrace();
-            }
         }
         CheckForeignPersonBasicReponse checkForeignPersonBasicReponse = JSON.parseArray(o.getString("results"), CheckForeignPersonBasicReponse.class).get(0);
 

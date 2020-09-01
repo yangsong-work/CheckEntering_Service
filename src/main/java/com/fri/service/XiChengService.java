@@ -20,16 +20,16 @@ public interface XiChengService {
     List<CheckInfoHistoryResponse> checkInfoHistory(CheckInfoHistoryResquest data);
 
     //5.请求人的基本信息
-    CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo) ;
+    CheckPersonBasicInfoResponse checkPersonBasicInfo(String IDCard, String deviceNo) throws NoMessageException;
 
     //6.请求人的警示信息
     List<CheckPersonJs> checkPersonJs(String IDCard, String deviceNo) ;
 
     //7.请求人的警示详细信息
-    List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request) ;
+    List<CheckPersonJsDetail2> checkPersonJsDetail(CheckPersonJsDetailRequest request) throws NoMessageException;
 
     //9.请求境外人员基本信息(ocr)
-    CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request);
+    CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request) throws NoMessageException;
 
     //10.请求境外人员的警示信息(ocr)
     List<CheckForeignPersonJsReponse> checkForeignPersonJsInfo(CheckForeignPersonInfoRequest request);

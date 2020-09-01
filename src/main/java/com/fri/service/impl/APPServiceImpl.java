@@ -154,7 +154,7 @@ public class APPServiceImpl implements APPService {
 
         list = myCompareList(list,"0");
 
-        list.addAll(list4XiCheng);
+        list4XiCheng.addAll(list);
         Map map = new HashMap();
         DetailsResponse detailsResponse = new DetailsResponse();
         BeanUtils.copyProperties(checkInfo, detailsResponse);
@@ -183,12 +183,12 @@ public class APPServiceImpl implements APPService {
         detailsResponse.setWarnTime(time);
 
         map.put("detailsResponse", detailsResponse);
-        map.put("warnList", list);
+        map.put("warnList", list4XiCheng);
         return map;
     }
 
     @Override
-    public List<CheckPersonJsDetail2> CheckPersonJsDetail(CheckPersonJsDetailRequest request) {
+    public List<CheckPersonJsDetail2> CheckPersonJsDetail(CheckPersonJsDetailRequest request) throws NoMessageException {
         //请求    拿信息
         List<CheckPersonJsDetail2> checkPersonJsDetail2s = xiChengService.checkPersonJsDetail(request);
         if (checkPersonJsDetail2s == null) {

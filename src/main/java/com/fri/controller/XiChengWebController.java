@@ -1,6 +1,7 @@
 package com.fri.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fri.exception.NoMessageException;
 import com.fri.pojo.bo.xicheng.request.CheckForeignPersonInfoRequest;
 import com.fri.pojo.bo.xicheng.response.CheckForeignPersonBasicReponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
@@ -49,12 +50,12 @@ public class XiChengWebController {
 
     }
     @PostMapping(value = "/testCheckBase")
-    public Object testCheckBase() {
+    public Object testCheckBase() throws NoMessageException {
          CheckPersonBasicInfoResponse res = xiChengService.checkPersonBasicInfo("111","222");
          return  res;
 
     }@PostMapping(value = "/testCheckforeBase")
-    public Object testCheckforeBase() {
+    public Object testCheckforeBase() throws NoMessageException {
         CheckForeignPersonInfoRequest request = new CheckForeignPersonInfoRequest();
         request.setZjhm("123131");
         CheckForeignPersonBasicReponse res = xiChengService.checkForeignPersonBasicInfo(request);

@@ -8,6 +8,7 @@ import com.fri.dao.CheckEnterPushInfoMapper;
 import com.fri.dao.CheckImageMapper;
 import com.fri.dao.CountryInfoMapper;
 import com.fri.dao.PoliceLoginRecordMapper;
+import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.push.CheckInfo;
 import com.fri.pojo.bo.app.push.FacePhoneInfo;
@@ -67,7 +68,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     @Value("${xicheng.appType}")
     String appType;
     @Override
-    public Map verifyIDCard(VerifyIDCardRequest verifyIDCardRequest) {
+    public Map verifyIDCard(VerifyIDCardRequest verifyIDCardRequest) throws NoMessageException {
         //品恩核录桩抓取相片入库
         CheckImage checkImage = new CheckImage();
         checkImage.setImg(verifyIDCardRequest.getpCaptureImage());
@@ -146,22 +147,6 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         }catch (Exception e){
             log.info("西城接口发送失败");
         }
-        for (CheckWarnInfo personJs : checkWarnInfoList) {
-            String color = personJs.getColor();
-            if (("red").equals(color)) {
-                warningColor = color;
-                status = "2";
-                break;
-            }
-            if (("yellow").equals(color)) {
-                warningColor = color;
-                status = "2";
-            }
-            if (("green").equals(color) && !warningColor.equals("yellow")) {
-                warningColor = color;
-                status = "1";
-            }
-        }
 
         pushInfo.setPoliceIDCard(record.getPoliceIDCard());
         pushInfo.setCheckNumber(pushInfo.getCheckNumber() + 1);
@@ -226,7 +211,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
      * @return
      */
     @Override
-    public Object verifyOcr(VerifyOcrRequest ocrRequest) {
+    public Object verifyOcr(VerifyOcrRequest ocrRequest) throws NoMessageException {
 
         ocrRequest.setNationality(countryInfoMapper.selectCountryEn(ocrRequest.getNationality()));
 
@@ -319,7 +304,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         return returMap;
     }
 
-    public Map verifyFacePhoto(VerifyImageRequest request) {
+    public Map verifyFacePhoto(VerifyImageRequest request) throws NoMessageException {
         String img = request.getImg();
         String deviceNo = request.getDeviceNo();
         PoliceLoginRecord record = UserUtil.getUserMap().get(deviceNo);
@@ -404,7 +389,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     /**
      * 人证核验未通过流程
      */
-    private Map queryInfo(String IDCard, VerifyIDCardRequest verifyIDCardRequest) {
+    private Map queryInfo(String IDCard, VerifyIDCardRequest verifyIDCardRequest) throws NoMessageException {
         CheckPersonBasicInfoResponse personBasicInfoResponse = xiChengService.checkPersonBasicInfo(IDCard, verifyIDCardRequest.getDeviceNo());
         CheckPersonPhotoResponse personPhotoResponse = xiChengService.checkPersonPhoto(verifyIDCardRequest.getDeviceNo(), IDCard);
 

@@ -1,5 +1,6 @@
 package com.fri.controller;
 
+import com.fri.exception.NoMessageException;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.service.APPService;
 import com.fri.service.CheckEnterService;
@@ -23,7 +24,11 @@ public class TestController {
     @Autowired
     APPService appService;
     @RequestMapping("/11")
-    public String getm(){
+    public String getm() throws NoMessageException {
+        System.out.println("aaa");
+        if(true) {
+            throw new NoMessageException();
+        }
         return "1";
     }
 

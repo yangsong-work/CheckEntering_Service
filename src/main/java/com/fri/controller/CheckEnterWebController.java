@@ -3,6 +3,7 @@ package com.fri.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fri.common.Result;
+import com.fri.exception.NoMessageException;
 import com.fri.model.PoliceLoginRecord;
 import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
@@ -47,7 +48,7 @@ public class CheckEnterWebController {
      * 人证核验+手工输入
      */
     @PostMapping("/idcard")
-    public String verifyIDCard(@Valid @RequestBody VerifyIDCardRequest request) {
+    public String verifyIDCard(@Valid @RequestBody VerifyIDCardRequest request) throws NoMessageException {
         log.info("接收核录桩身份证接口时间：{}",LocalDateTime.now());
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
@@ -64,7 +65,7 @@ public class CheckEnterWebController {
     }
 
     @PostMapping("/face")
-    public String verifyImage(@Valid @RequestBody VerifyImageRequest request) {
+    public String verifyImage(@Valid @RequestBody VerifyImageRequest request) throws NoMessageException {
         log.info("接收人像相似接口时间：{}",LocalDateTime.now());
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
@@ -82,7 +83,7 @@ public class CheckEnterWebController {
 
     //ocr证件查询
     @PostMapping("/ocr")
-    public String verifyOcr(@Valid @RequestBody VerifyOcrRequest request) {
+    public String verifyOcr(@Valid @RequestBody VerifyOcrRequest request) throws NoMessageException {
         log.info("接收OCR接口时间：{}",LocalDateTime.now());
         //设备号未绑定报错
         if (UserUtil.getUserMap().get(request.getDeviceNo()) == null) {
