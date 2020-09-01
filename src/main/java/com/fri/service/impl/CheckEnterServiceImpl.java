@@ -166,7 +166,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         //更新push表的信息
         pushInfo.setWarningNumber(pushInfo.getGreenWarningNumber() + pushInfo.getYellowWarningNumber() + pushInfo.getRedWarningNumber());
         pushInfo.setUpdatedTime(LocalDateTime.now());
-        checkEnterPushInfoMapper.updateByPrimaryKeySelective(pushInfo);
+        int resultStatus = checkEnterPushInfoMapper.updateByPrimaryKeySelective(pushInfo);
         int age = LocalDateTime.now().getYear() - Integer.valueOf(personBasicInfoResponse.getCardNumber().substring(6, 10));
 
         CheckInfo checkInfo = new CheckInfo();

@@ -135,7 +135,7 @@
       </if>
     </set>
     where police_id_card = #{policeIDCard,jdbcType=VARCHAR}
-      and created_time = #{createdTime,jdbcType=TIMESTAMP}
+      and DATE_FORMAT(created_time,'%Y%m%d') = DATE_FORMAT(#{createdTime},'%Y%m%d') order by created_time DESC limit 1
   </update>
   <update id="updateByPrimaryKey" parameterType="com.fri.model.CheckEnterPushInfo" >
     update tbl_check_enter_push
