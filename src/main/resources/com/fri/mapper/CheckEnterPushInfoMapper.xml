@@ -106,7 +106,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckEnterPushInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.CheckEnterPushInfo" useGeneratedKeys="true" keyProperty="id">
     update tbl_check_enter_push
     <set >
       <if test="padId != null" >
