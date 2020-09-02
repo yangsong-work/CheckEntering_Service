@@ -2,8 +2,10 @@ package com.fri.controller;
 
 import com.fri.exception.NoMessageException;
 import com.fri.model.CheckPersonJsDetail2;
+import com.fri.model.PeopleCountInfo;
 import com.fri.model.PoliceInfo;
 import com.fri.pojo.bo.app.request.*;
+import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
 import com.fri.service.APPService;
 import com.fri.utils.ResponseUtil;
 import com.fri.utils.UserUtil;
@@ -34,9 +36,11 @@ public class APPWebController {
     public String login(@Valid @RequestBody LoginRequest loginRequest) {
         log.info("警员扫码绑定：{}", loginRequest.toString());
         Integer result = appService.login(loginRequest);
-        if (result == 1) {
+        if (result !=null) {
+            CountRequest countRequest=new CountRequest();
+            countRequest.setId(result);
             log.info("警员扫码绑定：{}", "成功");
-            return ResponseUtil.ok();
+            return ResponseUtil.ok(result);
         } else {
             log.info("警员扫码绑定：{}", "失败");
             return ResponseUtil.fail("1", "绑定失败");
@@ -195,11 +199,23 @@ public class APPWebController {
 
 
     /**
-     * 信息统计
+     * 人数信息统计
      */
-
     @RequestMapping("/statistics")
-    public String countStatistics() {
-        return "";
+    public String countStatistics(@RequestBody CountRequest request) {
+        int id = request.getId();
+        PeopleCountInfo countStatistics = appService.getCountStatistics(request);
+        return ResponseUtil.ok(countStatistics);
+    }
+    /*
+     * 基本信息查询
+     * */
+    @RequestMapping("/peopleBasicMessage")
+    public String peopleBasicMessage(@RequestBody PeopleBasicMessageRequest request) {
+        List<CheckPersonBasicInfoResponse> peopleBasicMessage = appService.getPeopleBasicMessage(request);
+        if (peopleBasicMessage==null||peopleBasicMessage.isEmpty()){
+            return ResponseUtil.ok("暂无信息");
+        }
+        return ResponseUtil.ok(peopleBasicMessage);
     }
 }

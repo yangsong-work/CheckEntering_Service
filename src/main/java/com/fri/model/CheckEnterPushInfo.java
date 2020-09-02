@@ -6,7 +6,16 @@ import java.time.LocalDateTime;
 
 @Repository
 public class CheckEnterPushInfo extends CheckEnterPushInfoKey {
+    private Integer id;
     private String padId;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     private Integer checkNumber;
 
