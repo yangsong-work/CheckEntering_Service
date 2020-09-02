@@ -128,7 +128,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             checkWarnInfoList = appService.transferList(personJsList4XiCheng);
             for (CheckWarnInfo personJs : checkWarnInfoList) {
                 String color = personJs.getColor();
-                if (("red").equals(color)) {
+                if (warningColor.equals("red")||("red").equals(color)) {
                     warningColor = color;
                     status = "2";
                     break;
@@ -447,6 +447,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setWarningColor("orange");
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
+        //人证核验未通过 没确定
+//        checkInfo.setWarnList(new ArrayList());
         Map pushMap = new HashMap();
         //推送PAD
         pushMap.put("messageType", 3);
