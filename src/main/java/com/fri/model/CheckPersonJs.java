@@ -7,6 +7,7 @@ public class CheckPersonJs {
     private String value;
     private String disposalWay;
     private String resourceName;
+    private String isLocal;
 
     public String getResourceName() {
         return resourceName;
@@ -18,6 +19,14 @@ public class CheckPersonJs {
 
     public String getKey() {
         return key;
+    }
+
+    public String getIsLocal() {
+        return isLocal;
+    }
+
+    public void setIsLocal(String isLocal) {
+        this.isLocal = isLocal;
     }
 
     public void setKey(String key) {
@@ -65,6 +74,7 @@ public class CheckPersonJs {
                 ", value='" + value + '\'' +
                 ", disposalWay='" + disposalWay + '\'' +
                 ", resourceName='" + resourceName + '\'' +
+                ", isLocal='" + isLocal + '\'' +
                 '}';
     }
 }

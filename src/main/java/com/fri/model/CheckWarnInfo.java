@@ -17,6 +17,8 @@ public class CheckWarnInfo {
 
     private String resourceName;
 
+    private String isLocal;
+
     public String getIsLocal() {
         return isLocal;
     }
@@ -25,7 +27,6 @@ public class CheckWarnInfo {
         this.isLocal = isLocal;
     }
 
-    private String isLocal;
 
     public Long getId() {
         return id;

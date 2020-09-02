@@ -31,4 +31,6 @@ public interface APPService {
     List<CheckPersonJsDetail2> CheckLocalJsDetail(CheckPersonJsDetailRequest request);
 
     List<CheckWarnInfo> transferList(List<CheckPersonJs4XiCheng> list);
+
+    Object upLoad(APPUpdateRequest request);
 }

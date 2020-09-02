@@ -76,7 +76,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         //checkImageMapper.insertSelective(checkImage);
 
         String IDCard = verifyIDCardRequest.getpCardNo();
-        // 人证核验
+        // 人证核验 comparestatus为1时 表示已开启人证核验
         if (verifyIDCardRequest.getCheckFrom() == 0&&verifyIDCardRequest.getCompareStatus()==1) {
             String compareValue = verifyIDCardRequest.getCompareValue();
             //TODO 测试代码 上线删除
@@ -119,12 +119,12 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             }
         }
         List<CheckWarnInfo> checkWarnInfoList = new ArrayList<>();
+        List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
         try {
             Map jsXiChengMap = new HashMap();
             jsXiChengMap.put("cardId", verifyIDCardRequest.getpCardNo());
             jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId());
             jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPoliceNumber());
-            List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
             personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
             checkWarnInfoList = appService.transferList(personJsList4XiCheng);
             for (CheckWarnInfo personJs : checkWarnInfoList) {
@@ -148,6 +148,18 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             log.info("西城接口发送失败");
         }
 
+
+        List<CheckPersonJs> list4XiCheng = new ArrayList<>();
+        list4XiCheng = transferList(personJsList4XiCheng);
+        list4XiCheng = myCompareList(list4XiCheng,"1");
+
+        personJsList = myCompareList(personJsList,"0");
+
+        list4XiCheng.addAll(personJsList);
+
+
+
+        //组装push数据
         pushInfo.setPoliceIDCard(record.getPoliceIDCard());
         pushInfo.setCheckNumber(pushInfo.getCheckNumber() + 1);
 
@@ -162,7 +174,6 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 pushInfo.setGreenWarningNumber(pushInfo.getGreenWarningNumber() + 1);
                 break;
         }
-
         //更新push表的信息
         pushInfo.setWarningNumber(pushInfo.getGreenWarningNumber() + pushInfo.getYellowWarningNumber() + pushInfo.getRedWarningNumber());
         pushInfo.setUpdatedTime(LocalDateTime.now());
@@ -184,11 +195,11 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setWarningColor(warningColor);
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
-
+        checkInfo.setWarnList(list4XiCheng);
         //推送至PAD
         Map pushMap = new HashMap();
         pushMap.put("messageType", 1);
-        pushMap.put("data", JSON.toJSON(checkInfo));
+        pushMap.put("data", JSON.toJSONString(checkInfo));
         System.out.println(JSON.toJSONString(pushMap));
         boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
@@ -547,5 +558,51 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         } else {
             return subMap.get("code").equals("0");
         }
+    }
+    private List myCompareList(List<CheckPersonJs> list,String isLocal) {
+        List<CheckPersonJs> returnList = new ArrayList<>();
+        //按红黄绿paixv
+        List<CheckPersonJs> yellowList = new ArrayList<>();
+        List<CheckPersonJs> greenList = new ArrayList<>();
+        for (CheckPersonJs checkPersonJs : list) {
+            checkPersonJs.setIsLocal(isLocal);
+            if (checkPersonJs.getColor().equals("red")) {
+                returnList.add(checkPersonJs);
+            }
+            if (checkPersonJs.getColor().equals("yellow")) {
+                yellowList.add(checkPersonJs);
+            }
+            if (checkPersonJs.getColor().equals("green")) {
+                greenList.add(checkPersonJs);
+            }
+        }
+        returnList.addAll(yellowList);
+        returnList.addAll(greenList);
+        return returnList;
+    }
+
+    public List<CheckPersonJs> transferList(List<CheckPersonJs4XiCheng> list) {
+        List<CheckPersonJs> returnList = new ArrayList<>();
+        for (CheckPersonJs4XiCheng checkPersonJs4XiCheng : list) {
+            CheckPersonJs checkPersonJs = new CheckPersonJs();
+            checkPersonJs.setValue(checkPersonJs4XiCheng.getDATA_CLASS());
+            checkPersonJs.setResourceName(checkPersonJs4XiCheng.getResourceName());
+
+            String color = "white";
+            switch (checkPersonJs4XiCheng.getALARM_LEVEL()) {
+                case "3":
+                    color = "green";
+                    break;
+                case "2":
+                    color = "yellow";
+                    break;
+                case "1":
+                    color = "red";
+                    break;
+            }
+            checkPersonJs.setColor(color);
+            returnList.add(checkPersonJs);
+        }
+        return  returnList;
     }
 }

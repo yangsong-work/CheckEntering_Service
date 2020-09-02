@@ -98,7 +98,7 @@ public class APPWebController {
     }
 
     /**
-     * 预警人员详细信息
+     * 公安网3.0预警人员详细信息
      */
     @PostMapping(value = "/detail")
     public Object getDetails(@Valid @RequestBody DetailRequest detailRequest) {
@@ -186,9 +186,10 @@ public class APPWebController {
     /**
      * 录入
      */
-
-    @RequestMapping("/exclude")
-    public String insertExclude() {
+    @RequestMapping("/upload")
+    public String upLoad(@Valid @RequestBody APPUpdateRequest request) {
+        log.info("录入接口数据：{}", request.toString());
+        Object  o = appService.upLoad(request);
         return "";
     }
 
