@@ -6,6 +6,7 @@ import com.fri.model.*;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.app.response.CheckAddressResponse;
 import com.fri.pojo.bo.app.response.DetailsResponse;
+import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonJs4XiCheng;
 import com.fri.service.APPService;
 import com.fri.service.CheckEnterService;
@@ -47,7 +48,8 @@ public class APPServiceImpl implements APPService {
     private CheckEnterService checkEnterService;
     @Autowired
     private PoliceInfoMapper policeInfoMapper;
-
+    @Autowired
+    private CheckPeopleMapper checkPeopleMapper;
 
     @Override
     public Integer login(LoginRequest loginRequest) {
@@ -77,7 +79,7 @@ public class APPServiceImpl implements APPService {
         int i = policeLoginRecordMapper.insert(record);
 
 
-        return i;
+        return pushInfo.getId();
     }
 
     @Override
@@ -270,6 +272,52 @@ public class APPServiceImpl implements APPService {
             returnList.add(checkWarnInfo);
         }
         return  returnList;
+    }
+    @Override
+    public PeopleCountInfo getCountStatistics(CountRequest request) {
+        PeopleCountInfo peopleCountInfo = new PeopleCountInfo();
+        peopleCountInfo.setAllCount(checkPeopleMapper.selectAllCount(request.getId()));
+        peopleCountInfo.setGreenCount(checkPeopleMapper.selectGreenCount(request.getId()));
+        peopleCountInfo.setRedCount(checkPeopleMapper.selectRedCount(request.getId()));
+        peopleCountInfo.setRzCount(checkPeopleMapper.selectRzCount(request.getId()));
+        peopleCountInfo.setWarnCount(checkPeopleMapper.selectWarnCount(request.getId()));
+        peopleCountInfo.setYellowCount(checkPeopleMapper.selectYellowCount(request.getId()));
+        return peopleCountInfo;
+    }
+
+    @Override
+    public List<CheckPersonBasicInfoResponse> getPeopleBasicMessage(PeopleBasicMessageRequest request) {
+        request.getId();
+        int type = request.getType();
+        List<String> idCardList=null;
+        if(type==0){
+            idCardList=  checkPeopleMapper.selectAllIdCard(request.getId());
+        }
+        else if(type==1){
+            idCardList= checkPeopleMapper.selectRzIdCard(request.getId());
+        }
+        else if(type==2){
+            idCardList=   checkPeopleMapper.selectWarnIdCard(request.getId());
+        }
+        else if(type==3){
+            idCardList=    checkPeopleMapper.selectGreenIdCard(request.getId());
+        }
+        else if(type==4){
+            idCardList=   checkPeopleMapper.selectYellowIdCard(request.getId());
+        }
+        else if(type==5){
+            idCardList=   checkPeopleMapper.selectRedIdCard(request.getId());
+        }
+        List<CheckPersonBasicInfoResponse> checkPersonBasicInfoResponses = new ArrayList<>();
+        for(String idCard:idCardList){
+            try {
+                CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = xiChengService.checkPersonBasicInfo(idCard, request.getDeviceNo());
+                checkPersonBasicInfoResponses.add(checkPersonBasicInfoResponse);
+            } catch (NoMessageException e) {
+            	e.printStackTrace();
+            }
+        }
+        return checkPersonBasicInfoResponses;
     }
 
 
