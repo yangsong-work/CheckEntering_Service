@@ -1,10 +1,19 @@
 package com.fri.model;
 
 public class CheckPeople {
+    Integer pid;
     Integer id;
     Integer color;
     String idCard;
     Integer compareStatus;
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
+    }
 
     public Integer getCompareStatus() {
         return compareStatus;
