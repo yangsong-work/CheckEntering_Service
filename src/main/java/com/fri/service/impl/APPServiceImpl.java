@@ -89,7 +89,7 @@ public class APPServiceImpl implements APPService {
         UserUtil.getUserMap().get(checkOptionRequest.getDeviceNo()).setCheckAddress(checkOptionRequest.getCheckAddress());
         // 通知核录桩
         //TODO 测试代码 上线删除
-        checkEnterService.notifyLogin(checkOptionRequest.getPadId());
+//        checkEnterService.notifyLogin(checkOptionRequest.getPadId());
         return policeLoginRecordMapper.updateCheckOption(checkOptionRequest);
     }
 

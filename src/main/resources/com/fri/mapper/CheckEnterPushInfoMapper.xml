@@ -39,7 +39,7 @@
       #{redWarningNumber,jdbcType=INTEGER}, #{yellowWarningNumber,jdbcType=INTEGER}, 
       #{greenWarningNumber,jdbcType=INTEGER}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.fri.model.CheckEnterPushInfo" >
+  <insert id="insertSelective" parameterType="com.fri.model.CheckEnterPushInfo" useGeneratedKeys="true" keyProperty="id" >
     insert into tbl_check_enter_push
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="policeIDCard != null" >

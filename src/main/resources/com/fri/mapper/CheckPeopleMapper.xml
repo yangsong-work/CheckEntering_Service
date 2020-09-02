@@ -12,22 +12,22 @@
     <insert id="insertPeople" parameterType="com.fri.model.CheckPeople">
         insert into tbl_check_people(color,idCard,compareStatus,pid) values (#{color},#{idCard},#{compareStatus},#{pid})
     </insert>
-    <select id="selectAllCount" parameterType="java.lang.Integer">
+    <select id="selectAllCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(id) from tbl_check_people where pid =#{pid}
     </select>
-    <select id="selectRzCount" parameterType="java.lang.Integer">
+    <select id="selectRzCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(id) from tbl_check_people where pid =#{pid} and compareStatus =1
     </select>
-    <select id="selectGreenCount" parameterType="java.lang.Integer">
+    <select id="selectGreenCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(id) from tbl_check_people where pid =#{pid} and color =1
     </select>
-    <select id="selectYellowCount" parameterType="java.lang.Integer">
+    <select id="selectYellowCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(id) from tbl_check_people where pid =#{pid} and color =2
     </select>
-    <select id="selectRedCount" parameterType="java.lang.Integer">
+    <select id="selectRedCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(id) from tbl_check_people where pid =#{pid} and color =3
     </select>
-    <select id="selectWarnCount" parameterType="java.lang.Integer">
+    <select id="selectWarnCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select count(id) from tbl_check_people where pid =#{pid} and (color =1 or color =2 or color =3)
     </select>
     <select id="selectAllIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">

@@ -40,7 +40,7 @@ public class APPWebController {
             CountRequest countRequest=new CountRequest();
             countRequest.setId(result);
             log.info("警员扫码绑定：{}", "成功");
-            return ResponseUtil.ok(result);
+            return ResponseUtil.ok(countRequest);
         } else {
             log.info("警员扫码绑定：{}", "失败");
             return ResponseUtil.fail("1", "绑定失败");

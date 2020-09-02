@@ -79,7 +79,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         if (verifyIDCardRequest.getCheckFrom() == 0&&verifyIDCardRequest.getCompareStatus()==1) {
             String compareValue = verifyIDCardRequest.getCompareValue();
             //TODO 测试代码 上线删除
-//            UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
+            UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
             String score = UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getDeviceScore();
             int compareResult = compareValue.compareTo(score);
             if (compareResult < 0) {
@@ -192,7 +192,10 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setMinzuCn(personBasicInfoResponse.getMinzuCn());
         checkInfo.setHouseHolds(personBasicInfoResponse.getHouseHolds());
         checkInfo.setWarningColor(warningColor);
+        checkInfo.setWarnList(list4XiCheng);
         checkInfo.setImg(personPhotoResponse.getZp());
+
+
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
         checkInfo.setWarnList(list4XiCheng);
         checkInfo.setGuoJi(personBasicInfoResponse.getGuoJiCn());
@@ -209,7 +212,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         //推送至PAD
         Map pushMap = new HashMap();
         pushMap.put("messageType", 1);
-        pushMap.put("data", JSON.toJSONString(checkInfo));
+        pushMap.put("data", checkInfo);
         System.out.println(JSON.toJSONString(pushMap));
         boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
@@ -421,6 +424,11 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         pushInfo.setUpdatedTime(LocalDateTime.now());
 
         int age = LocalDateTime.now().getYear() - Integer.valueOf(personBasicInfoResponse.getCardNumber().substring(6, 10));
+
+
+
+
+
         //更新push表
         checkEnterPushInfoMapper.updateByPrimaryKeySelective(pushInfo);
         //组合推送信息
