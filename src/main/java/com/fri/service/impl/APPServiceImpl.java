@@ -1,11 +1,13 @@
 package com.fri.service.impl;
 
+import com.fri.common.Location;
 import com.fri.dao.*;
 import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.app.response.CheckAddressResponse;
 import com.fri.pojo.bo.app.response.DetailsResponse;
+import com.fri.pojo.bo.xicheng.request.UploadRequest;
 import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonJs4XiCheng;
 import com.fri.service.APPService;
@@ -130,9 +132,9 @@ public class APPServiceImpl implements APPService {
         List<CheckWarnInfo> list = new ArrayList<>();
         try {
             list = checkWarnInfoMapper.selectByCardNumber(detailRequest.getCardNumber());
-            System.out.println("公安3.0返回数据"+list);
+            System.out.println("公安3.0返回数据" + list);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.info("公安3.0警示信息接口请求异常");
         }
@@ -143,18 +145,18 @@ public class APPServiceImpl implements APPService {
         jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPoliceNumber());
         List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
         try {
-            personJsList4XiCheng =  xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
-            System.out.println("西城接口返回数据"+list);
-        }catch (Exception e){
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+            System.out.println("西城接口返回数据" + list);
+        } catch (Exception e) {
             e.printStackTrace();
             log.info("西城分局警示信息接口请求异常");
         }
 
         List<CheckWarnInfo> list4XiCheng = new ArrayList<>();
         list4XiCheng = transferList(personJsList4XiCheng);
-        list4XiCheng = myCompareList(list4XiCheng,"1");
+        list4XiCheng = myCompareList(list4XiCheng, "1");
 
-        list = myCompareList(list,"0");
+        list = myCompareList(list, "0");
 
         list4XiCheng.addAll(list);
         Map map = new HashMap();
@@ -227,7 +229,7 @@ public class APPServiceImpl implements APPService {
     }
 
 
-    private List myCompareList(List<CheckWarnInfo> list,String isLocal) {
+    private List myCompareList(List<CheckWarnInfo> list, String isLocal) {
         List<CheckWarnInfo> returnList = new ArrayList<>();
         //按红黄绿paixv
         List<CheckWarnInfo> yellowList = new ArrayList<>();
@@ -271,7 +273,7 @@ public class APPServiceImpl implements APPService {
             checkWarnInfo.setColor(color);
             returnList.add(checkWarnInfo);
         }
-        return  returnList;
+        return returnList;
     }
     @Override
     public PeopleCountInfo getCountStatistics(CountRequest request) {
@@ -318,6 +320,71 @@ public class APPServiceImpl implements APPService {
             }
         }
         return checkPersonBasicInfoResponses;
+    }
+
+    @Override
+    public Object upLoad(APPUpdateRequest request) {
+
+        //封装西城录入接口
+        UploadRequest xichengUploadRequest = new UploadRequest();
+        PoliceLoginRecord policeLoginRecord = UserUtil.getUserMap().get(request.getDeviceNo());
+        if ("1".equals(request.getCheckObject())) {
+            //境内人员
+            CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(request.getIdentify());
+            int age = LocalDateTime.now().getYear() - Integer.valueOf(checkInfo.getCardNumber().substring(6, 10));
+            //人员警示信息
+            List<CheckWarnInfo> list = new ArrayList<>();
+            list = checkWarnInfoMapper.selectByCardNumber(request.getIdentify());
+
+//            LocalDateTime localDateTime =  LocalDateTime.now();
+//            DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//            String time  = localDateTime.format(dt);
+            Location location = new Location();
+            location.setLat(Double.valueOf(policeLoginRecord.getLat()));
+            location.setLon(Double.valueOf(policeLoginRecord.getLon()));
+            xichengUploadRequest.setAge(age);
+            //TODO 少字段
+            xichengUploadRequest.setCardType(checkInfo.getCardType());
+            xichengUploadRequest.setCardTypeCn(checkInfo.getCardTypeCn());
+            xichengUploadRequest.setCheckObject(request.getCheckObject());
+            xichengUploadRequest.setCheckResult(request.getCheckResult());
+            xichengUploadRequest.setCheckResult(policeLoginRecord.getCheckTask());
+            xichengUploadRequest.setDisposalWay(request.getDisposalWay());
+            xichengUploadRequest.setGuoJi(checkInfo.getGuoJi());
+            xichengUploadRequest.setGuoJiCn(checkInfo.getGuoJiCn());
+            xichengUploadRequest.setHouseHolds(checkInfo.getHouseHolds());
+            xichengUploadRequest.setIdentify(checkInfo.getCardNumber());
+            xichengUploadRequest.setLocation(location);
+            xichengUploadRequest.setMinzu(checkInfo.getMinzu());
+            xichengUploadRequest.setMinzuCn(checkInfo.getMinzuCn());
+            xichengUploadRequest.setName(checkInfo.getName());
+            xichengUploadRequest.setPoliceDeptNo(policeLoginRecord.getPoliceOrg());
+            xichengUploadRequest.setPoliceIdCard(policeLoginRecord.getPoliceIDCard());
+            xichengUploadRequest.setPoliceNo(policeLoginRecord.getPoliceNumber());
+            xichengUploadRequest.setSex(checkInfo.getSex());
+            xichengUploadRequest.setSexCn(checkInfo.getSexCn());
+            //0 为保存 1为完成  写死为完成
+            xichengUploadRequest.setState("1");
+            xichengUploadRequest.setTogether(false);
+            xichengUploadRequest.setUpdateUser(policeLoginRecord.getPoliceIDCard());
+            //警示信息与警示信息简项
+            xichengUploadRequest.setWarningInfoDetail(list);
+            xichengUploadRequest.setWarningInfoShortHands(list);
+            xichengUploadRequest.setXzqh(checkInfo.getXzqh());
+            xichengUploadRequest.setXzqhCn(checkInfo.getXzqhCn());
+
+
+
+
+            xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
+        } else if ("2".equals(request.getCheckObject())) {
+            //境外人员
+        } else {
+            return null;
+        }
+
+
+        return null;
     }
 
 

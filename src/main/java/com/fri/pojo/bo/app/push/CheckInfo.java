@@ -1,5 +1,7 @@
 package com.fri.pojo.bo.app.push;
 
+import java.util.List;
+
 public class CheckInfo {
     private Integer checkNumber;
     private Integer warningNumber;
@@ -16,6 +18,7 @@ public class CheckInfo {
     private String age;
     private String minzuCn;
     private String  houseHolds;
+    private List warnList;
 
     public String getName() {
         return name;
@@ -23,6 +26,14 @@ public class CheckInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List getWarnList() {
+        return warnList;
+    }
+
+    public void setWarnList(List warnList) {
+        this.warnList = warnList;
     }
 
     public String getSex() {
@@ -146,6 +157,7 @@ public class CheckInfo {
                 ", age='" + age + '\'' +
                 ", minzuCn='" + minzuCn + '\'' +
                 ", houseHolds='" + houseHolds + '\'' +
+                ", warnList=" + warnList +
                 '}';
     }
 }

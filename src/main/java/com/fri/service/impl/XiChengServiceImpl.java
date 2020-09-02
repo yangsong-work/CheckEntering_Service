@@ -9,6 +9,7 @@ import com.fri.dao.CheckWarnInfoMapper;
 import com.fri.dao.Test1Mapper;
 import com.fri.exception.NoMessageException;
 import com.fri.model.*;
+import com.fri.pojo.bo.app.request.APPUpdateRequest;
 import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.xicheng.request.*;
 import com.fri.service.XiChengService;
@@ -386,6 +387,38 @@ public class XiChengServiceImpl implements XiChengService {
         return  list;
     }
 
+    @Override
+    public Object upLoad(UploadRequest request,String deviceNo) {
+        UriComponentsBuilder builder = createBaseUri4Upload(deviceNo, baseUrl + "Upload");
+        String url = builder.build().toUri().toString();
+        Map returnMap = new HashMap();
+        try {
+            HttpHeaders requestHeaders = new HttpHeaders();
+            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            requestHeaders.setContentType(type);
+            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+            HttpEntity<String> requestEntity = new HttpEntity<String>(JSON.toJSONString(request), requestHeaders);
+            String data = restTemplate.postForEntity(url, requestEntity, String.class).getBody();
+            logger.info("总线返回报文：{}", data);
+            returnMap = JSON.parseObject(data, Map.class);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        if(returnMap==null||!returnMap.get("status").equals("0")){
+              throw new RuntimeException();
+        }
+//        List list = JSONArray.parseArray((String) returnMap.get("results"),List.class);
+//        if(list==null||list.isEmpty()){
+//              throw new RuntimeException();
+//        }
+        return returnMap;
+    }
+
+    @Override
+    public Object upLoadForeign(UploadRequest request,String deviceNo) {
+        return null;
+    }
+
 
     /**
      * restTemplate get请求封装
@@ -418,6 +451,22 @@ public class XiChengServiceImpl implements XiChengService {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         PoliceLoginRecord record = UserUtil.getUserMap().get(deviceNo);
         builder.queryParam("appid", appid)
+                .queryParam("deviceid", deviceNo)
+                .queryParam("policesfzh", record.getPoliceIDCard())
+                .queryParam("policename", record.getPoliceName())
+                .queryParam("policeorg", record.getPoliceOrg())
+                .queryParam("apptype", appType)
+                .queryParam("lon", record.getLon())
+                .queryParam("lat", record.getLat());
+
+        return builder;
+
+
+    }
+    private UriComponentsBuilder createBaseUri4Upload(String deviceNo, String url) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        PoliceLoginRecord record = UserUtil.getUserMap().get(deviceNo);
+        builder.queryParam("appid", "hxkj_hlz")
                 .queryParam("deviceid", deviceNo)
                 .queryParam("policesfzh", record.getPoliceIDCard())
                 .queryParam("policename", record.getPoliceName())

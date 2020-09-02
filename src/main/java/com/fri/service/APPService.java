@@ -36,4 +36,6 @@ public interface APPService {
     PeopleCountInfo getCountStatistics(CountRequest request);
 
     List<CheckPersonBasicInfoResponse> getPeopleBasicMessage(PeopleBasicMessageRequest request);
+
+    Object upLoad(APPUpdateRequest request);
 }

@@ -6,10 +6,7 @@ import com.fri.model.CheckAddress;
 import com.fri.model.CheckPersonJs;
 import com.fri.model.CheckPersonJsDetail2;
 import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
-import com.fri.pojo.bo.xicheng.request.CheckForeignPersonInfoRequest;
-import com.fri.pojo.bo.xicheng.request.CheckInfoHistoryResquest;
-import com.fri.pojo.bo.xicheng.request.CheckInfoListPoliceRequest;
-import com.fri.pojo.bo.xicheng.request.CheckInfoListRequest;
+import com.fri.pojo.bo.xicheng.request.*;
 import com.fri.pojo.bo.xicheng.response.*;
 
 import java.util.List;
@@ -53,6 +50,11 @@ public interface XiChengService {
     List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request);
     //西城公安提供警示信息接口（优先级大于市局接口）
     List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map data);
+
+    //录入接口（境内）
+    Object upLoad(UploadRequest uploadRequest,String deviceNo);
+    //录入接口（境外）
+    Object upLoadForeign(UploadRequest uploadRequest,String deviceNo);
 
 
 }

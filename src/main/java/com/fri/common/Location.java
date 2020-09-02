@@ -4,23 +4,23 @@ import java.math.BigDecimal;
 
 public class Location {
     //精度坐标
-    private BigDecimal lon;
+    private Double lon;
     //维度坐标
-    private BigDecimal lat;
+    private Double lat;
 
-    public BigDecimal getLon() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLon(BigDecimal lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 
-    public BigDecimal getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(BigDecimal lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
