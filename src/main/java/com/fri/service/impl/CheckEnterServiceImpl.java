@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fri.common.Result;
 import com.fri.contants.CommonContants;
-import com.fri.dao.CheckEnterPushInfoMapper;
-import com.fri.dao.CheckImageMapper;
-import com.fri.dao.CountryInfoMapper;
-import com.fri.dao.PoliceLoginRecordMapper;
+import com.fri.dao.*;
 import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.push.CheckInfo;
@@ -53,6 +50,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     PoliceLoginRecordMapper policeLoginRecordMapper;
     @Autowired
     CheckEnterPushInfoMapper checkEnterPushInfoMapper;
+    @Autowired
+    CheckPeopleMapper checkPeopleMapper;
     @Autowired
     CheckImageMapper checkImageMapper;
     @Autowired
