@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.CheckPeopleMapper">
+    <resultMap id="BaseResultMap" type="com.fri.model.CheckPeople">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="color" property="color" jdbcType="INTEGER"/>
+        <result column="idCard" property="idCard" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, color, idCard
+  </sql>
+    <insert id="insertPeople" parameterType="com.fri.model.CheckPeople">
+        insert into tbl_check_people(color,idCard,compareStatus,pid) values (#{color},#{idCard},#{compareStatus},#{pid})
+    </insert>
+    <select id="selectAllCount" parameterType="java.lang.Integer">
+        select count(id) from tbl_check_people where pid =#{pid}
+    </select>
+    <select id="selectRzCount" parameterType="java.lang.Integer">
+        select count(id) from tbl_check_people where pid =#{pid} and compareStatus =1
+    </select>
+    <select id="selectGreenCount" parameterType="java.lang.Integer">
+        select count(id) from tbl_check_people where pid =#{pid} and color =1
+    </select>
+    <select id="selectYellowCount" parameterType="java.lang.Integer">
+        select count(id) from tbl_check_people where pid =#{pid} and color =2
+    </select>
+    <select id="selectRedCount" parameterType="java.lang.Integer">
+        select count(id) from tbl_check_people where pid =#{pid} and color =3
+    </select>
+    <select id="selectWarnCount" parameterType="java.lang.Integer">
+        select count(id) from tbl_check_people where pid =#{pid} and (color =1 or color =2 or color =3)
+    </select>
+    <select id="selectAllIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select idCard from tbl_check_people where pid =#{pid}
+    </select>
+    <select id="selectRzIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select idCard from tbl_check_people where pid =#{pid} and compareStatus =1
+    </select>
+    <select id="selectGreenIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select idCard from tbl_check_people where pid =#{pid} and color =1
+    </select>
+    <select id="selectYellowIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select idCard from tbl_check_people where pid =#{pid} and color =2
+    </select>
+    <select id="selectRedIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select idCard from tbl_check_people where pid =#{pid} and color =3
+    </select>
+    <select id="selectWarnIdCard" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select idCard from tbl_check_people where pid =#{pid} and (color =1 or color =2 or color =3)
+    </select>
+
+</mapper>
