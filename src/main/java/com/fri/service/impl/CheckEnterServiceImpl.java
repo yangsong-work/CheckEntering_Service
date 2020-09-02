@@ -196,6 +196,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
         checkInfo.setWarnList(list4XiCheng);
+        checkInfo.setGuoJi(personBasicInfoResponse.getGuoJiCn());
         //推送至PAD
         Map pushMap = new HashMap();
         pushMap.put("messageType", 1);
@@ -297,6 +298,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setWarningColor(warningColor);
         checkInfo.setImg("");
         checkInfo.setCardNumber(checkForeignPersonBasic.getIdentify());
+        checkInfo.setGuoJi(checkForeignPersonBasic.getGuoJiCn());
         //TODO 人员信息入库
         //推送至PAD
         Map pushMap = new HashMap();
@@ -429,6 +431,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setWarningColor("orange");
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
+        checkInfo.setGuoJi(personBasicInfoResponse.getGuoJiCn());
         Map pushMap = new HashMap();
         //推送PAD
         pushMap.put("messageType", 3);
