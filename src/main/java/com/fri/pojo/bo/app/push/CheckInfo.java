@@ -19,6 +19,15 @@ public class CheckInfo {
     private String minzuCn;
     private String  houseHolds;
     private List warnList;
+    private String guoJi;
+
+    public String getGuoJi() {
+        return guoJi;
+    }
+
+    public void setGuoJi(String guoJi) {
+        this.guoJi = guoJi;
+    }
 
     public String getName() {
         return name;
