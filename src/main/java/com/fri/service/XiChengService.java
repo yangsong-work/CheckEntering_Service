@@ -52,9 +52,9 @@ public interface XiChengService {
     List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map data,String checkType);
 
     //录入接口（境内）
-    Object upLoad(UploadRequest uploadRequest,String deviceNo);
+    boolean upLoad(UploadRequest uploadRequest,String deviceNo);
     //录入接口（境外）
-    Object upLoadForeign(UploadRequest uploadRequest,String deviceNo);
+    boolean upLoadForeign(UploadRequest uploadRequest,String deviceNo);
 
     SsoResponse Ssologin(String deviceNo);
 }

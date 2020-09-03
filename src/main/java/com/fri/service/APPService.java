@@ -6,8 +6,6 @@ import com.fri.model.CheckPersonJsDetail2;
 import com.fri.model.CheckWarnInfo;
 import com.fri.model.PeopleCountInfo;
 import com.fri.pojo.bo.app.request.*;
-import com.fri.pojo.bo.app.response.CheckAddressResponse;
-import com.fri.pojo.bo.app.response.DetailsResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonJs4XiCheng;
 
@@ -37,5 +35,5 @@ public interface APPService {
 
     List<CheckPersonBasicInfoResponse> getPeopleBasicMessage(PeopleBasicMessageRequest request);
 
-    Object upLoad(APPUpdateRequest request);
+    Boolean upLoad(APPUpdateRequest request);
 }

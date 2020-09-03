@@ -388,7 +388,7 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public Object upLoad(UploadRequest request,String deviceNo) {
+    public boolean upLoad(UploadRequest request,String deviceNo) {
         UriComponentsBuilder builder = createBaseUri4Upload(deviceNo, baseUrl + "Upload");
         String url = builder.build().toUri().toString();
         Map returnMap = new HashMap();
@@ -404,19 +404,19 @@ public class XiChengServiceImpl implements XiChengService {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        if(returnMap==null||!returnMap.get("status").equals("0")){
+        if(returnMap==null|| (Integer) returnMap.get("status")!=0){
               throw new RuntimeException();
         }
 //        List list = JSONArray.parseArray((String) returnMap.get("results"),List.class);
 //        if(list==null||list.isEmpty()){
 //              throw new RuntimeException();
 //        }
-        return returnMap;
+        return true;
     }
 
     @Override
-    public Object upLoadForeign(UploadRequest request,String deviceNo) {
-        return null;
+    public boolean upLoadForeign(UploadRequest request,String deviceNo) {
+        return true;
     }
 
     @Override

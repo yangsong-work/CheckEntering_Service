@@ -51,7 +51,7 @@ public class UploadRequest {
     private List currentAddress;
     private List currentCellNumbers;
     private List currentCarNumbers;
-    private List warningInfoShortHands;
+    private String warningInfoShortHands;
     //民族中文
     private String minzuCn;
     //性别中文
@@ -65,7 +65,7 @@ public class UploadRequest {
     private String guoJiCn;
     private Date updateTime;
     private String updateUser;
-    private List warningInfoDetail;
+    private String warningInfoDetail;
     private String brunchDeptName;
     private String brunchDeptNo;
     private String policeDeptName;
@@ -112,13 +112,7 @@ public class UploadRequest {
         this.brunchDeptNo = brunchDeptNo;
     }
 
-    public List getWarningInfoDetail() {
-        return warningInfoDetail;
-    }
 
-    public void setWarningInfoDetail(List warningInfoDetail) {
-        this.warningInfoDetail = warningInfoDetail;
-    }
 
     public String getPoliceDeptNo() {
         return policeDeptNo;
@@ -392,13 +386,7 @@ public class UploadRequest {
         this.currentCarNumbers = currentCarNumbers;
     }
 
-    public List getWarningInfoShortHands() {
-        return warningInfoShortHands;
-    }
 
-    public void setWarningInfoShortHands(List warningInfoShortHands) {
-        this.warningInfoShortHands = warningInfoShortHands;
-    }
 
     public String getMinzuCn() {
         return minzuCn;
@@ -422,6 +410,22 @@ public class UploadRequest {
 
     public void setXzqhCn(String xzqhCn) {
         this.xzqhCn = xzqhCn;
+    }
+
+    public String getWarningInfoShortHands() {
+        return warningInfoShortHands;
+    }
+
+    public void setWarningInfoShortHands(String warningInfoShortHands) {
+        this.warningInfoShortHands = warningInfoShortHands;
+    }
+
+    public String getWarningInfoDetail() {
+        return warningInfoDetail;
+    }
+
+    public void setWarningInfoDetail(String warningInfoDetail) {
+        this.warningInfoDetail = warningInfoDetail;
     }
 
     @Override
