@@ -35,6 +35,13 @@ public class ResponseUtil {
     obj.put("msg", errmsg);
     return JSON.toJSONString(obj);
   }
+  public static String ok1(String errmsg,Object data) {
+    Map<String, Object> obj = new HashMap<String, Object>();
+    obj.put("code", "0");
+    obj.put("msg", errmsg);
+    obj.put("data", data);
+    return JSON.toJSONString(obj);
+  }
 
   public static String fail() {
     Map<String, Object> obj = new HashMap<String, Object>();
