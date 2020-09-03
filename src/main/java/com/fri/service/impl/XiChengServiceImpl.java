@@ -409,12 +409,9 @@ public class XiChengServiceImpl implements XiChengService {
         List list = (List) returnMap.get("results");
         Map map = (Map) list.get(0);
         String checkinfoid = (String) map.get("checkinfoid");
-//        if(list==null||list.isEmpty()){
-//              throw new RuntimeException();
-//        }
         EnterInfo enterInfo = new EnterInfo();
+        BeanUtils.copyProperties(request,enterInfo);
         enterInfo.setCheckinfoid(checkinfoid);
-        enterInfo.setPoliceIdCard(request.getPoliceIdCard());
         enterInfoMapper.insert(enterInfo);
         return true;
     }

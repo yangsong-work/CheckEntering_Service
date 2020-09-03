@@ -334,6 +334,7 @@ public class APPServiceImpl implements APPService {
         boolean flag = false;
         //封装西城录入接口
         UploadRequest xichengUploadRequest = new UploadRequest();
+
         PoliceLoginRecord policeLoginRecord = UserUtil.getUserMap().get(request.getDeviceNo());
         //查询警員信息
         SsoResponse policeInfo = xiChengService.Ssologin(request.getDeviceNo());
