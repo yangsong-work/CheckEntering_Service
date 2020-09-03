@@ -7,7 +7,9 @@ import com.fri.model.PeopleCountInfo;
 import com.fri.model.PoliceInfo;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
+import com.fri.pojo.bo.xicheng.response.SsoResponse;
 import com.fri.service.APPService;
+import com.fri.service.XiChengService;
 import com.fri.utils.ResponseUtil;
 import com.fri.utils.UserUtil;
 import org.apache.commons.lang.StringUtils;
@@ -29,6 +31,8 @@ public class APPWebController {
     private static Logger log = LoggerFactory.getLogger(APPWebController.class);
     @Autowired
     APPService appService;
+    @Autowired
+    XiChengService xiChengService;
 
     /**
      * 警员扫码绑定
@@ -226,5 +230,15 @@ public class APPWebController {
             return ResponseUtil.ok("暂无信息");
         }
         return ResponseUtil.ok(peopleBasicMessage);
+    }
+    @RequestMapping("policedetails")
+    public String getPoliceDetails(@RequestBody Map map){
+        String deviceNo = (String) map.get("deviceNo");
+
+        if (deviceNo==null||UserUtil.getUserMap().get(deviceNo) == null) {
+            return ResponseUtil.fail("1", "核录桩未绑定");
+        }
+        SsoResponse policeInfo = xiChengService.Ssologin(deviceNo);
+        return ResponseUtil.ok(policeInfo);
     }
 }

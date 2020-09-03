@@ -33,4 +33,5 @@ public interface APPService {
     List<PeopleBasicInfo> getPeopleBasicMessage(PeopleBasicMessageRequest request);
 
     Boolean upLoad(APPUpdateRequest request);
+
 }
