@@ -218,7 +218,7 @@ public class APPWebController {
     public String peopleBasicMessage(@RequestBody PeopleBasicMessageRequest request) {
         List<PeopleBasicInfo> peopleBasicMessage = appService.getPeopleBasicMessage(request);
         if (peopleBasicMessage==null||peopleBasicMessage.isEmpty()){
-            return ResponseUtil.ok("暂无信息");
+            return ResponseUtil.ok1("暂无信息",peopleBasicMessage);
         }
         return ResponseUtil.ok(peopleBasicMessage);
     }
