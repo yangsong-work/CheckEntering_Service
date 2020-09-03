@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.EnterInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.EnterInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="brunch_dept_name" property="brunchDeptName" jdbcType="VARCHAR" />
+    <result column="brunch_dept_no" property="brunchDeptNo" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="card_type_cn" property="cardTypeCn" jdbcType="VARCHAR" />
+    <result column="check_object" property="checkObject" jdbcType="VARCHAR" />
+    <result column="check_result" property="checkResult" jdbcType="VARCHAR" />
+    <result column="check_task" property="checkTask" jdbcType="VARCHAR" />
+    <result column="disposal_way" property="disposalWay" jdbcType="VARCHAR" />
+    <result column="guo_ji" property="guoJi" jdbcType="VARCHAR" />
+    <result column="guo_ji_cn" property="guoJiCn" jdbcType="VARCHAR" />
+    <result column="house_holds" property="houseHolds" jdbcType="VARCHAR" />
+    <result column="identify" property="identify" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="location_name" property="locationName" jdbcType="VARCHAR" />
+    <result column="location_name_level_one" property="locationNameLevelOne" jdbcType="VARCHAR" />
+    <result column="location_name_level_two" property="locationNameLevelTwo" jdbcType="VARCHAR" />
+    <result column="location_name_real" property="locationNameReal" jdbcType="VARCHAR" />
+    <result column="minzu" property="minzu" jdbcType="VARCHAR" />
+    <result column="minzu_cn" property="minzuCn" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="person_info_json" property="personInfoJson" jdbcType="VARCHAR" />
+    <result column="police_dept_name" property="policeDeptName" jdbcType="VARCHAR" />
+    <result column="police_dept_no" property="policeDeptNo" jdbcType="VARCHAR" />
+    <result column="police_id_card" property="policeIdCard" jdbcType="VARCHAR" />
+    <result column="police_no" property="policeNo" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="sex_cn" property="sexCn" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="station_name" property="stationName" jdbcType="VARCHAR" />
+    <result column="station_no" property="stationNo" jdbcType="VARCHAR" />
+    <result column="together" property="together" jdbcType="BIT" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="warning_info_detail" property="warningInfoDetail" jdbcType="VARCHAR" />
+    <result column="warning_info_short_hands" property="warningInfoShortHands" jdbcType="VARCHAR" />
+    <result column="xzqh" property="xzqh" jdbcType="VARCHAR" />
+    <result column="xzqh_cn" property="xzqhCn" jdbcType="VARCHAR" />
+    <result column="checkinfoid" property="checkinfoid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, age, brunch_dept_name, brunch_dept_no, card_type, card_type_cn, check_object, 
+    check_result, check_task, disposal_way, guo_ji, guo_ji_cn, house_holds, identify, 
+    location, location_name, location_name_level_one, location_name_level_two, location_name_real, 
+    minzu, minzu_cn, name, person_info_json, police_dept_name, police_dept_no, police_id_card, 
+    police_no, sex, sex_cn, state, station_name, station_no, together, update_user, warning_info_detail, 
+    warning_info_short_hands, xzqh, xzqh_cn, checkinfoid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_enter_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tbl_enter_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.EnterInfo" >
+    insert into tbl_enter_info (id, age, brunch_dept_name, 
+      brunch_dept_no, card_type, card_type_cn, 
+      check_object, check_result, check_task, 
+      disposal_way, guo_ji, guo_ji_cn, 
+      house_holds, identify, location, 
+      location_name, location_name_level_one, location_name_level_two, 
+      location_name_real, minzu, minzu_cn, 
+      name, person_info_json, police_dept_name, 
+      police_dept_no, police_id_card, police_no, 
+      sex, sex_cn, state, 
+      station_name, station_no, together, 
+      update_user, warning_info_detail, warning_info_short_hands, 
+      xzqh, xzqh_cn, checkinfoid
+      )
+    values (#{id,jdbcType=BIGINT}, #{age,jdbcType=INTEGER}, #{brunchDeptName,jdbcType=VARCHAR}, 
+      #{brunchDeptNo,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR}, 
+      #{checkObject,jdbcType=VARCHAR}, #{checkResult,jdbcType=VARCHAR}, #{checkTask,jdbcType=VARCHAR}, 
+      #{disposalWay,jdbcType=VARCHAR}, #{guoJi,jdbcType=VARCHAR}, #{guoJiCn,jdbcType=VARCHAR}, 
+      #{houseHolds,jdbcType=VARCHAR}, #{identify,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{locationName,jdbcType=VARCHAR}, #{locationNameLevelOne,jdbcType=VARCHAR}, #{locationNameLevelTwo,jdbcType=VARCHAR}, 
+      #{locationNameReal,jdbcType=VARCHAR}, #{minzu,jdbcType=VARCHAR}, #{minzuCn,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{personInfoJson,jdbcType=VARCHAR}, #{policeDeptName,jdbcType=VARCHAR}, 
+      #{policeDeptNo,jdbcType=VARCHAR}, #{policeIdCard,jdbcType=VARCHAR}, #{policeNo,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{stationName,jdbcType=VARCHAR}, #{stationNo,jdbcType=VARCHAR}, #{together,jdbcType=BIT}, 
+      #{updateUser,jdbcType=VARCHAR}, #{warningInfoDetail,jdbcType=VARCHAR}, #{warningInfoShortHands,jdbcType=VARCHAR}, 
+      #{xzqh,jdbcType=VARCHAR}, #{xzqhCn,jdbcType=VARCHAR}, #{checkinfoid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.EnterInfo" >
+    insert into tbl_enter_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="brunchDeptName != null" >
+        brunch_dept_name,
+      </if>
+      <if test="brunchDeptNo != null" >
+        brunch_dept_no,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardTypeCn != null" >
+        card_type_cn,
+      </if>
+      <if test="checkObject != null" >
+        check_object,
+      </if>
+      <if test="checkResult != null" >
+        check_result,
+      </if>
+      <if test="checkTask != null" >
+        check_task,
+      </if>
+      <if test="disposalWay != null" >
+        disposal_way,
+      </if>
+      <if test="guoJi != null" >
+        guo_ji,
+      </if>
+      <if test="guoJiCn != null" >
+        guo_ji_cn,
+      </if>
+      <if test="houseHolds != null" >
+        house_holds,
+      </if>
+      <if test="identify != null" >
+        identify,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="locationName != null" >
+        location_name,
+      </if>
+      <if test="locationNameLevelOne != null" >
+        location_name_level_one,
+      </if>
+      <if test="locationNameLevelTwo != null" >
+        location_name_level_two,
+      </if>
+      <if test="locationNameReal != null" >
+        location_name_real,
+      </if>
+      <if test="minzu != null" >
+        minzu,
+      </if>
+      <if test="minzuCn != null" >
+        minzu_cn,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="personInfoJson != null" >
+        person_info_json,
+      </if>
+      <if test="policeDeptName != null" >
+        police_dept_name,
+      </if>
+      <if test="policeDeptNo != null" >
+        police_dept_no,
+      </if>
+      <if test="policeIdCard != null" >
+        police_id_card,
+      </if>
+      <if test="policeNo != null" >
+        police_no,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="sexCn != null" >
+        sex_cn,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="stationName != null" >
+        station_name,
+      </if>
+      <if test="stationNo != null" >
+        station_no,
+      </if>
+      <if test="together != null" >
+        together,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="warningInfoDetail != null" >
+        warning_info_detail,
+      </if>
+      <if test="warningInfoShortHands != null" >
+        warning_info_short_hands,
+      </if>
+      <if test="xzqh != null" >
+        xzqh,
+      </if>
+      <if test="xzqhCn != null" >
+        xzqh_cn,
+      </if>
+      <if test="checkinfoid != null" >
+        checkinfoid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="brunchDeptName != null" >
+        #{brunchDeptName,jdbcType=VARCHAR},
+      </if>
+      <if test="brunchDeptNo != null" >
+        #{brunchDeptNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeCn != null" >
+        #{cardTypeCn,jdbcType=VARCHAR},
+      </if>
+      <if test="checkObject != null" >
+        #{checkObject,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null" >
+        #{checkResult,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTask != null" >
+        #{checkTask,jdbcType=VARCHAR},
+      </if>
+      <if test="disposalWay != null" >
+        #{disposalWay,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJi != null" >
+        #{guoJi,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiCn != null" >
+        #{guoJiCn,jdbcType=VARCHAR},
+      </if>
+      <if test="houseHolds != null" >
+        #{houseHolds,jdbcType=VARCHAR},
+      </if>
+      <if test="identify != null" >
+        #{identify,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="locationName != null" >
+        #{locationName,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameLevelOne != null" >
+        #{locationNameLevelOne,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameLevelTwo != null" >
+        #{locationNameLevelTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameReal != null" >
+        #{locationNameReal,jdbcType=VARCHAR},
+      </if>
+      <if test="minzu != null" >
+        #{minzu,jdbcType=VARCHAR},
+      </if>
+      <if test="minzuCn != null" >
+        #{minzuCn,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="personInfoJson != null" >
+        #{personInfoJson,jdbcType=VARCHAR},
+      </if>
+      <if test="policeDeptName != null" >
+        #{policeDeptName,jdbcType=VARCHAR},
+      </if>
+      <if test="policeDeptNo != null" >
+        #{policeDeptNo,jdbcType=VARCHAR},
+      </if>
+      <if test="policeIdCard != null" >
+        #{policeIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="policeNo != null" >
+        #{policeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCn != null" >
+        #{sexCn,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null" >
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNo != null" >
+        #{stationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="together != null" >
+        #{together,jdbcType=BIT},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="warningInfoDetail != null" >
+        #{warningInfoDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="warningInfoShortHands != null" >
+        #{warningInfoShortHands,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqh != null" >
+        #{xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqhCn != null" >
+        #{xzqhCn,jdbcType=VARCHAR},
+      </if>
+      <if test="checkinfoid != null" >
+        #{checkinfoid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.EnterInfo" >
+    update tbl_enter_info
+    <set >
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="brunchDeptName != null" >
+        brunch_dept_name = #{brunchDeptName,jdbcType=VARCHAR},
+      </if>
+      <if test="brunchDeptNo != null" >
+        brunch_dept_no = #{brunchDeptNo,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeCn != null" >
+        card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+      </if>
+      <if test="checkObject != null" >
+        check_object = #{checkObject,jdbcType=VARCHAR},
+      </if>
+      <if test="checkResult != null" >
+        check_result = #{checkResult,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTask != null" >
+        check_task = #{checkTask,jdbcType=VARCHAR},
+      </if>
+      <if test="disposalWay != null" >
+        disposal_way = #{disposalWay,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJi != null" >
+        guo_ji = #{guoJi,jdbcType=VARCHAR},
+      </if>
+      <if test="guoJiCn != null" >
+        guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      </if>
+      <if test="houseHolds != null" >
+        house_holds = #{houseHolds,jdbcType=VARCHAR},
+      </if>
+      <if test="identify != null" >
+        identify = #{identify,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="locationName != null" >
+        location_name = #{locationName,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameLevelOne != null" >
+        location_name_level_one = #{locationNameLevelOne,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameLevelTwo != null" >
+        location_name_level_two = #{locationNameLevelTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="locationNameReal != null" >
+        location_name_real = #{locationNameReal,jdbcType=VARCHAR},
+      </if>
+      <if test="minzu != null" >
+        minzu = #{minzu,jdbcType=VARCHAR},
+      </if>
+      <if test="minzuCn != null" >
+        minzu_cn = #{minzuCn,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="personInfoJson != null" >
+        person_info_json = #{personInfoJson,jdbcType=VARCHAR},
+      </if>
+      <if test="policeDeptName != null" >
+        police_dept_name = #{policeDeptName,jdbcType=VARCHAR},
+      </if>
+      <if test="policeDeptNo != null" >
+        police_dept_no = #{policeDeptNo,jdbcType=VARCHAR},
+      </if>
+      <if test="policeIdCard != null" >
+        police_id_card = #{policeIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="policeNo != null" >
+        police_no = #{policeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="sexCn != null" >
+        sex_cn = #{sexCn,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="stationName != null" >
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationNo != null" >
+        station_no = #{stationNo,jdbcType=VARCHAR},
+      </if>
+      <if test="together != null" >
+        together = #{together,jdbcType=BIT},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="warningInfoDetail != null" >
+        warning_info_detail = #{warningInfoDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="warningInfoShortHands != null" >
+        warning_info_short_hands = #{warningInfoShortHands,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqh != null" >
+        xzqh = #{xzqh,jdbcType=VARCHAR},
+      </if>
+      <if test="xzqhCn != null" >
+        xzqh_cn = #{xzqhCn,jdbcType=VARCHAR},
+      </if>
+      <if test="checkinfoid != null" >
+        checkinfoid = #{checkinfoid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.EnterInfo" >
+    update tbl_enter_info
+    set age = #{age,jdbcType=INTEGER},
+      brunch_dept_name = #{brunchDeptName,jdbcType=VARCHAR},
+      brunch_dept_no = #{brunchDeptNo,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      card_type_cn = #{cardTypeCn,jdbcType=VARCHAR},
+      check_object = #{checkObject,jdbcType=VARCHAR},
+      check_result = #{checkResult,jdbcType=VARCHAR},
+      check_task = #{checkTask,jdbcType=VARCHAR},
+      disposal_way = #{disposalWay,jdbcType=VARCHAR},
+      guo_ji = #{guoJi,jdbcType=VARCHAR},
+      guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
+      house_holds = #{houseHolds,jdbcType=VARCHAR},
+      identify = #{identify,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      location_name = #{locationName,jdbcType=VARCHAR},
+      location_name_level_one = #{locationNameLevelOne,jdbcType=VARCHAR},
+      location_name_level_two = #{locationNameLevelTwo,jdbcType=VARCHAR},
+      location_name_real = #{locationNameReal,jdbcType=VARCHAR},
+      minzu = #{minzu,jdbcType=VARCHAR},
+      minzu_cn = #{minzuCn,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      person_info_json = #{personInfoJson,jdbcType=VARCHAR},
+      police_dept_name = #{policeDeptName,jdbcType=VARCHAR},
+      police_dept_no = #{policeDeptNo,jdbcType=VARCHAR},
+      police_id_card = #{policeIdCard,jdbcType=VARCHAR},
+      police_no = #{policeNo,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      sex_cn = #{sexCn,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      station_name = #{stationName,jdbcType=VARCHAR},
+      station_no = #{stationNo,jdbcType=VARCHAR},
+      together = #{together,jdbcType=BIT},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      warning_info_detail = #{warningInfoDetail,jdbcType=VARCHAR},
+      warning_info_short_hands = #{warningInfoShortHands,jdbcType=VARCHAR},
+      xzqh = #{xzqh,jdbcType=VARCHAR},
+      xzqh_cn = #{xzqhCn,jdbcType=VARCHAR},
+      checkinfoid = #{checkinfoid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

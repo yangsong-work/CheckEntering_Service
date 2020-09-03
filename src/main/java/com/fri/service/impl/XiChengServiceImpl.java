@@ -3,10 +3,7 @@ package com.fri.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fri.dao.CheckInfoForeignMapper;
-import com.fri.dao.CheckInfoMapper;
-import com.fri.dao.CheckWarnInfoMapper;
-import com.fri.dao.Test1Mapper;
+import com.fri.dao.*;
 import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.request.APPUpdateRequest;
@@ -52,6 +49,8 @@ public class XiChengServiceImpl implements XiChengService {
     CheckWarnInfoMapper checkWarnInfoMapper;
     @Autowired
     CheckInfoForeignMapper checkInfoForeignMapper;
+    @Autowired
+    EnterInfoMapper enterInfoMapper;
 
     @Override
     public List<CheckInfoHistoryResponse> checkInfoHistory(CheckInfoHistoryResquest data) {
@@ -388,7 +387,7 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public Object upLoad(UploadRequest request,String deviceNo) {
+    public boolean upLoad(UploadRequest request,String deviceNo) {
         UriComponentsBuilder builder = createBaseUri4Upload(deviceNo, baseUrl + "Upload");
         String url = builder.build().toUri().toString();
         Map returnMap = new HashMap();
@@ -399,24 +398,27 @@ public class XiChengServiceImpl implements XiChengService {
             requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
             HttpEntity<String> requestEntity = new HttpEntity<String>(JSON.toJSONString(request), requestHeaders);
             String data = restTemplate.postForEntity(url, requestEntity, String.class).getBody();
-            logger.info("总线返回报文：{}", data);
+            logger.info("录入返回报文：{}", data);
             returnMap = JSON.parseObject(data, Map.class);
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        if(returnMap==null||!returnMap.get("status").equals("0")){
+        if(returnMap==null|| (Integer) returnMap.get("status")!=0){
               throw new RuntimeException();
         }
-//        List list = JSONArray.parseArray((String) returnMap.get("results"),List.class);
-//        if(list==null||list.isEmpty()){
-//              throw new RuntimeException();
-//        }
-        return returnMap;
+        List list = (List) returnMap.get("results");
+        Map map = (Map) list.get(0);
+        String checkinfoid = (String) map.get("checkinfoid");
+        EnterInfo enterInfo = new EnterInfo();
+        BeanUtils.copyProperties(request,enterInfo);
+        enterInfo.setCheckinfoid(checkinfoid);
+        enterInfoMapper.insert(enterInfo);
+        return true;
     }
 
     @Override
-    public Object upLoadForeign(UploadRequest request,String deviceNo) {
-        return null;
+    public boolean upLoadForeign(UploadRequest request,String deviceNo) {
+        return true;
     }
 
     @Override

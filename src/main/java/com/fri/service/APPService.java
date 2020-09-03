@@ -3,8 +3,6 @@ package com.fri.service;
 import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.request.*;
-import com.fri.pojo.bo.app.response.CheckAddressResponse;
-import com.fri.pojo.bo.app.response.DetailsResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonJs4XiCheng;
 
@@ -34,5 +32,5 @@ public interface APPService {
 
     List<PeopleBasicInfo> getPeopleBasicMessage(PeopleBasicMessageRequest request);
 
-    Object upLoad(APPUpdateRequest request);
+    Boolean upLoad(APPUpdateRequest request);
 }
