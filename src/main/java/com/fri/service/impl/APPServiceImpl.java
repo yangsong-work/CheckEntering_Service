@@ -415,13 +415,5 @@ public class APPServiceImpl implements APPService {
         return flag;
     }
 
-    public static void main(String[] args) {
-        String s = "320721199703030034";
-        int birth = Integer.parseInt(s.substring(6, 10));
-        int now = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
-        int age = now - birth;
-        //   String substring = s.substring(6, 10);
-        System.out.println(age);
 
-    }
 }
