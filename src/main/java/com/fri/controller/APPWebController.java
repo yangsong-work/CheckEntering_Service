@@ -2,6 +2,7 @@ package com.fri.controller;
 
 import com.fri.exception.NoMessageException;
 import com.fri.model.CheckPersonJsDetail2;
+import com.fri.model.PeopleBasicInfo;
 import com.fri.model.PeopleCountInfo;
 import com.fri.model.PoliceInfo;
 import com.fri.pojo.bo.app.request.*;
@@ -110,7 +111,6 @@ public class APPWebController {
         Map map = appService.getDetails(detailRequest);
         return ResponseUtil.ok(map);
     }
-
     /**
      * 根据警号查询警员信息
      */
@@ -127,7 +127,6 @@ public class APPWebController {
         }
         return ResponseUtil.ok(policeManRequest);
     }
-
     /*
      *   请求人的警示详细信息和本地警示信息详情
      * */
@@ -219,8 +218,8 @@ public class APPWebController {
      * */
     @RequestMapping("/peopleBasicMessage")
     public String peopleBasicMessage(@RequestBody PeopleBasicMessageRequest request) {
-        List<CheckPersonBasicInfoResponse> peopleBasicMessage = appService.getPeopleBasicMessage(request);
-        if (peopleBasicMessage == null || peopleBasicMessage.isEmpty()) {
+        List<PeopleBasicInfo> peopleBasicMessage = appService.getPeopleBasicMessage(request);
+        if (peopleBasicMessage==null||peopleBasicMessage.isEmpty()){
             return ResponseUtil.ok("暂无信息");
         }
         return ResponseUtil.ok(peopleBasicMessage);
