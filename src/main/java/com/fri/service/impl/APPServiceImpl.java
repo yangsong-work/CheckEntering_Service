@@ -22,12 +22,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class APPServiceImpl implements APPService {
@@ -146,7 +144,7 @@ public class APPServiceImpl implements APPService {
         jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPoliceNumber());
         List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
         try {
-            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"person");
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap, "person");
             System.out.println("西城接口返回数据" + list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -276,6 +274,7 @@ public class APPServiceImpl implements APPService {
         }
         return returnList;
     }
+
     @Override
     public PeopleCountInfo getCountStatistics(CountRequest request) {
         PeopleCountInfo peopleCountInfo = new PeopleCountInfo();
@@ -289,38 +288,40 @@ public class APPServiceImpl implements APPService {
     }
 
     @Override
-    public List<CheckPersonBasicInfoResponse> getPeopleBasicMessage(PeopleBasicMessageRequest request) {
-        request.getId();
+    public List<PeopleBasicInfo> getPeopleBasicMessage(PeopleBasicMessageRequest request) {
         int type = request.getType();
-        List<String> idCardList=null;
-        if(type==0){
-            idCardList=  checkPeopleMapper.selectAllIdCard(request.getId());
+        List<String> idCardList = null;
+        if (type == 0) {
+            idCardList = checkPeopleMapper.selectAllIdCard(request.getId());
+        } else if (type == 1) {
+            idCardList = checkPeopleMapper.selectRzIdCard(request.getId());
+        } else if (type == 2) {
+            idCardList = checkPeopleMapper.selectWarnIdCard(request.getId());
+        } else if (type == 3) {
+            idCardList = checkPeopleMapper.selectGreenIdCard(request.getId());
+        } else if (type == 4) {
+            idCardList = checkPeopleMapper.selectYellowIdCard(request.getId());
+        } else if (type == 5) {
+            idCardList = checkPeopleMapper.selectRedIdCard(request.getId());
         }
-        else if(type==1){
-            idCardList= checkPeopleMapper.selectRzIdCard(request.getId());
+        List<PeopleBasicInfo> peopleBasicInfos = new ArrayList<>();
+        int now = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
+        for (String idCard : idCardList) {
+            //根据身份证查信息
+            CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(idCard);
+            PeopleBasicInfo peopleBasicInfo = new PeopleBasicInfo();
+            peopleBasicInfo.setHouseHolds(checkInfo.getHouseHolds());
+            peopleBasicInfo.setIdCard(idCard);
+            peopleBasicInfo.setMinzu(checkInfo.getMinzu());
+            peopleBasicInfo.setSex(checkInfo.getSex());
+            peopleBasicInfo.setZp(checkInfo.getZp());
+            peopleBasicInfo.setName(checkInfo.getName());
+            int birth = Integer.parseInt(idCard.substring(6, 10));
+            peopleBasicInfo.setAge(now - birth);
+            peopleBasicInfos.add(peopleBasicInfo);
         }
-        else if(type==2){
-            idCardList=   checkPeopleMapper.selectWarnIdCard(request.getId());
-        }
-        else if(type==3){
-            idCardList=    checkPeopleMapper.selectGreenIdCard(request.getId());
-        }
-        else if(type==4){
-            idCardList=   checkPeopleMapper.selectYellowIdCard(request.getId());
-        }
-        else if(type==5){
-            idCardList=   checkPeopleMapper.selectRedIdCard(request.getId());
-        }
-        List<CheckPersonBasicInfoResponse> checkPersonBasicInfoResponses = new ArrayList<>();
-        for(String idCard:idCardList){
-            try {
-                CheckPersonBasicInfoResponse checkPersonBasicInfoResponse = xiChengService.checkPersonBasicInfo(idCard, request.getDeviceNo());
-                checkPersonBasicInfoResponses.add(checkPersonBasicInfoResponse);
-            } catch (NoMessageException e) {
-            	e.printStackTrace();
-            }
-        }
-        return checkPersonBasicInfoResponses;
+        return peopleBasicInfos;
+        // return checkPersonBasicInfoResponses;
     }
 
     @Override
@@ -383,9 +384,7 @@ public class APPServiceImpl implements APPService {
             xichengUploadRequest.setXzqhCn(checkInfo.getXzqhCn());
 
 
-
-
-            xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
+            xiChengService.upLoad(xichengUploadRequest, request.getDeviceNo());
         } else if ("2".equals(request.getCheckObject())) {
             //境外人员
         } else {
@@ -396,5 +395,13 @@ public class APPServiceImpl implements APPService {
         return null;
     }
 
+    public static void main(String[] args) {
+        String s = "320721199703030034";
+        int birth = Integer.parseInt(s.substring(6, 10));
+        int now = Integer.parseInt(new SimpleDateFormat("yyyy").format(new Date()));
+        int age = now - birth;
+        //   String substring = s.substring(6, 10);
+        System.out.println(age);
 
+    }
 }

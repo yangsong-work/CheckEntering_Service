@@ -2,6 +2,7 @@ package com.fri.controller;
 
 import com.fri.exception.NoMessageException;
 import com.fri.model.CheckPersonJsDetail2;
+import com.fri.model.PeopleBasicInfo;
 import com.fri.model.PeopleCountInfo;
 import com.fri.model.PoliceInfo;
 import com.fri.pojo.bo.app.request.*;
@@ -215,7 +216,7 @@ public class APPWebController {
      * */
     @RequestMapping("/peopleBasicMessage")
     public String peopleBasicMessage(@RequestBody PeopleBasicMessageRequest request) {
-        List<CheckPersonBasicInfoResponse> peopleBasicMessage = appService.getPeopleBasicMessage(request);
+        List<PeopleBasicInfo> peopleBasicMessage = appService.getPeopleBasicMessage(request);
         if (peopleBasicMessage==null||peopleBasicMessage.isEmpty()){
             return ResponseUtil.ok("暂无信息");
         }

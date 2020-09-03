@@ -1,10 +1,7 @@
 package com.fri.service;
 
 import com.fri.exception.NoMessageException;
-import com.fri.model.CheckAddress;
-import com.fri.model.CheckPersonJsDetail2;
-import com.fri.model.CheckWarnInfo;
-import com.fri.model.PeopleCountInfo;
+import com.fri.model.*;
 import com.fri.pojo.bo.app.request.*;
 import com.fri.pojo.bo.app.response.CheckAddressResponse;
 import com.fri.pojo.bo.app.response.DetailsResponse;
@@ -35,7 +32,7 @@ public interface APPService {
     List<CheckWarnInfo> transferList(List<CheckPersonJs4XiCheng> list);
     PeopleCountInfo getCountStatistics(CountRequest request);
 
-    List<CheckPersonBasicInfoResponse> getPeopleBasicMessage(PeopleBasicMessageRequest request);
+    List<PeopleBasicInfo> getPeopleBasicMessage(PeopleBasicMessageRequest request);
 
     Object upLoad(APPUpdateRequest request);
 }
