@@ -10,6 +10,7 @@ import com.fri.pojo.bo.app.response.DetailsResponse;
 import com.fri.pojo.bo.xicheng.request.UploadRequest;
 import com.fri.pojo.bo.xicheng.response.CheckPersonBasicInfoResponse;
 import com.fri.pojo.bo.xicheng.response.CheckPersonJs4XiCheng;
+import com.fri.pojo.bo.xicheng.response.SsoResponse;
 import com.fri.service.APPService;
 import com.fri.service.CheckEnterService;
 import com.fri.service.XiChengService;
@@ -145,7 +146,7 @@ public class APPServiceImpl implements APPService {
         jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(detailRequest.getDeviceNo()).getPoliceNumber());
         List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
         try {
-            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"person");
             System.out.println("西城接口返回数据" + list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -328,6 +329,7 @@ public class APPServiceImpl implements APPService {
         //封装西城录入接口
         UploadRequest xichengUploadRequest = new UploadRequest();
         PoliceLoginRecord policeLoginRecord = UserUtil.getUserMap().get(request.getDeviceNo());
+        SsoResponse policeInfo = xiChengService.Ssologin(request.getDeviceNo());
         if ("1".equals(request.getCheckObject())) {
             //境内人员
             CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(request.getIdentify());
@@ -343,7 +345,9 @@ public class APPServiceImpl implements APPService {
             location.setLat(Double.valueOf(policeLoginRecord.getLat()));
             location.setLon(Double.valueOf(policeLoginRecord.getLon()));
             xichengUploadRequest.setAge(age);
-            //TODO 少字段
+            //分局
+            xichengUploadRequest.setBrunchDeptName(policeInfo.getOrgName());
+            xichengUploadRequest.setBrunchDeptNo(policeInfo.getOrgNo());
             xichengUploadRequest.setCardType(checkInfo.getCardType());
             xichengUploadRequest.setCardTypeCn(checkInfo.getCardTypeCn());
             xichengUploadRequest.setCheckObject(request.getCheckObject());
@@ -358,13 +362,18 @@ public class APPServiceImpl implements APPService {
             xichengUploadRequest.setMinzu(checkInfo.getMinzu());
             xichengUploadRequest.setMinzuCn(checkInfo.getMinzuCn());
             xichengUploadRequest.setName(checkInfo.getName());
-            xichengUploadRequest.setPoliceDeptNo(policeLoginRecord.getPoliceOrg());
+            //组织
+            xichengUploadRequest.setPoliceDeptName(policeInfo.getDeptName());
+            xichengUploadRequest.setPoliceDeptNo(policeInfo.getDeptNo());
             xichengUploadRequest.setPoliceIdCard(policeLoginRecord.getPoliceIDCard());
             xichengUploadRequest.setPoliceNo(policeLoginRecord.getPoliceNumber());
             xichengUploadRequest.setSex(checkInfo.getSex());
             xichengUploadRequest.setSexCn(checkInfo.getSexCn());
             //0 为保存 1为完成  写死为完成
             xichengUploadRequest.setState("1");
+            //部门
+            xichengUploadRequest.setStationName(policeInfo.getSubOrgName());
+            xichengUploadRequest.setStationNo(policeInfo.getSuborgNo());
             xichengUploadRequest.setTogether(false);
             xichengUploadRequest.setUpdateUser(policeLoginRecord.getPoliceIDCard());
             //警示信息与警示信息简项

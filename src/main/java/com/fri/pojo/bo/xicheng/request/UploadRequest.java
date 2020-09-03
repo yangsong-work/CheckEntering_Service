@@ -66,6 +66,51 @@ public class UploadRequest {
     private Date updateTime;
     private String updateUser;
     private List warningInfoDetail;
+    private String brunchDeptName;
+    private String brunchDeptNo;
+    private String policeDeptName;
+    private String stationNo;
+    private String stationName;
+
+    public String getStationNo() {
+        return stationNo;
+    }
+
+    public void setStationNo(String stationNo) {
+        this.stationNo = stationNo;
+    }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
+    public String getPoliceDeptName() {
+        return policeDeptName;
+    }
+
+    public void setPoliceDeptName(String policeDeptName) {
+        this.policeDeptName = policeDeptName;
+    }
+
+    public String getBrunchDeptName() {
+        return brunchDeptName;
+    }
+
+    public void setBrunchDeptName(String brunchDeptName) {
+        this.brunchDeptName = brunchDeptName;
+    }
+
+    public String getBrunchDeptNo() {
+        return brunchDeptNo;
+    }
+
+    public void setBrunchDeptNo(String brunchDeptNo) {
+        this.brunchDeptNo = brunchDeptNo;
+    }
 
     public List getWarningInfoDetail() {
         return warningInfoDetail;

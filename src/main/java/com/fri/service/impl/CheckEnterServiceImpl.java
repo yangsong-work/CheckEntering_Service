@@ -124,7 +124,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             jsXiChengMap.put("cardId", verifyIDCardRequest.getpCardNo());
             jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId());
             jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPoliceNumber());
-            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap);
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"person");
             checkWarnInfoList = appService.transferList(personJsList4XiCheng);
             for (CheckWarnInfo personJs : checkWarnInfoList) {
                 String color = personJs.getColor();
@@ -246,7 +246,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         infoRequest.setDeviceNo(ocrRequest.getDeviceNo());
 
         CheckForeignPersonBasicReponse checkForeignPersonBasic = xiChengService.checkForeignPersonBasicInfo(infoRequest);
-        List<CheckForeignPersonJsReponse> checkForeignPersonJsList = xiChengService.checkForeignPersonJsInfo(infoRequest);
+        List<CheckPersonJs> checkForeignPersonJsList = xiChengService.checkForeignPersonJsInfo(infoRequest);
 
         PoliceLoginRecord record = UserUtil.getUserMap().get(ocrRequest.getDeviceNo());
         String padId = record.getPadId();
@@ -255,7 +255,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         Set<String> set = new HashSet<String>();
         String warningColor = "white";
         String status = "1";
-        for (CheckForeignPersonJsReponse personJs : checkForeignPersonJsList) {
+        for (CheckPersonJs personJs : checkForeignPersonJsList) {
             String color = personJs.getColor();
             if (("red").equals(color)) {
                 warningColor = color;
@@ -271,6 +271,48 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 status = "1";
             }
         }
+
+        //西城警示接口
+        List<CheckWarnInfo> checkWarnInfoList = new ArrayList<>();
+        List<CheckPersonJs4XiCheng> personJsList4XiCheng = new ArrayList<>();
+        try {
+            Map jsXiChengMap = new HashMap();
+            jsXiChengMap.put("cardId", ocrRequest.getCardNo());
+            jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPadId());
+            jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPoliceNumber());
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"person");
+            checkWarnInfoList = appService.transferList(personJsList4XiCheng);
+            for (CheckWarnInfo personJs : checkWarnInfoList) {
+                String color = personJs.getColor();
+                if (warningColor.equals("red")||("red").equals(color)) {
+                    warningColor = color;
+                    status = "2";
+                    break;
+                }
+                if (("yellow").equals(color)) {
+                    warningColor = color;
+                    status = "2";
+                }
+                if (("green").equals(color) && !warningColor.equals("yellow")) {
+                    warningColor = color;
+                    status = "1";
+                }
+            }
+            System.out.println("西城公安网数据"+checkWarnInfoList);
+        }catch (Exception e){
+            log.info("西城接口发送失败");
+        }
+
+
+        List<CheckPersonJs> list4XiCheng = new ArrayList<>();
+        list4XiCheng = transferList(personJsList4XiCheng);
+        list4XiCheng = myCompareList(list4XiCheng,"1");
+
+        checkForeignPersonJsList = myCompareList(checkForeignPersonJsList,"0");
+
+        list4XiCheng.addAll(checkForeignPersonJsList);
+
+
 
         pushInfo.setPoliceIDCard(record.getPoliceIDCard());
         pushInfo.setCheckNumber(pushInfo.getCheckNumber() + 1);
@@ -310,6 +352,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setWarningColor(warningColor);
         checkInfo.setImg("");
         checkInfo.setCardNumber(checkForeignPersonBasic.getIdentify());
+        checkInfo.setWarnList(list4XiCheng);
         //TODO 人员信息入库
         //推送至PAD
         Map pushMap = new HashMap();
@@ -601,7 +644,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         return returnList;
     }
 
-    public List<CheckPersonJs> transferList(List<CheckPersonJs4XiCheng> list) {
+    //西城警示转换公安3.0警示
+    private List<CheckPersonJs> transferList(List<CheckPersonJs4XiCheng> list) {
         List<CheckPersonJs> returnList = new ArrayList<>();
         for (CheckPersonJs4XiCheng checkPersonJs4XiCheng : list) {
             CheckPersonJs checkPersonJs = new CheckPersonJs();

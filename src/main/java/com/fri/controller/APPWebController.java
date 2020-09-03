@@ -194,7 +194,10 @@ public class APPWebController {
     public String upLoad(@Valid @RequestBody APPUpdateRequest request) {
         log.info("录入接口数据：{}", request.toString());
         Object  o = appService.upLoad(request);
-        return "";
+        if(o==null){
+            return ResponseUtil.fail();
+        }
+        return ResponseUtil.ok();
     }
 
 

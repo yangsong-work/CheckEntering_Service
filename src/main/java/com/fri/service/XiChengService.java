@@ -29,7 +29,7 @@ public interface XiChengService {
     CheckForeignPersonBasicReponse checkForeignPersonBasicInfo(CheckForeignPersonInfoRequest request) throws NoMessageException;
 
     //10.请求境外人员的警示信息(ocr)
-    List<CheckForeignPersonJsReponse> checkForeignPersonJsInfo(CheckForeignPersonInfoRequest request);
+    List<CheckPersonJs> checkForeignPersonJsInfo(CheckForeignPersonInfoRequest request);
 
     //12.请求核查对象轨迹信息
     List<CheckInfoListResponse> checkInfoList(CheckInfoListRequest data);
@@ -49,12 +49,12 @@ public interface XiChengService {
     //7.市局的警示详细信息
     List<CheckPersonJsDetail2> checkLocalJsDetail(CheckPersonJsDetailRequest request);
     //西城公安提供警示信息接口（优先级大于市局接口）
-    List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map data);
+    List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map data,String checkType);
 
     //录入接口（境内）
     Object upLoad(UploadRequest uploadRequest,String deviceNo);
     //录入接口（境外）
     Object upLoadForeign(UploadRequest uploadRequest,String deviceNo);
 
-
+    SsoResponse Ssologin(String deviceNo);
 }

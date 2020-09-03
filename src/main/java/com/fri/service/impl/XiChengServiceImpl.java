@@ -240,7 +240,7 @@ public class XiChengServiceImpl implements XiChengService {
     }
 
     @Override
-    public List<CheckForeignPersonJsReponse> checkForeignPersonJsInfo(CheckForeignPersonInfoRequest request) {
+    public List<CheckPersonJs> checkForeignPersonJsInfo(CheckForeignPersonInfoRequest request) {
                 UriComponentsBuilder builder = createBaseUri(request.getDeviceNo(), baseUrl + "CheckForeignPersonJsInfo");
         builder.queryParam("gj", request.getGj());
         builder.queryParam("zjlb", request.getZjlb());
@@ -249,19 +249,19 @@ public class XiChengServiceImpl implements XiChengService {
         String data = restTemplateForGet(url);
 
 
-        List<CheckForeignPersonJsReponse> returnList = new ArrayList<>();
+        List<CheckPersonJs> returnList = new ArrayList<>();
         Map<String, Object> map = JSON.parseObject(data, Map.class);
         //查询失败直接返回空list
         if (map == null || !(map.get("status").toString().equals("0"))) {
             return returnList;
         }
         JSONObject o = JSON.parseObject(data);
-        returnList = JSON.parseArray(o.getString("results"), CheckForeignPersonJsReponse.class);
+        returnList = JSON.parseArray(o.getString("results"), CheckPersonJs.class);
 
         //先删除再插入
         checkWarnInfoMapper.deleteByCardNumber(request.getZjhm());
         List<CheckWarnInfo> list = new ArrayList<>();
-        for(CheckForeignPersonJsReponse reponse:returnList){
+        for(CheckPersonJs reponse:returnList){
             CheckWarnInfo checkWarnInfo = new CheckWarnInfo();
             BeanUtils.copyProperties(reponse,checkWarnInfo);
             checkWarnInfo.setCardNumber(request.getZjhm());
@@ -335,10 +335,10 @@ public class XiChengServiceImpl implements XiChengService {
      * @return
      */
     @Override
-    public List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map dataMap) {
+    public List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map dataMap,String checkType) {
         String url = "http://10.11.53.207:7979/terminal/request";
         dataMap.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI4YThiYjU1MDVkNWUwM2E0MDE1ZWI3ZGQ5MmY2MDE2ZCIsImltZWkiOiI4Njk2NjEwMjAzMDk3OTQiLCJpYXQiOjE1ODg4MTQwMjA2MjksIm9yZ2lkIjoiMTEwMTAyNzYwMDAwIiwiYWNjb3VudCI6Ijg4ODgwMyIsInVybCI6IjEwLjExLjUzLjIwNSJ9.Zgkj88ha4Wn3yxM8eSS7_B6aumneqfjAaNLldG5vC3Q");
-        dataMap.put("checkType","person");
+        dataMap.put("checkType",checkType);
         LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter fdt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String checkTime = fdt.format(time);
@@ -417,6 +417,29 @@ public class XiChengServiceImpl implements XiChengService {
     @Override
     public Object upLoadForeign(UploadRequest request,String deviceNo) {
         return null;
+    }
+
+    @Override
+    public SsoResponse Ssologin(String deviceNo) {
+        UriComponentsBuilder builder = createBaseUri4Upload(deviceNo, baseUrl + "SsoLogin");
+        String url = builder.build().toUri().toString();
+        String data = restTemplateForGet(url);
+        SsoResponse response = new SsoResponse();
+        Map<String, Object> map = JSON.parseObject(data, Map.class);
+        //查询失败
+        if (map == null || !(map.get("status").toString().equals("0"))) {
+
+            logger.info("警员信息查询失败:{}",map);
+            return response;
+        }
+        JSONObject o = JSON.parseObject(data);
+        List list = JSON.parseArray(o.getString("results"), SsoResponse.class);
+        if(list!=null&&!list.isEmpty()) {
+            response = (SsoResponse) list.get(0);
+            //入库
+            logger.info("警员信息查询成功:{}",response);
+        }
+        return response;
     }
 
 
