@@ -312,8 +312,8 @@ public class APPServiceImpl implements APPService {
             PeopleBasicInfo peopleBasicInfo = new PeopleBasicInfo();
             peopleBasicInfo.setHouseHolds(checkInfo.getHouseHolds());
             peopleBasicInfo.setIdCard(idCard);
-            peopleBasicInfo.setMinzu(checkInfo.getMinzu());
-            peopleBasicInfo.setSex(checkInfo.getSex());
+            peopleBasicInfo.setMinzu(checkInfo.getMinzuCn());
+            peopleBasicInfo.setSex(checkInfo.getSexCn());
             peopleBasicInfo.setZp(checkInfo.getZp());
             peopleBasicInfo.setName(checkInfo.getName());
             int birth = Integer.parseInt(idCard.substring(6, 10));
