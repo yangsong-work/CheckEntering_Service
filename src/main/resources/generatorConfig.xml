@@ -121,7 +121,7 @@
 
 <!--        >-->
 <!--        </table> -->
-        <table schema="checkenter" tableName="tbl_country_info" domainObjectName="CountryInfo"
+        <table schema="checkenter" tableName="tbl_enter_info" domainObjectName="EnterInfo"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"

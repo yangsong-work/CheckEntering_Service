@@ -194,6 +194,9 @@ public class APPWebController {
      */
     @RequestMapping("/upload")
     public String upLoad(@Valid @RequestBody APPUpdateRequest request) {
+         //TODO 测试代码 上线删除
+        request.setDisposalWay("1");
+
         log.info("录入接口数据：{}", request.toString());
         boolean flag = appService.upLoad(request);
         if (flag) {
