@@ -355,6 +355,16 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setCardNumber(checkForeignPersonBasic.getIdentify());
         checkInfo.setWarnList(list4XiCheng);
         checkInfo.setGuoJi(checkForeignPersonBasic.getGuoJi());
+        //护照插入
+        CheckPeople checkPeople = new CheckPeople();
+        checkPeople.setIdCard(ocrRequest.getCardNo());
+        if(warningColor.equals("white")) checkPeople.setColor(0);
+        else if(warningColor.equals("green")) checkPeople.setColor(1);
+        else if(warningColor.equals("yellow")) checkPeople.setColor(2);
+        else if(warningColor.equals("red")) checkPeople.setColor(3);
+        checkPeople.setCompareStatus(0);
+        checkPeople.setPid(pushInfo.getId());
+        checkPeopleMapper.insertPeople(checkPeople);
         //TODO 人员信息入库
         //推送至PAD
         Map pushMap = new HashMap();
@@ -417,6 +427,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 facePhoneInfo.setName(checkPersonBasicInfoResponse.getName());
                 facePhoneInfo.setImg(checkPersonPhotoResponse.getZp());
                 facePhoneInfo.setSimilarityDegree(checkPersonFaceResponse.getSimilaritydegree());
+                facePhoneInfo.setGuoJi(checkPersonBasicInfoResponse.getGuoJi());
                 facePhoneInfos.add(facePhoneInfo);
             }
         }
