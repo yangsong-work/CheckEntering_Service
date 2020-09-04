@@ -427,6 +427,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 facePhoneInfo.setName(checkPersonBasicInfoResponse.getName());
                 facePhoneInfo.setImg(checkPersonPhotoResponse.getZp());
                 facePhoneInfo.setSimilarityDegree(checkPersonFaceResponse.getSimilaritydegree());
+                facePhoneInfo.setGuoJi(checkPersonBasicInfoResponse.getGuoJi());
                 facePhoneInfos.add(facePhoneInfo);
             }
         }
