@@ -114,7 +114,7 @@ public class XiChengServiceImpl implements XiChengService {
              BeanUtils.copyProperties(checkPersonJs,checkWarnInfo);
              checkWarnInfo.setCardNumber(IDCard);
              list.add(checkWarnInfo);
-        checkWarnInfoMapper.insertBatch(list);
+        checkWarnInfoMapper.insert(checkWarnInfo);
         }
         return returnList;
     }
@@ -226,9 +226,9 @@ public class XiChengServiceImpl implements XiChengService {
 
 
         JSONObject o = JSON.parseObject(data);
-        if(!o.getString("").equals("0")){
-                throw new NoMessageException();
-        }
+//        if(!o.getString("").equals("0")){
+//                throw new NoMessageException();
+//        }
         CheckForeignPersonBasicReponse checkForeignPersonBasicReponse = JSON.parseArray(o.getString("results"), CheckForeignPersonBasicReponse.class).get(0);
 
         CheckInfoForeign checkInfo = new CheckInfoForeign();
@@ -496,7 +496,7 @@ public class XiChengServiceImpl implements XiChengService {
                 .queryParam("policesfzh", record.getPoliceIDCard())
                 .queryParam("policename", record.getPoliceName())
                 .queryParam("policeorg", record.getPoliceOrg())
-                .queryParam("apptype", appType)
+                .queryParam("apptype", "hlz")
                 .queryParam("lon", record.getLon())
                 .queryParam("lat", record.getLat());
 

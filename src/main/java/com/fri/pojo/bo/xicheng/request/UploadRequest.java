@@ -72,6 +72,44 @@ public class UploadRequest {
     private String stationNo;
     private String stationName;
 
+    //护照字段
+    private String foreignerBaseInfoJson;
+    private String foreignerCname;
+    private String foreignerName;
+    private String guoJiEn;
+
+    public String getForeignerBaseInfoJson() {
+        return foreignerBaseInfoJson;
+    }
+
+    public void setForeignerBaseInfoJson(String foreignerBaseInfoJson) {
+        this.foreignerBaseInfoJson = foreignerBaseInfoJson;
+    }
+
+    public String getForeignerCname() {
+        return foreignerCname;
+    }
+
+    public void setForeignerCname(String foreignerCname) {
+        this.foreignerCname = foreignerCname;
+    }
+
+    public String getForeignerName() {
+        return foreignerName;
+    }
+
+    public void setForeignerName(String foreignerName) {
+        this.foreignerName = foreignerName;
+    }
+
+    public String getGuoJiEn() {
+        return guoJiEn;
+    }
+
+    public void setGuoJiEn(String guoJiEn) {
+        this.guoJiEn = guoJiEn;
+    }
+
     public String getStationNo() {
         return stationNo;
     }

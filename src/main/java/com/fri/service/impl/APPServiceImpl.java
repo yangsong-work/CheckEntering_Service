@@ -44,6 +44,8 @@ public class APPServiceImpl implements APPService {
     @Autowired
     private CheckInfoMapper checkInfoMapper;
     @Autowired
+    CheckInfoForeignMapper checkInfoForeignMapper;
+    @Autowired
     private CheckWarnInfoMapper checkWarnInfoMapper;
     @Autowired
     private CheckAddressMapper checkAddressMapper;
@@ -93,7 +95,7 @@ public class APPServiceImpl implements APPService {
         record.setCheckTask(checkOptionRequest.getCheckTask());
         // 通知核录桩
         //TODO 测试代码 上线删除
-//        checkEnterService.notifyLogin(checkOptionRequest.getPadId());
+        checkEnterService.notifyLogin(checkOptionRequest.getPadId());
         return policeLoginRecordMapper.updateCheckOption(checkOptionRequest);
     }
 
@@ -115,6 +117,11 @@ public class APPServiceImpl implements APPService {
     @Override
     public List getCheckAddress(String deviceNo, String parentId) {
         List<CheckAddress> checkAddressList = addressUtil.checkAddress(deviceNo, parentId);
+        if(checkAddressList==null||checkAddressList.isEmpty()){
+            CheckAddress checkAddress  = checkAddressMapper.selectByPrimaryKey(parentId);
+            checkAddressList = new ArrayList<>();
+           checkAddressList.add(checkAddress);
+        }
         List<CheckAddressResponse> returnList = new ArrayList<>();
         for (CheckAddress checkAddress : checkAddressList) {
             CheckAddressResponse res = new CheckAddressResponse();
@@ -349,7 +356,7 @@ public class APPServiceImpl implements APPService {
             checkInfo.setAge(age);
             //人员警示信息
             List<CheckWarnInfo> list = new ArrayList<>();
-//            list = checkWarnInfoMapper.selectByCardNumber(request.getIdentify());
+            list = checkWarnInfoMapper.selectByCardNumber(request.getIdentify());
 
 //            LocalDateTime localDateTime =  LocalDateTime.now();
 //            DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -387,6 +394,7 @@ public class APPServiceImpl implements APPService {
             xichengUploadRequest.setPoliceDeptNo(policeInfo.getDeptNo());
             xichengUploadRequest.setPoliceIdCard(policeLoginRecord.getPoliceIDCard());
             xichengUploadRequest.setPoliceNo(policeLoginRecord.getPoliceNumber());
+            xichengUploadRequest.setPoliceName(policeLoginRecord.getPoliceName());
             xichengUploadRequest.setSex(checkInfo.getSex());
             xichengUploadRequest.setSexCn(checkInfo.getSexCn());
             //0 为保存 1为完成  写死为完成
@@ -408,6 +416,69 @@ public class APPServiceImpl implements APPService {
             flag = xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
         } else if ("2".equals(request.getCheckObject())) {
             //境外人员
+            CheckInfoForeign checkInfo = checkInfoForeignMapper.selectByPrimaryKey(request.getIdentify());
+
+            //人员警示信息
+            List<CheckWarnInfo> list = new ArrayList<>();
+            list = checkWarnInfoMapper.selectByCardNumber(request.getIdentify());
+
+//            LocalDateTime localDateTime =  LocalDateTime.now();
+//            DateTimeFormatter dt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//            String time  = localDateTime.format(dt);
+            Location location = new Location();
+            location.setLat(Double.valueOf(policeLoginRecord.getLat()));
+            location.setLon(Double.valueOf(policeLoginRecord.getLon()));
+            //分局
+            xichengUploadRequest.setBrunchDeptName(policeInfo.getOrgName());
+            xichengUploadRequest.setBrunchDeptNo(policeInfo.getOrgNo());
+            xichengUploadRequest.setCardType(checkInfo.getCardType());
+            xichengUploadRequest.setCardTypeCn(checkInfo.getCardTypeCn());
+            xichengUploadRequest.setCheckObject(request.getCheckObject());
+            xichengUploadRequest.setCheckResult(request.getCheckResult());
+            xichengUploadRequest.setCheckTask(policeLoginRecord.getCheckTask());
+            xichengUploadRequest.setDisposalWay(request.getDisposalWay());
+
+            xichengUploadRequest.setForeignerBaseInfoJson(JSON.toJSONString(checkInfo));
+
+            //TODO 名字问题
+            xichengUploadRequest.setForeignerCname(checkInfo.getForeignerName());
+            xichengUploadRequest.setForeignerName(checkInfo.getForeignerName());
+
+            xichengUploadRequest.setGuoJi(checkInfo.getGuoJi());
+            xichengUploadRequest.setGuoJiCn(checkInfo.getGuoJiCn());
+            xichengUploadRequest.setGuoJiEn(checkInfo.getGuoJiEn());
+            xichengUploadRequest.setIdentify(checkInfo.getCardNumber());
+            xichengUploadRequest.setLocation(location);
+            //放入三级地理信息
+            xichengUploadRequest.setLocationName(checkAddress2.getValue()+checkAddress3.getValue());
+            xichengUploadRequest.setLocationNameLevelOne(checkAddress1.getValue());
+            xichengUploadRequest.setLocationNameLevelTwo(checkAddress2.getValue());
+            xichengUploadRequest.setLocationNameReal(checkAddress3.getValue());
+
+            //xichengUploadRequest.setPersonInfoJson(JSONObject.toJSONString(checkInfo));
+            //组织
+            xichengUploadRequest.setPoliceDeptName(policeInfo.getDeptName());
+            xichengUploadRequest.setPoliceDeptNo(policeInfo.getDeptNo());
+            xichengUploadRequest.setPoliceIdCard(policeLoginRecord.getPoliceIDCard());
+            xichengUploadRequest.setPoliceNo(policeLoginRecord.getPoliceNumber());
+            xichengUploadRequest.setPoliceName(policeLoginRecord.getPoliceName());
+            xichengUploadRequest.setSex(checkInfo.getSex());
+            xichengUploadRequest.setSexCn(checkInfo.getSexCn());
+            //0 为保存 1为完成  写死为完成
+            xichengUploadRequest.setState("1");
+            //部门
+            xichengUploadRequest.setStationName(policeInfo.getSubOrgName());
+            xichengUploadRequest.setStationNo(policeInfo.getSuborgNo());
+            xichengUploadRequest.setTogether(false);
+            xichengUploadRequest.setUpdateUser(policeLoginRecord.getPoliceIDCard());
+            //警示信息与警示信息简项
+            xichengUploadRequest.setWarningInfoDetail(JSON.toJSONString(list));
+            xichengUploadRequest.setWarningInfoShortHands(JSON.toJSONString(list));
+
+
+
+
+            flag = xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
         } else {
             return false;
         }

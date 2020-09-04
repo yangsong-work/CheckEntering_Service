@@ -79,7 +79,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         if (verifyIDCardRequest.getCheckFrom() == 0&&verifyIDCardRequest.getCompareStatus()==1) {
             String compareValue = verifyIDCardRequest.getCompareValue();
             //TODO 测试代码 上线删除
-            UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
+//            UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).setDeviceScore("60");
             String score = UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getDeviceScore();
             int compareResult = compareValue.compareTo(score);
             if (compareResult < 0) {
@@ -198,7 +198,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
         checkInfo.setWarnList(list4XiCheng);
-        checkInfo.setGuoJi(personBasicInfoResponse.getGuoJiCn());
+        checkInfo.setGuoJi(personBasicInfoResponse.getGuoJi());
 
         CheckPeople checkPeople = new CheckPeople();
         checkPeople.setIdCard(IDCard);
@@ -217,6 +217,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
         // 发送至二类区服务
+
         if (!flag) {
             throw new RuntimeException();
         }
@@ -280,7 +281,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             jsXiChengMap.put("cardId", ocrRequest.getCardNo());
             jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPadId());
             jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPoliceNumber());
-            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"person");
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"");
             checkWarnInfoList = appService.transferList(personJsList4XiCheng);
             for (CheckWarnInfo personJs : checkWarnInfoList) {
                 String color = personJs.getColor();
@@ -329,7 +330,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 break;
         }
 
-        int age = LocalDateTime.now().getYear() - Integer.valueOf(checkForeignPersonBasic.getIdentify().substring(0, 4));
+        int age = LocalDateTime.now().getYear() - Integer.valueOf(checkForeignPersonBasic.getBirthDay().substring(0, 4));
 
         //更新push表的信息
         pushInfo.setWarningNumber(pushInfo.getGreenWarningNumber() + pushInfo.getYellowWarningNumber() + pushInfo.getRedWarningNumber());
@@ -353,6 +354,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setImg("");
         checkInfo.setCardNumber(checkForeignPersonBasic.getIdentify());
         checkInfo.setWarnList(list4XiCheng);
+        checkInfo.setGuoJi(checkForeignPersonBasic.getGuoJi());
         //TODO 人员信息入库
         //推送至PAD
         Map pushMap = new HashMap();
@@ -399,7 +401,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        log.info("二类区服务返回数据：{}", returnMap.toString());
+        log.info("总线返回报文：{}", returnMap.toString());
         List<JSONObject> JSONObjects = (List) returnMap.get("results");
         List<FacePhoneInfo> facePhoneInfos = new ArrayList<>();
       //  List<CheckPersonFaceResponse> CheckPersonFaceResponseList = new ArrayList<>();
@@ -457,6 +459,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
      * 人证核验未通过流程
      */
     private Map queryInfo(String IDCard, VerifyIDCardRequest verifyIDCardRequest) throws NoMessageException {
+        System.out.println("人证核验未通过流程");
         CheckPersonBasicInfoResponse personBasicInfoResponse = xiChengService.checkPersonBasicInfo(IDCard, verifyIDCardRequest.getDeviceNo());
         CheckPersonPhotoResponse personPhotoResponse = xiChengService.checkPersonPhoto(verifyIDCardRequest.getDeviceNo(), IDCard);
 
@@ -491,18 +494,21 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkInfo.setImg(personPhotoResponse.getZp());
         checkInfo.setCardNumber(personBasicInfoResponse.getCardNumber());
         //人证核验未通过 没确定
-//        checkInfo.setWarnList(new ArrayList());
+        checkInfo.setWarnList(new ArrayList());
+        checkInfo.setGuoJi(personBasicInfoResponse.getGuoJi());
         Map pushMap = new HashMap();
         //推送PAD
         pushMap.put("messageType", 3);
         pushMap.put("data", checkInfo);
         boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //trsUtil.sendMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
-        //TODO 返回值
+
         if (!flag) {
             throw new RuntimeException();
         }
         Map returnMap = new HashMap();
+        returnMap.put("status", "2");
+        returnMap.put("deviceNo", verifyIDCardRequest.getDeviceNo());
         return returnMap;
     }
 

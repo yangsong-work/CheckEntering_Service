@@ -39,8 +39,10 @@ public class APPWebController {
      */
     @PostMapping(value = "/login")
     public String login(@Valid @RequestBody LoginRequest loginRequest) {
+        log.info("警员扫码绑定开始时间：{}",LocalDateTime.now());
         log.info("警员扫码绑定：{}", loginRequest.toString());
         Integer result = appService.login(loginRequest);
+        log.info("警员扫码绑定结束时间:{}", LocalDateTime.now());
         if (result != null) {
             CountRequest countRequest = new CountRequest();
             countRequest.setId(result);
@@ -57,8 +59,11 @@ public class APPWebController {
      */
     @PostMapping(value = "/checkoption")
     public Object checkOption(@Valid @RequestBody CheckOptionRequest checkOptionRequest) {
+        log.info("警员核查设置开始时间：{}",LocalDateTime.now());
         log.info("警员核查设置：{}", checkOptionRequest.toString());
         int i = appService.checkOption(checkOptionRequest);
+
+        log.info("警员核查设置结束时间:{}", LocalDateTime.now());
         if (i == 1) {
             return ResponseUtil.ok();
         } else {
@@ -72,6 +77,7 @@ public class APPWebController {
 
     @PostMapping(value = "/checkaddress")
     public String getCheckAddress(@RequestBody Map<String, String> map) {
+        log.info("请求核查地开始时间：{}",LocalDateTime.now());
         String parentId = map.get("parentId");
         String deviceNo = map.get("deviceNo");
         if (parentId == null || StringUtils.isBlank(deviceNo)) {
@@ -79,6 +85,7 @@ public class APPWebController {
         }
         log.info("请求核查地：parentId = {}", parentId);
         List list = appService.getCheckAddress(deviceNo, parentId);
+        log.info("请求核查地结束时间:{}", LocalDateTime.now());
         if (list == null || list.isEmpty()) {
             return ResponseUtil.fail("1", "查询失败");
         }
@@ -94,6 +101,7 @@ public class APPWebController {
      */
     @PostMapping(value = "/logout")
     public Object logout(@Valid @RequestBody LogoutRequest logoutRequest) {
+
         log.info("警员解除绑定：{}", logoutRequest.toString());
         Integer result = appService.logout(logoutRequest);
         System.out.println(result);
@@ -111,8 +119,10 @@ public class APPWebController {
      */
     @PostMapping(value = "/detail")
     public Object getDetails(@Valid @RequestBody DetailRequest detailRequest) {
+        log.info("公安网3.0预警人员详细信息开始时间：{}",LocalDateTime.now());
         log.info("查询预警人员详细信息：{}", detailRequest.toString());
         Map map = appService.getDetails(detailRequest);
+        log.info("公安网3.0预警人员详细信息结束时间:{}", LocalDateTime.now());
         return ResponseUtil.ok(map);
     }
     /**
@@ -198,8 +208,7 @@ public class APPWebController {
      */
     @RequestMapping("/upload")
     public String upLoad(@Valid @RequestBody APPUpdateRequest request) {
-         //TODO 测试代码 上线删除
-        request.setDisposalWay("1");
+
 
         log.info("录入接口数据：{}", request.toString());
         boolean flag = appService.upLoad(request);
@@ -231,13 +240,14 @@ public class APPWebController {
         }
         return ResponseUtil.ok(peopleBasicMessage);
     }
-    @RequestMapping("policedetails")
+    @RequestMapping("/policedetails")
     public String getPoliceDetails(@RequestBody Map map){
         String deviceNo = (String) map.get("deviceNo");
 
         if (deviceNo==null||UserUtil.getUserMap().get(deviceNo) == null) {
             return ResponseUtil.fail("1", "核录桩未绑定");
         }
+        log.info("查询警員详细信息(用于录入):{}",map);
         SsoResponse policeInfo = xiChengService.Ssologin(deviceNo);
         return ResponseUtil.ok(policeInfo);
     }
