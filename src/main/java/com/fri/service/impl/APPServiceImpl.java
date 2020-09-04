@@ -55,6 +55,8 @@ public class APPServiceImpl implements APPService {
     private PoliceInfoMapper policeInfoMapper;
     @Autowired
     private CheckPeopleMapper checkPeopleMapper;
+    @Autowired
+    EnterInfoMapper enterInfoMapper;
 
     @Override
     public Integer login(LoginRequest loginRequest) {
@@ -411,9 +413,14 @@ public class APPServiceImpl implements APPService {
             xichengUploadRequest.setXzqhCn(checkInfo.getXzqhCn());
 
 
-
+            EnterInfo enterInfo = new EnterInfo();
+            BeanUtils.copyProperties(xichengUploadRequest,enterInfo);
 
             flag = xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
+            if(flag) {
+                int i = enterInfoMapper.insert(enterInfo);
+                log.info("录入人员入库状态{}:", i);
+            }
         } else if ("2".equals(request.getCheckObject())) {
             //境外人员
             CheckInfoForeign checkInfo = checkInfoForeignMapper.selectByPrimaryKey(request.getIdentify());
