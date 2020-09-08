@@ -1,7 +1,7 @@
 package com.fri.model;
 
 public class EnterInfo {
-    private Long id;
+    private String checkinfoid;
 
     private Integer age;
 
@@ -77,14 +77,24 @@ public class EnterInfo {
 
     private String xzqhCn;
 
-    private String checkinfoid;
+    private String birthDay;
 
-    public Long getId() {
-        return id;
+    private String checkSourceType;
+
+    private String foreignerBaseInfoJson;
+
+    private String foreignerName;
+
+    private String foreignerCname;
+
+    private String guoJiEn;
+
+    public String getCheckinfoid() {
+        return checkinfoid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCheckinfoid(String checkinfoid) {
+        this.checkinfoid = checkinfoid;
     }
 
     public Integer getAge() {
@@ -383,11 +393,51 @@ public class EnterInfo {
         this.xzqhCn = xzqhCn;
     }
 
-    public String getCheckinfoid() {
-        return checkinfoid;
+    public String getBirthDay() {
+        return birthDay;
     }
 
-    public void setCheckinfoid(String checkinfoid) {
-        this.checkinfoid = checkinfoid;
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public String getCheckSourceType() {
+        return checkSourceType;
+    }
+
+    public void setCheckSourceType(String checkSourceType) {
+        this.checkSourceType = checkSourceType;
+    }
+
+    public String getForeignerBaseInfoJson() {
+        return foreignerBaseInfoJson;
+    }
+
+    public void setForeignerBaseInfoJson(String foreignerBaseInfoJson) {
+        this.foreignerBaseInfoJson = foreignerBaseInfoJson;
+    }
+
+    public String getForeignerName() {
+        return foreignerName;
+    }
+
+    public void setForeignerName(String foreignerName) {
+        this.foreignerName = foreignerName;
+    }
+
+    public String getForeignerCname() {
+        return foreignerCname;
+    }
+
+    public void setForeignerCname(String foreignerCname) {
+        this.foreignerCname = foreignerCname;
+    }
+
+    public String getGuoJiEn() {
+        return guoJiEn;
+    }
+
+    public void setGuoJiEn(String guoJiEn) {
+        this.guoJiEn = guoJiEn;
     }
 }

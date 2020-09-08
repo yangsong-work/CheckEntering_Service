@@ -9,14 +9,15 @@
     <result column="guo_ji_cn" property="guoJiCn" jdbcType="VARCHAR" />
     <result column="identify" property="identify" jdbcType="VARCHAR" />
     <result column="foreigner_name" property="foreignerName" jdbcType="VARCHAR" />
+    <result column="foreigner_cname" property="foreignerCname" jdbcType="VARCHAR" />
     <result column="sex_cn" property="sexCn" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="VARCHAR" />
     <result column="card_type" property="cardType" jdbcType="VARCHAR" />
     <result column="card_type_cn" property="cardTypeCn" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    card_number, birth_day, guo_ji_en, guo_ji, guo_ji_cn, identify, foreigner_name, sex_cn, 
-    sex, card_type, card_type_cn
+    card_number, birth_day, guo_ji_en, guo_ji, guo_ji_cn, identify, foreigner_name, foreigner_cname, 
+    sex_cn, sex, card_type, card_type_cn
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -31,12 +32,14 @@
   <insert id="insert" parameterType="com.fri.model.CheckInfoForeign" >
     insert into tbl_check_info_foreign (card_number, birth_day, guo_ji_en, 
       guo_ji, guo_ji_cn, identify, 
-      foreigner_name, sex_cn, sex, 
-      card_type, card_type_cn)
+      foreigner_name, foreigner_cname, sex_cn, 
+      sex, card_type, card_type_cn
+      )
     values (#{cardNumber,jdbcType=VARCHAR}, #{birthDay,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR}, 
       #{guoJi,jdbcType=VARCHAR}, #{guoJiCn,jdbcType=VARCHAR}, #{identify,jdbcType=VARCHAR}, 
-      #{foreignerName,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
-      #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR})
+      #{foreignerName,jdbcType=VARCHAR}, #{foreignerCname,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.fri.model.CheckInfoForeign" >
     insert into tbl_check_info_foreign
@@ -61,6 +64,9 @@
       </if>
       <if test="foreignerName != null" >
         foreigner_name,
+      </if>
+      <if test="foreignerCname != null" >
+        foreigner_cname,
       </if>
       <if test="sexCn != null" >
         sex_cn,
@@ -97,6 +103,9 @@
       <if test="foreignerName != null" >
         #{foreignerName,jdbcType=VARCHAR},
       </if>
+      <if test="foreignerCname != null" >
+        #{foreignerCname,jdbcType=VARCHAR},
+      </if>
       <if test="sexCn != null" >
         #{sexCn,jdbcType=VARCHAR},
       </if>
@@ -132,6 +141,9 @@
       <if test="foreignerName != null" >
         foreigner_name = #{foreignerName,jdbcType=VARCHAR},
       </if>
+      <if test="foreignerCname != null" >
+        foreigner_cname = #{foreignerCname,jdbcType=VARCHAR},
+      </if>
       <if test="sexCn != null" >
         sex_cn = #{sexCn,jdbcType=VARCHAR},
       </if>
@@ -155,6 +167,7 @@
       guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
       identify = #{identify,jdbcType=VARCHAR},
       foreigner_name = #{foreignerName,jdbcType=VARCHAR},
+      foreigner_cname = #{foreignerCname,jdbcType=VARCHAR},
       sex_cn = #{sexCn,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=VARCHAR},
       card_type = #{cardType,jdbcType=VARCHAR},
@@ -167,11 +180,11 @@
           parameterType="com.fri.model.CheckInfoForeign">
     insert into tbl_check_info_foreign (card_number, birth_day, guo_ji_en,
     guo_ji, guo_ji_cn, identify,
-    foreigner_name, sex_cn, sex,
+    foreigner_name, foreigner_cname,sex_cn, sex,
     card_type, card_type_cn)
     values (#{cardNumber,jdbcType=VARCHAR}, #{birthDay,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR},
     #{guoJi,jdbcType=VARCHAR}, #{guoJiCn,jdbcType=VARCHAR}, #{identify,jdbcType=VARCHAR},
-    #{foreignerName,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},
+    #{foreignerName,jdbcType=VARCHAR},#{foreignerCname,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR},
     #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR})
 
     ON DUPLICATE KEY UPDATE
@@ -181,6 +194,7 @@
     guo_ji_cn = #{guoJiCn,jdbcType=VARCHAR},
     identify = #{identify,jdbcType=VARCHAR},
     foreigner_name = #{foreignerName,jdbcType=VARCHAR},
+    foreigner_cname = #{foreignerCname,jdbcType=VARCHAR},
     sex_cn = #{sexCn,jdbcType=VARCHAR},
     sex = #{sex,jdbcType=VARCHAR},
     card_type = #{cardType,jdbcType=VARCHAR},

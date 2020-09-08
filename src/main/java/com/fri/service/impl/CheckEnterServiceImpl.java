@@ -9,6 +9,7 @@ import com.fri.exception.NoMessageException;
 import com.fri.model.*;
 import com.fri.pojo.bo.app.push.CheckInfo;
 import com.fri.pojo.bo.app.push.FacePhoneInfo;
+import com.fri.pojo.bo.app.request.APPUpdateRequest;
 import com.fri.pojo.bo.app.request.CheckPersonJsDetailRequest;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.pojo.bo.pinen.VerifyImageRequest;
@@ -43,8 +44,6 @@ public class CheckEnterServiceImpl implements CheckEnterService {
     @Autowired
     APPService appService;
     @Autowired
-    TrsUtil trsUtil;
-    @Autowired
     RestTemplate restTemplate;
     @Autowired
     PoliceLoginRecordMapper policeLoginRecordMapper;
@@ -72,6 +71,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         CheckImage checkImage = new CheckImage();
         checkImage.setImg(verifyIDCardRequest.getpCaptureImage());
         checkImage.setCardNo(verifyIDCardRequest.getpCardNo());
+        //图片不存储
         //checkImageMapper.insertSelective(checkImage);
 
         String IDCard = verifyIDCardRequest.getpCardNo();
@@ -214,19 +214,29 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         pushMap.put("messageType", 1);
         pushMap.put("data", checkInfo);
         System.out.println(JSON.toJSONString(pushMap));
-        boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
+        boolean flag = pushMessage(verifyIDCardRequest.getDeviceNo(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
         // 发送至二类区服务
 
         if (!flag) {
+            log.info("向pad推送失敗");
             throw new RuntimeException();
         }
+        //TODO 自动录入 上线加上
+        if(!warningColor.equalsIgnoreCase("yellow")&&!warningColor.equalsIgnoreCase("red")) {
+            APPUpdateRequest req = new APPUpdateRequest();
+            req.setCheckObject("1");
+            req.setCheckResult("未发现可疑情况，排除通行");
+            req.setDeviceNo(verifyIDCardRequest.getDeviceNo());
+            req.setDisposalWay("1");
+            req.setIdentify(verifyIDCardRequest.getpCardNo());
+            appService.upLoad(req);
+        }
+
         Map returMap = new HashMap();
         returMap.put("status", status);
         returMap.put("deviceNo", verifyIDCardRequest.getDeviceNo());
         return returMap;
-
-
     }
 
     /**
@@ -365,18 +375,31 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         checkPeople.setCompareStatus(0);
         checkPeople.setPid(pushInfo.getId());
         checkPeopleMapper.insertPeople(checkPeople);
-        //TODO 人员信息入库
         //推送至PAD
         Map pushMap = new HashMap();
         pushMap.put("messageType", 1);
         pushMap.put("data", checkInfo);
-        boolean flag = pushMessage(UserUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPadId(), "ocr", pushMap, CommonContants.OCR_METHOD);
+        boolean flag = pushMessage(ocrRequest.getDeviceNo(), "ocr", pushMap, CommonContants.OCR_METHOD);
         // socketUtil.sendMessage(MyUtil.getUserMap().get(ocrRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
         // 发送至二类区服务
         System.out.println(JSON.toJSONString(pushMap));
         if (!flag) {
+            log.info("向pad推送失敗");
             throw new RuntimeException();
         }
+        //TODO 自动录入  上线解开
+        if(!warningColor.equalsIgnoreCase("yellow")&&!warningColor.equalsIgnoreCase("red")) {
+        APPUpdateRequest req = new APPUpdateRequest();
+
+            req.setCheckObject("2");
+            String type = "ocr";
+            req.setCheckResult("未发现可疑情况，排除通行");
+            req.setDeviceNo(ocrRequest.getDeviceNo());
+            req.setDisposalWay("1");
+            req.setIdentify(ocrRequest.getCardNo());
+            appService.upLoad(req);
+        }
+
         Map returMap = new HashMap();
         returMap.put("status", status);
         returMap.put("deviceNo", ocrRequest.getDeviceNo());
@@ -451,11 +474,12 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         Map<String,Object> pushMap = new HashMap<String,Object>();
         pushMap.put("messageType", 2);
         pushMap.put("data", facePhoneInfos);
-        boolean flag = pushMessage(UserUtil.getUserMap().get(request.getDeviceNo()).getPadId(), "face", pushMap, "FUN003");
+        boolean flag = pushMessage(request.getDeviceNo(), "face", pushMap, "FUN003");
 
         // 发送至二类区服务
         System.out.println(JSON.toJSONString(pushMap));
         if (!flag) {
+            log.info("向pad推送失敗");
             throw new RuntimeException();
         }
         Map returMap = new HashMap();
@@ -511,12 +535,17 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         //推送PAD
         pushMap.put("messageType", 3);
         pushMap.put("data", checkInfo);
-        boolean flag = pushMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
+        boolean flag = pushMessage(verifyIDCardRequest.getDeviceNo(), "idcard", pushMap, CommonContants.IDCARD_METHOD);
         //trsUtil.sendMessage(UserUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
 
         if (!flag) {
+            log.info("向pad推送失敗");
             throw new RuntimeException();
         }
+
+
+
+
         Map returnMap = new HashMap();
         returnMap.put("status", "2");
         returnMap.put("deviceNo", verifyIDCardRequest.getDeviceNo());
@@ -525,7 +554,6 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
     //通知核录桩登录功能
 
-    //TODO  思考要不要返回值
     public void notifyLogin(String padId) {
         String deviceNo = policeLoginRecordMapper.selectDeviceNoByPadId(padId);
         String data = "";
@@ -549,7 +577,6 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         Map map = JSONObject.parseObject(data, Map.class);
         if ( 200 !=((Integer)map.get("code"))) {
             log.info("核录桩登录失败: {}" , map.get("code"));
-            //TODO 自定义异常
             throw new RuntimeException();
         }
         Map dataMap = (Map) map.get("data");
@@ -558,7 +585,6 @@ public class CheckEnterServiceImpl implements CheckEnterService {
             log.info("核录桩登录成功");
         } else {
             log.info("核录桩登录失败: {}" , status);
-            //TODO 自定义异常
             throw new RuntimeException();
         }
         String verifyScore = (String) dataMap.get("verifyScore");
@@ -569,20 +595,77 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         log.info("推送数据完毕：{}",LocalDateTime.now());
     }
 
+    /**
+     * 离线上传身份证号
+     * @param deviceNo
+     * @param cardList
+     * @return
+     */
+    @Override
+    public void verifyIDCard4OffLine(String deviceNo, List<String> cardList) throws NoMessageException {
+
+        for (String IDCard : cardList) {
+            boolean flag = true;
+            CheckPersonBasicInfoResponse personBasicInfoResponse = xiChengService.checkPersonBasicInfo(IDCard, deviceNo);
+            List<CheckPersonJs> personJsList = xiChengService.checkPersonJs(IDCard, deviceNo);
+           if(personJsList!=null&&personJsList.size()!=0){
+                for (CheckPersonJs checkPersonJs: personJsList){
+                    if (checkPersonJs.getColor().equalsIgnoreCase("yellow")||checkPersonJs.getColor().equalsIgnoreCase("red")){
+                        flag = false;
+                        break;
+                    }
+                }
+           }
+            List<CheckPersonJs4XiCheng>  personJsList4XiCheng = new ArrayList();
+        try {
+            Map jsXiChengMap = new HashMap();
+            jsXiChengMap.put("cardId", IDCard);
+            jsXiChengMap.put("deviceNum", UserUtil.getUserMap().get(deviceNo).getPadId());
+            jsXiChengMap.put("policeNumber", UserUtil.getUserMap().get(deviceNo).getPoliceNumber());
+            personJsList4XiCheng = xiChengService.checkPersonJs4XiCheng(jsXiChengMap,"person");
+
+        }catch (Exception e){
+            log.info("西城接口发送失败");
+        }
+            if(personJsList4XiCheng!=null||personJsList4XiCheng.size()!=0){
+                for (CheckPersonJs4XiCheng checkPersonJs: personJsList4XiCheng){
+                    if (checkPersonJs.getALARM_LEVEL().equals("2")||checkPersonJs.getALARM_LEVEL().equals("1")){
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+            //TODO 自动录入 注释掉 上线放开
+         if(flag){
+             //录入
+                APPUpdateRequest req = new APPUpdateRequest();
+                req.setCheckObject("1");
+                req.setCheckResult("未发现可疑情况，排除通行");
+                req.setDeviceNo(deviceNo);
+                req.setDisposalWay("1");
+                req.setIdentify(deviceNo);
+                appService.upLoad(req);
+         }
+        }
+
+
+    }
 
     /**
      * 推送至二类区
-     * @param padId
+     * @param deviceNo
      * @param method
      * @param mapData
      * @param FFBS
      * @return
      */
-    public boolean pushMessage(String padId, String method, Map mapData, String FFBS) {
+    public boolean pushMessage(String deviceNo, String method, Map mapData, String FFBS) {
         //TODO 测试代码
 //        String url = socketUrl+method;
 
         String url = socketUrl;
+        String padId = UserUtil.getUserMap().get(deviceNo).getPadId();
+
         Map dataMap = new HashMap();
         dataMap.put("padId", padId);
         dataMap.put("json", JSON.toJSONString(mapData));
@@ -609,10 +692,10 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
         sendMap.put("FWQQ_NR", jsonMap);
 
-        //TODO 总线参数目前写死
-        sendMap.put("XXCZRY_XM", "白志斌");
-        sendMap.put("XXCZRY_GMSFHM", "140603199011271011");
-        sendMap.put("XXCZRY_GAJGJGDM", "110102110000");
+
+        sendMap.put("XXCZRY_XM", UserUtil.getUserMap().get(deviceNo).getPoliceName());
+        sendMap.put("XXCZRY_GMSFHM", UserUtil.getUserMap().get(deviceNo).getPoliceIDCard());
+        sendMap.put("XXCZRY_GAJGJGDM", UserUtil.getUserMap().get(deviceNo).getPoliceOrg());
         sendMap.put("XXCZRY_BH", SERVICE_IP);
         sendMap.put("XXCZRY_SJSJLX", "service_request");
 

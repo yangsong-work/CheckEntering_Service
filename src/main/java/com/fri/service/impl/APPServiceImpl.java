@@ -104,9 +104,8 @@ public class APPServiceImpl implements APPService {
     @Override
     public Integer logout(LogoutRequest logoutRequest) {
         //登出删除维护的登录map
-        UserUtil.getUserMap().remove(logoutRequest.getDeviceNo());
+//        UserUtil.getUserMap().remove(logoutRequest.getDeviceNo());
         //移除socket连接
-        //TODO 通知核录桩
         PoliceLoginRecord record = new PoliceLoginRecord();
         record.setDeviceNo(logoutRequest.getDeviceNo());
         record.setPadId(logoutRequest.getPadId());
@@ -340,6 +339,8 @@ public class APPServiceImpl implements APPService {
 
     @Override
     public Boolean upLoad(APPUpdateRequest request) {
+        log.info("开始整合信息");
+
         boolean flag = false;
         //封装西城录入接口
         UploadRequest xichengUploadRequest = new UploadRequest();
@@ -353,7 +354,7 @@ public class APPServiceImpl implements APPService {
         if ("1".equals(request.getCheckObject())) {
             //境内人员
             CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(request.getIdentify());
-
+            checkInfo.setZp(null);
             int age = LocalDateTime.now().getYear() - Integer.valueOf(checkInfo.getCardNumber().substring(6, 10));
             checkInfo.setAge(age);
             //人员警示信息
@@ -415,14 +416,14 @@ public class APPServiceImpl implements APPService {
 
             EnterInfo enterInfo = new EnterInfo();
             BeanUtils.copyProperties(xichengUploadRequest,enterInfo);
-
+            System.out.println("整合信息结束");
             flag = xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
             if(flag) {
-                int i = enterInfoMapper.insert(enterInfo);
-                log.info("录入人员入库状态{}:", i);
+                log.info("录入人员入库状态{}:", flag);
             }
         } else if ("2".equals(request.getCheckObject())) {
             //境外人员
+            log.info("开始整合信息");
             CheckInfoForeign checkInfo = checkInfoForeignMapper.selectByPrimaryKey(request.getIdentify());
 
             //人员警示信息
@@ -436,6 +437,8 @@ public class APPServiceImpl implements APPService {
             location.setLat(Double.valueOf(policeLoginRecord.getLat()));
             location.setLon(Double.valueOf(policeLoginRecord.getLon()));
             //分局
+            int age = LocalDateTime.now().getYear() - Integer.valueOf(checkInfo.getBirthDay().substring(0, 4));
+            xichengUploadRequest.setAge(age);
             xichengUploadRequest.setBrunchDeptName(policeInfo.getOrgName());
             xichengUploadRequest.setBrunchDeptNo(policeInfo.getOrgNo());
             xichengUploadRequest.setCardType(checkInfo.getCardType());
@@ -447,8 +450,7 @@ public class APPServiceImpl implements APPService {
 
             xichengUploadRequest.setForeignerBaseInfoJson(JSON.toJSONString(checkInfo));
 
-            //TODO 名字问题
-            xichengUploadRequest.setForeignerCname(checkInfo.getForeignerName());
+            xichengUploadRequest.setForeignerCname(checkInfo.getForeignerCname());
             xichengUploadRequest.setForeignerName(checkInfo.getForeignerName());
 
             xichengUploadRequest.setGuoJi(checkInfo.getGuoJi());
@@ -485,12 +487,13 @@ public class APPServiceImpl implements APPService {
 
 
 
-            flag = xiChengService.upLoad(xichengUploadRequest,request.getDeviceNo());
+            flag = xiChengService.upLoadForeign(xichengUploadRequest,request.getDeviceNo());
         } else {
             return false;
         }
 
 
+        flag = true;
         return flag;
     }
 

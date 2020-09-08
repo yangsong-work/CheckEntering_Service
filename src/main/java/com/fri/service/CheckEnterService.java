@@ -7,6 +7,7 @@ import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.pojo.bo.pinen.VerifyImageRequest;
 import com.fri.pojo.bo.pinen.VerifyOcrRequest;
 
+import java.util.List;
 import java.util.Map;
 
 public interface CheckEnterService {
@@ -20,5 +21,5 @@ public interface CheckEnterService {
 
     public void notifyLogin(String deviceNo);
 
-
+    void verifyIDCard4OffLine(String deviceNo , List<String> cardList) throws NoMessageException;
 }

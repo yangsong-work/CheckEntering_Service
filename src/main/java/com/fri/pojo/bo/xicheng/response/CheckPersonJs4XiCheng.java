@@ -5,7 +5,7 @@ public class CheckPersonJs4XiCheng {
     private String DATA_CLASS;
     //LOCAL_LABEL_110102760000label2
     private String resourceName;
-    //异常等级 3
+    //异常等级 1红  2黄 3绿
     private String ALARM_LEVEL;
 
     public String getDATA_CLASS() {

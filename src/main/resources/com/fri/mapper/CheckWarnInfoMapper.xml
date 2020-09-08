@@ -127,7 +127,7 @@
   </update>
 
   <select id="selectByCardNumber" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select value_info,color,resource_name from tbl_check_warn_info where card_number = #{cardNumber}
+    select key_info,order_info,value_info,disposal_way,color,resource_name from tbl_check_warn_info where card_number = #{cardNumber}
   </select>
 
   <delete id="deleteByCardNumber" parameterType="java.lang.String">

@@ -86,7 +86,6 @@ public class MyHandler extends TextWebSocketHandler {
             WebSocketMessage returnMessage = new TextMessage(result);
             session.sendMessage(returnMessage);
             session.getAttributes().put("padId",padId);
-            //TODO 通知核录桩绑定成功
         } catch (JSONException e) {
             e.printStackTrace();
             //JSON格式不正确，绑定失败
@@ -153,7 +152,6 @@ public class MyHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         users.remove(getClientId(session));
         log.info("连接已关闭：" + status); //当前的状态码，并删除存储在map中的websocket的链接对象
-        //TODO 是否通知核录桩？
     }
 
     @Override

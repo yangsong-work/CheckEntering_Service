@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 @Component
+@Deprecated
 public class TrsUtil {
     @Autowired
     MyHandler myHandler;
@@ -16,7 +17,6 @@ public class TrsUtil {
         hasSend = myHandler.sendMessageToUser(padId,textMessage);
         System.out.println(hasSend);
         if (hasSend) {
-         //TODO   return ResponseUtil.ok();
         } else {
           //  return ResponseUtil.fail();
         }

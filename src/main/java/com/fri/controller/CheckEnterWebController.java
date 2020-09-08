@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 @RestController
 @RequestMapping("/check")
@@ -94,6 +95,29 @@ public class CheckEnterWebController {
         log.info("核录桩传送OCR证件信息推送完毕:{}", LocalDateTime.now());
         return ResponseUtil.ok();
     }
-
-
+    /**
+     * 离线上送身份证号
+     */
+    @PostMapping("/offLineupload")
+    public String offLineUpload(@RequestBody Map map) throws NoMessageException {
+        log.info("离线上送身份证号时间：{}",LocalDateTime.now());
+        String deviceNo = (String) map.get("deviceNo");
+        List<String> list = (List) map.get("cardList");
+        if(StringUtils.isEmpty(deviceNo)||list==null||list.size()==0){
+            return ResponseUtil.fail402();
+        }
+        checkEnterService.verifyIDCard4OffLine(deviceNo,list);
+        //设备号未绑定报错
+//        if (UserUtil.getUserMap().get(deviceNo) == null) {
+//            return ResponseUtil.fail("1", "核录桩未绑定");
+//        }
+        return ResponseUtil.ok();
+    }
+    /**
+     * 无数据 测试网络是否通畅
+     */
+    @PostMapping("/pingstatus")
+    public String getPingstatus(){
+        return ResponseUtil.ok();
+    }
 }

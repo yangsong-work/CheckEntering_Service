@@ -15,6 +15,8 @@ public class CheckInfoForeign {
 
     private String foreignerName;
 
+    private String foreignerCname;
+
     private String sexCn;
 
     private String sex;
@@ -77,6 +79,14 @@ public class CheckInfoForeign {
 
     public void setForeignerName(String foreignerName) {
         this.foreignerName = foreignerName;
+    }
+
+    public String getForeignerCname() {
+        return foreignerCname;
+    }
+
+    public void setForeignerCname(String foreignerCname) {
+        this.foreignerCname = foreignerCname;
     }
 
     public String getSexCn() {

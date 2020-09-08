@@ -388,6 +388,7 @@ public class XiChengServiceImpl implements XiChengService {
 
     @Override
     public boolean upLoad(UploadRequest request,String deviceNo) {
+        logger.info("开始调用西城录入方法==========");
         UriComponentsBuilder builder = createBaseUri4Upload(deviceNo, baseUrl + "Upload");
         String url = builder.build().toUri().toString();
         Map returnMap = new HashMap();
@@ -403,8 +404,45 @@ public class XiChengServiceImpl implements XiChengService {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+        System.out.println("结束录入方法==========");
         if(returnMap==null|| (Integer) returnMap.get("status")!=0){
               throw new RuntimeException();
+        }
+        List list = (List) returnMap.get("results");
+        Map map = (Map) list.get(0);
+
+//        //TODO 測試代碼
+//        Map map = new HashMap();
+//        map.put("checkinfoid","1111");
+
+        String checkinfoid = (String) map.get("checkinfoid");
+        EnterInfo enterInfo = new EnterInfo();
+        BeanUtils.copyProperties(request,enterInfo);
+        enterInfo.setCheckinfoid(checkinfoid);
+        enterInfoMapper.insertSelective(enterInfo);
+        return true;
+    }
+
+    @Override
+    public boolean upLoadForeign(UploadRequest request,String deviceNo) {
+
+        UriComponentsBuilder builder = createBaseUri4Upload(deviceNo, baseUrl + "UploadForeign");
+        String url = builder.build().toUri().toString();
+        Map returnMap = new HashMap();
+        try {
+            HttpHeaders requestHeaders = new HttpHeaders();
+            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            requestHeaders.setContentType(type);
+            requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
+            HttpEntity<String> requestEntity = new HttpEntity<String>(JSON.toJSONString(request), requestHeaders);
+            String data = restTemplate.postForEntity(url, requestEntity, String.class).getBody();
+            logger.info("境外录入返回报文：{}", data);
+            returnMap = JSON.parseObject(data, Map.class);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        if(returnMap==null|| (Integer) returnMap.get("status")!=0){
+            throw new RuntimeException();
         }
         List list = (List) returnMap.get("results");
         Map map = (Map) list.get(0);
@@ -412,12 +450,9 @@ public class XiChengServiceImpl implements XiChengService {
         EnterInfo enterInfo = new EnterInfo();
         BeanUtils.copyProperties(request,enterInfo);
         enterInfo.setCheckinfoid(checkinfoid);
-        enterInfoMapper.insert(enterInfo);
-        return true;
-    }
+        enterInfoMapper.insertSelective(enterInfo);
 
-    @Override
-    public boolean upLoadForeign(UploadRequest request,String deviceNo) {
+
         return true;
     }
 
