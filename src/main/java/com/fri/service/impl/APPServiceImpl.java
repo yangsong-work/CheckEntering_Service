@@ -18,6 +18,7 @@ import com.fri.service.CheckEnterService;
 import com.fri.service.XiChengService;
 import com.fri.utils.AddressUtil;
 import com.fri.utils.UserUtil;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -495,6 +496,24 @@ public class APPServiceImpl implements APPService {
 
         flag = true;
         return flag;
+    }
+
+    /**
+     * pad离线通知
+     * @param padId
+     * @return
+     */
+    @Override
+    public Boolean offLine(String padId) {
+        Map<String,PoliceLoginRecord> userMap  = UserUtil.getUserMap();
+        Set<String> set = userMap.keySet();
+        for(String deivceNo:set){
+            if(userMap.get(deivceNo).getPadId().equals(padId)){
+                userMap.remove(deivceNo);
+            }
+        }
+
+        return true;
     }
 
 

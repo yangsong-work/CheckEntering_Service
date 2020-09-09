@@ -34,4 +34,6 @@ public interface APPService {
 
     Boolean upLoad(APPUpdateRequest request);
 
+    Boolean offLine(String padId);
+
 }

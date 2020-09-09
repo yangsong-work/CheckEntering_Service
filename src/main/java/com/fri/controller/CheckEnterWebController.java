@@ -117,7 +117,16 @@ public class CheckEnterWebController {
      * 无数据 测试网络是否通畅
      */
     @PostMapping("/pingstatus")
-    public String getPingstatus(){
-        return ResponseUtil.ok();
+    public String getPingstatus(@RequestBody Map<String,String> map){
+        String deviceNo = map.get("deviceNo");
+        Map data = new HashMap();
+        Map<String,PoliceLoginRecord> userMap = UserUtil.getUserMap();
+        if(userMap.get(deviceNo)==null){
+            data.put("netState","0");
+        }else {
+            data.put("netState","1");
+
+        }
+        return ResponseUtil.ok(data);
     }
 }

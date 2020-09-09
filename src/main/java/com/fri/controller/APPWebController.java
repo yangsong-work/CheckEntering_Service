@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -250,5 +251,11 @@ public class APPWebController {
         log.info("查询警員详细信息(用于录入):{}",map);
         SsoResponse policeInfo = xiChengService.Ssologin(deviceNo);
         return ResponseUtil.ok(policeInfo);
+    }
+    @PostMapping("/offline")
+    public String offLine(@RequestBody Map<String,String> map){
+        String padId = map.get("padId");
+        boolean flag = appService.offLine(padId);
+        return ResponseUtil.ok();
     }
 }
