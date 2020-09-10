@@ -118,15 +118,18 @@ public class CheckEnterWebController {
      */
     @PostMapping("/pingstatus")
     public String getPingstatus(@RequestBody Map<String,String> map){
+
         String deviceNo = map.get("deviceNo");
         Map data = new HashMap();
         Map<String,PoliceLoginRecord> userMap = UserUtil.getUserMap();
-        if(userMap.get(deviceNo)==null){
-            data.put("netState","0");
-        }else {
+        if(userMap.get(deviceNo)!=null&&userMap.get(deviceNo).getCheckTask()!=null){
             data.put("netState","1");
+        }else {
+            data.put("netState","0");
 
         }
+        //TODO 测试代码 日志 删除
+        log.info("ping测试{}",data);
         return ResponseUtil.ok(data);
     }
 }

@@ -252,10 +252,16 @@ public class APPWebController {
         SsoResponse policeInfo = xiChengService.Ssologin(deviceNo);
         return ResponseUtil.ok(policeInfo);
     }
+
     @PostMapping("/offline")
-    public String offLine(@RequestBody Map<String,String> map){
-        String padId = map.get("padId");
+    public String offLine(@RequestBody Map map) {
+        log.info("与pad接触绑定",map);
+        String padId = (String) map.get("padId");
         boolean flag = appService.offLine(padId);
-        return ResponseUtil.ok();
+        if (flag) {
+            return ResponseUtil.ok();
+        } else {
+            return ResponseUtil.fail();
+        }
     }
 }

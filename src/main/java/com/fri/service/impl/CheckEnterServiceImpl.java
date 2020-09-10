@@ -643,7 +643,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
                 req.setCheckResult("未发现可疑情况，排除通行");
                 req.setDeviceNo(deviceNo);
                 req.setDisposalWay("1");
-                req.setIdentify(deviceNo);
+                req.setIdentify(IDCard);
                 appService.upLoad(req);
          }
         }
@@ -696,8 +696,8 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         sendMap.put("XXCZRY_XM", UserUtil.getUserMap().get(deviceNo).getPoliceName());
         sendMap.put("XXCZRY_GMSFHM", UserUtil.getUserMap().get(deviceNo).getPoliceIDCard());
         sendMap.put("XXCZRY_GAJGJGDM", UserUtil.getUserMap().get(deviceNo).getPoliceOrg());
-        sendMap.put("XXCZRY_BH", SERVICE_IP);
-        sendMap.put("XXCZRY_SJSJLX", "service_request");
+        sendMap.put("FWQQSB_BH", SERVICE_IP);
+        sendMap.put("FWQQ_SJSJLX", "service_request");
 
 
         Map returnMap = new HashMap<>();

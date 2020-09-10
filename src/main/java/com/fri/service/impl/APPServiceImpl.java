@@ -105,7 +105,7 @@ public class APPServiceImpl implements APPService {
     @Override
     public Integer logout(LogoutRequest logoutRequest) {
         //登出删除维护的登录map
-//        UserUtil.getUserMap().remove(logoutRequest.getDeviceNo());
+        UserUtil.getUserMap().remove(logoutRequest.getDeviceNo());
         //移除socket连接
         PoliceLoginRecord record = new PoliceLoginRecord();
         record.setDeviceNo(logoutRequest.getDeviceNo());
@@ -338,6 +338,7 @@ public class APPServiceImpl implements APPService {
         // return checkPersonBasicInfoResponses;
     }
 
+
     @Override
     public Boolean upLoad(APPUpdateRequest request) {
         log.info("开始整合信息");
@@ -349,9 +350,24 @@ public class APPServiceImpl implements APPService {
         PoliceLoginRecord policeLoginRecord = UserUtil.getUserMap().get(request.getDeviceNo());
         //查询警員信息
         SsoResponse policeInfo = xiChengService.Ssologin(request.getDeviceNo());
+        CheckAddress checkAddress1 = new CheckAddress();
+        CheckAddress checkAddress2 = new CheckAddress();
+
         CheckAddress checkAddress3 = checkAddressMapper.selectByPrimaryKey(policeLoginRecord.getCheckAddress());
-        CheckAddress checkAddress2 = checkAddressMapper.selectByPrimaryKey(checkAddress3.getParentId());
-        CheckAddress checkAddress1 = checkAddressMapper.selectByPrimaryKey(checkAddress2.getParentId());
+        if (checkAddress3.getParentId() == null) {
+
+            checkAddress2 = checkAddress3;
+        } else {
+            checkAddress2 = checkAddressMapper.selectByPrimaryKey(checkAddress3.getParentId());
+        }
+
+        if (checkAddress2.getParentId() == null) {
+            checkAddress1 = checkAddress2;
+        } else {
+
+            checkAddress1 = checkAddressMapper.selectByPrimaryKey(checkAddress2.getParentId());
+
+        }
         if ("1".equals(request.getCheckObject())) {
             //境内人员
             CheckInfo checkInfo = checkInfoMapper.selectByPrimaryKey(request.getIdentify());
@@ -498,6 +514,7 @@ public class APPServiceImpl implements APPService {
         return flag;
     }
 
+
     /**
      * pad离线通知
      * @param padId
@@ -510,10 +527,11 @@ public class APPServiceImpl implements APPService {
         for(String deivceNo:set){
             if(userMap.get(deivceNo).getPadId().equals(padId)){
                 userMap.remove(deivceNo);
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
 
