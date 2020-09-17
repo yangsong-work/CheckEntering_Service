@@ -104,14 +104,14 @@
 <!--            <columnOverride column="value_info" property = "value"/>-->
 <!--            <columnOverride column="order_info" property = "order"/>-->
 <!--        </table>-->
-		<table schema="checkenter" tableName="tbl_check_info_foreign" domainObjectName="CheckInfoForeign"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false"
-        >
-        </table>
+<!--		<table schema="checkenter" tableName="tbl_check_info_foreign" domainObjectName="CheckInfoForeign"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"-->
+<!--        >-->
+<!--        </table>-->
 <!--        <table schema="checkenter" tableName="tbl_police_info" domainObjectName="PoliceInfo"-->
 <!--               enableCountByExample="false"-->
 <!--               enableUpdateByExample="false"-->
@@ -121,15 +121,16 @@
 
 <!--        >-->
 <!--        </table> -->
-<!--        <table schema="checkenter" tableName="tbl_enter_info" domainObjectName="EnterInfo"-->
-<!--               enableCountByExample="false"-->
-<!--               enableUpdateByExample="false"-->
-<!--               enableDeleteByExample="false"-->
-<!--               enableSelectByExample="false"-->
-<!--               selectByExampleQueryId="false"-->
+        <table schema="checkenter" tableName="tbl_enter_info" domainObjectName="EnterInfo"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"
 
-<!--        >-->
-<!--        </table>-->
+        >
+            <columnOverride column="create_time" javaType = "java.time.LocalDateTime"/>
+        </table>
 
     </context>
 </generatorConfiguration>

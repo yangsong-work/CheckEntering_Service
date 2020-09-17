@@ -1,5 +1,7 @@
 package com.fri.model;
 
+import java.time.LocalDateTime;
+
 public class EnterInfo {
     private String checkinfoid;
 
@@ -45,8 +47,6 @@ public class EnterInfo {
 
     private String name;
 
-    private String personInfoJson;
-
     private String policeDeptName;
 
     private String policeDeptNo;
@@ -81,13 +81,13 @@ public class EnterInfo {
 
     private String checkSourceType;
 
-    private String foreignerBaseInfoJson;
-
     private String foreignerName;
 
     private String foreignerCname;
 
     private String guoJiEn;
+
+    private LocalDateTime createTime;
 
     public String getCheckinfoid() {
         return checkinfoid;
@@ -265,14 +265,6 @@ public class EnterInfo {
         this.name = name;
     }
 
-    public String getPersonInfoJson() {
-        return personInfoJson;
-    }
-
-    public void setPersonInfoJson(String personInfoJson) {
-        this.personInfoJson = personInfoJson;
-    }
-
     public String getPoliceDeptName() {
         return policeDeptName;
     }
@@ -409,14 +401,6 @@ public class EnterInfo {
         this.checkSourceType = checkSourceType;
     }
 
-    public String getForeignerBaseInfoJson() {
-        return foreignerBaseInfoJson;
-    }
-
-    public void setForeignerBaseInfoJson(String foreignerBaseInfoJson) {
-        this.foreignerBaseInfoJson = foreignerBaseInfoJson;
-    }
-
     public String getForeignerName() {
         return foreignerName;
     }
@@ -439,5 +423,13 @@ public class EnterInfo {
 
     public void setGuoJiEn(String guoJiEn) {
         this.guoJiEn = guoJiEn;
+    }
+
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
     }
 }

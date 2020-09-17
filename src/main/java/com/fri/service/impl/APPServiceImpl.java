@@ -341,7 +341,7 @@ public class APPServiceImpl implements APPService {
 
     @Override
     public Boolean upLoad(APPUpdateRequest request) {
-        log.info("开始整合信息");
+        log.info("开始整合信息:{}",request);
 
         boolean flag = false;
         //封装西城录入接口

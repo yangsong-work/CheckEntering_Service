@@ -218,6 +218,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
         //  socketUtil.sendMessage(MyUtil.getUserMap().get(verifyIDCardRequest.getDeviceNo()).getPadId(), JSON.toJSONString(pushMap));
         // 发送至二类区服务
 
+        //TODO 测试代码 上线删除
         if (!flag) {
             log.info("向pad推送失敗");
             throw new RuntimeException();
@@ -668,7 +669,7 @@ public class CheckEnterServiceImpl implements CheckEnterService {
 
         Map dataMap = new HashMap();
         dataMap.put("padId", padId);
-        dataMap.put("json", JSON.toJSONString(mapData));
+        dataMap.put("json", mapData);
         //拼装总线参数
 
         Map sendMap = new HashMap();

@@ -1,9 +1,9 @@
 package com.fri.dao;
 
-import com.fri.model.EnterInfo;
+import com.fri.model.EnterInfoWithBLOBs;
 
 public interface EnterInfoMapper {
-    int insert(EnterInfo record);
+    int insert(EnterInfoWithBLOBs record);
 
-    int insertSelective(EnterInfo record);
+    int insertSelective(EnterInfoWithBLOBs record);
 }

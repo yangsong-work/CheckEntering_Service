@@ -404,7 +404,7 @@ public class XiChengServiceImpl implements XiChengService {
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        System.out.println("结束录入方法==========");
+        logger.info("结束录入方法==========");
         if(returnMap==null|| (Integer) returnMap.get("status")!=0){
               throw new RuntimeException();
         }
@@ -416,9 +416,10 @@ public class XiChengServiceImpl implements XiChengService {
 //        map.put("checkinfoid","1111");
 
         String checkinfoid = (String) map.get("checkinfoid");
-        EnterInfo enterInfo = new EnterInfo();
+        EnterInfoWithBLOBs enterInfo = new EnterInfoWithBLOBs();
         BeanUtils.copyProperties(request,enterInfo);
         enterInfo.setCheckinfoid(checkinfoid);
+        enterInfo.setCreateTime(LocalDateTime.now());
         enterInfoMapper.insertSelective(enterInfo);
         return true;
     }
@@ -447,9 +448,10 @@ public class XiChengServiceImpl implements XiChengService {
         List list = (List) returnMap.get("results");
         Map map = (Map) list.get(0);
         String checkinfoid = (String) map.get("checkinfoid");
-        EnterInfo enterInfo = new EnterInfo();
+        EnterInfoWithBLOBs enterInfo = new EnterInfoWithBLOBs();
         BeanUtils.copyProperties(request,enterInfo);
         enterInfo.setCheckinfoid(checkinfoid);
+        enterInfo.setCreateTime(LocalDateTime.now());
         enterInfoMapper.insertSelective(enterInfo);
 
 

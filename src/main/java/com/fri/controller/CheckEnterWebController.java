@@ -129,7 +129,7 @@ public class CheckEnterWebController {
 
         }
         //TODO 测试代码 日志 删除
-        log.info("ping测试{}",data);
+        log.info("ping测试{}:{}",deviceNo,data);
         return ResponseUtil.ok(data);
     }
 }

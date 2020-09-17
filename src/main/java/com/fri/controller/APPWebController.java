@@ -255,7 +255,7 @@ public class APPWebController {
 
     @PostMapping("/offline")
     public String offLine(@RequestBody Map map) {
-        log.info("与pad接触绑定",map);
+        log.info("与pad解除绑定",map);
         String padId = (String) map.get("padId");
         boolean flag = appService.offLine(padId);
         if (flag) {

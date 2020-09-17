@@ -24,7 +24,6 @@
     <result column="minzu" property="minzu" jdbcType="VARCHAR" />
     <result column="minzu_cn" property="minzuCn" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="person_info_json" property="personInfoJson" jdbcType="VARCHAR" />
     <result column="police_dept_name" property="policeDeptName" jdbcType="VARCHAR" />
     <result column="police_dept_no" property="policeDeptNo" jdbcType="VARCHAR" />
     <result column="police_id_card" property="policeIdCard" jdbcType="VARCHAR" />
@@ -42,12 +41,19 @@
     <result column="xzqh_cn" property="xzqhCn" jdbcType="VARCHAR" />
     <result column="birth_day" property="birthDay" jdbcType="VARCHAR" />
     <result column="check_source_type" property="checkSourceType" jdbcType="VARCHAR" />
-    <result column="foreigner_base_info_json" property="foreignerBaseInfoJson" jdbcType="VARCHAR" />
     <result column="foreigner_name" property="foreignerName" jdbcType="VARCHAR" />
     <result column="foreigner_cname" property="foreignerCname" jdbcType="VARCHAR" />
     <result column="guo_ji_en" property="guoJiEn" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <insert id="insert" parameterType="com.fri.model.EnterInfo" >
+  <resultMap id="ResultMapWithBLOBs" type="com.fri.model.EnterInfoWithBLOBs" extends="BaseResultMap" >
+    <result column="person_info_json" property="personInfoJson" jdbcType="LONGVARCHAR" />
+    <result column="foreigner_base_info_json" property="foreignerBaseInfoJson" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Blob_Column_List" >
+    person_info_json, foreigner_base_info_json
+  </sql>
+  <insert id="insert" parameterType="com.fri.model.EnterInfoWithBLOBs" >
     insert into tbl_enter_info (checkinfoid, age, brunch_dept_name, 
       brunch_dept_no, card_type, card_type_cn, 
       check_object, check_result, check_task, 
@@ -55,15 +61,15 @@
       house_holds, identify, location, 
       location_name, location_name_level_one, location_name_level_two, 
       location_name_real, minzu, minzu_cn, 
-      name, person_info_json, police_dept_name, 
-      police_dept_no, police_id_card, police_no, 
-      sex, sex_cn, state, 
-      station_name, station_no, together, 
-      update_user, warning_info_detail, warning_info_short_hands, 
+      name, police_dept_name, police_dept_no, 
+      police_id_card, police_no, sex, 
+      sex_cn, state, station_name, 
+      station_no, together, update_user, 
+      warning_info_detail, warning_info_short_hands, 
       xzqh, xzqh_cn, birth_day, 
-      check_source_type, foreigner_base_info_json, 
-      foreigner_name, foreigner_cname, guo_ji_en
-      )
+      check_source_type, foreigner_name, foreigner_cname, 
+      guo_ji_en, create_time, person_info_json, 
+      foreigner_base_info_json)
     values (#{checkinfoid,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{brunchDeptName,jdbcType=VARCHAR}, 
       #{brunchDeptNo,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardTypeCn,jdbcType=VARCHAR}, 
       #{checkObject,jdbcType=VARCHAR}, #{checkResult,jdbcType=VARCHAR}, #{checkTask,jdbcType=VARCHAR}, 
@@ -71,17 +77,17 @@
       #{houseHolds,jdbcType=VARCHAR}, #{identify,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
       #{locationName,jdbcType=VARCHAR}, #{locationNameLevelOne,jdbcType=VARCHAR}, #{locationNameLevelTwo,jdbcType=VARCHAR}, 
       #{locationNameReal,jdbcType=VARCHAR}, #{minzu,jdbcType=VARCHAR}, #{minzuCn,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{personInfoJson,jdbcType=VARCHAR}, #{policeDeptName,jdbcType=VARCHAR}, 
-      #{policeDeptNo,jdbcType=VARCHAR}, #{policeIdCard,jdbcType=VARCHAR}, #{policeNo,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=VARCHAR}, #{sexCn,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
-      #{stationName,jdbcType=VARCHAR}, #{stationNo,jdbcType=VARCHAR}, #{together,jdbcType=BIT}, 
-      #{updateUser,jdbcType=VARCHAR}, #{warningInfoDetail,jdbcType=VARCHAR}, #{warningInfoShortHands,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{policeDeptName,jdbcType=VARCHAR}, #{policeDeptNo,jdbcType=VARCHAR}, 
+      #{policeIdCard,jdbcType=VARCHAR}, #{policeNo,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{sexCn,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{stationName,jdbcType=VARCHAR}, 
+      #{stationNo,jdbcType=VARCHAR}, #{together,jdbcType=BIT}, #{updateUser,jdbcType=VARCHAR}, 
+      #{warningInfoDetail,jdbcType=VARCHAR}, #{warningInfoShortHands,jdbcType=VARCHAR}, 
       #{xzqh,jdbcType=VARCHAR}, #{xzqhCn,jdbcType=VARCHAR}, #{birthDay,jdbcType=VARCHAR}, 
-      #{checkSourceType,jdbcType=VARCHAR}, #{foreignerBaseInfoJson,jdbcType=VARCHAR}, 
-      #{foreignerName,jdbcType=VARCHAR}, #{foreignerCname,jdbcType=VARCHAR}, #{guoJiEn,jdbcType=VARCHAR}
-      )
+      #{checkSourceType,jdbcType=VARCHAR}, #{foreignerName,jdbcType=VARCHAR}, #{foreignerCname,jdbcType=VARCHAR}, 
+      #{guoJiEn,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{personInfoJson,jdbcType=LONGVARCHAR}, 
+      #{foreignerBaseInfoJson,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.fri.model.EnterInfo" >
+  <insert id="insertSelective" parameterType="com.fri.model.EnterInfoWithBLOBs" >
     insert into tbl_enter_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="checkinfoid != null" >
@@ -150,9 +156,6 @@
       <if test="name != null" >
         name,
       </if>
-      <if test="personInfoJson != null" >
-        person_info_json,
-      </if>
       <if test="policeDeptName != null" >
         police_dept_name,
       </if>
@@ -204,9 +207,6 @@
       <if test="checkSourceType != null" >
         check_source_type,
       </if>
-      <if test="foreignerBaseInfoJson != null" >
-        foreigner_base_info_json,
-      </if>
       <if test="foreignerName != null" >
         foreigner_name,
       </if>
@@ -215,6 +215,15 @@
       </if>
       <if test="guoJiEn != null" >
         guo_ji_en,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="personInfoJson != null" >
+        person_info_json,
+      </if>
+      <if test="foreignerBaseInfoJson != null" >
+        foreigner_base_info_json,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -284,9 +293,6 @@
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="personInfoJson != null" >
-        #{personInfoJson,jdbcType=VARCHAR},
-      </if>
       <if test="policeDeptName != null" >
         #{policeDeptName,jdbcType=VARCHAR},
       </if>
@@ -338,9 +344,6 @@
       <if test="checkSourceType != null" >
         #{checkSourceType,jdbcType=VARCHAR},
       </if>
-      <if test="foreignerBaseInfoJson != null" >
-        #{foreignerBaseInfoJson,jdbcType=VARCHAR},
-      </if>
       <if test="foreignerName != null" >
         #{foreignerName,jdbcType=VARCHAR},
       </if>
@@ -349,6 +352,15 @@
       </if>
       <if test="guoJiEn != null" >
         #{guoJiEn,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="personInfoJson != null" >
+        #{personInfoJson,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="foreignerBaseInfoJson != null" >
+        #{foreignerBaseInfoJson,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
