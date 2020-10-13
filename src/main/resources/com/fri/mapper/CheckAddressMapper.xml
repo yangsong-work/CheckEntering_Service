@@ -220,4 +220,9 @@
     </foreach>
   </insert>
 
+<!--  定时清空地址数据表  -->
+    <delete id="deleteAll">
+        delete from tbl_check_address
+    </delete>
+
 </mapper>

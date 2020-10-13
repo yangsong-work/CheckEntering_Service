@@ -2,7 +2,9 @@ package com.fri.dao;
 
 import com.fri.model.CheckEnterPushInfo;
 import com.fri.model.CheckEnterPushInfoKey;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CheckEnterPushInfoMapper {
     int deleteByPrimaryKey(CheckEnterPushInfoKey key);
 

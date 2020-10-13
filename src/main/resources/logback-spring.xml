@@ -49,7 +49,7 @@
             <!-- 日志归档 -->
             <fileNamePattern>${log.path}/web-debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+                <maxFileSize>300MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <!--日志文档保留天数-->
             <maxHistory>15</maxHistory>
@@ -150,7 +150,7 @@
     <!-- 4. 最终的策略 -->
     <!-- 4.1 开发环境:打印控制台-->
     <!--  <springProfile name="dev">
-          <logger name="com.sj_user.dao" level="debug"/>
+          <logger name="com.xxx.dao" level="debug"/>
       </springProfile>-->
 
     <root level="INFO">
@@ -162,15 +162,15 @@
     </root>
 
 
-    <!-- 4.2 生产环境:输出到文档
-    <springProfile name="pro">
-        <root level="info">
+    <!-- 4.2 生产环境:输出到文档-->
+    <springProfile name="prod">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
             <appender-ref ref="DEBUG_FILE" />
             <appender-ref ref="INFO_FILE" />
             <appender-ref ref="ERROR_FILE" />
             <appender-ref ref="WARN_FILE" />
         </root>
-    </springProfile> -->
+    </springProfile>
 
 </configuration>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fri.dao.WrongAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.fri.model.WrongAddress" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="level2_address" property="level2Address" jdbcType="VARCHAR" />
+    <result column="level3_address" property="level3Address" jdbcType="VARCHAR" />
+    <result column="key_word" property="keyWord" jdbcType="VARCHAR" />
+    <result column="address_id" property="addressId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, level2_address, level3_address, key_word, address_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tbl_wrong_address
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tbl_wrong_address
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.fri.model.WrongAddress" >
+    insert into tbl_wrong_address (id, level2_address, level3_address, 
+      key_word, address_id)
+    values (#{id,jdbcType=INTEGER}, #{level2Address,jdbcType=VARCHAR}, #{level3Address,jdbcType=VARCHAR}, 
+      #{keyWord,jdbcType=VARCHAR}, #{addressId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fri.model.WrongAddress" >
+    insert into tbl_wrong_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="level2Address != null" >
+        level2_address,
+      </if>
+      <if test="level3Address != null" >
+        level3_address,
+      </if>
+      <if test="keyWord != null" >
+        key_word,
+      </if>
+      <if test="addressId != null" >
+        address_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="level2Address != null" >
+        #{level2Address,jdbcType=VARCHAR},
+      </if>
+      <if test="level3Address != null" >
+        #{level3Address,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWord != null" >
+        #{keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fri.model.WrongAddress" >
+    update tbl_wrong_address
+    <set >
+      <if test="level2Address != null" >
+        level2_address = #{level2Address,jdbcType=VARCHAR},
+      </if>
+      <if test="level3Address != null" >
+        level3_address = #{level3Address,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWord != null" >
+        key_word = #{keyWord,jdbcType=VARCHAR},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fri.model.WrongAddress" >
+    update tbl_wrong_address
+    set level2_address = #{level2Address,jdbcType=VARCHAR},
+      level3_address = #{level3Address,jdbcType=VARCHAR},
+      key_word = #{keyWord,jdbcType=VARCHAR},
+      address_id = #{addressId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectAddress" resultMap="BaseResultMap">
+        select id, level2_address, level3_address, key_word, address_id from tbl_wrong_address
+    </select>
+</mapper>

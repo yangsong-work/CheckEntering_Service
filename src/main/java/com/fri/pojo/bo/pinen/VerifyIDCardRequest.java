@@ -98,7 +98,6 @@ public class VerifyIDCardRequest {
                 ", isReupload=" + isReupload +
                 ", compareValue='" + compareValue + '\'' +
                 ", checkFrom=" + checkFrom +
-                ", pCardNo='" + pCardNo + '\'' +
                 ", compareStatus=" + compareStatus +
                 '}';
     }

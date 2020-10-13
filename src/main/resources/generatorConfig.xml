@@ -121,7 +121,17 @@
 
 <!--        >-->
 <!--        </table> -->
-        <table schema="checkenter" tableName="tbl_enter_info" domainObjectName="EnterInfo"
+<!--        <table schema="checkenter" tableName="tbl_enter_info" domainObjectName="EnterInfo"-->
+<!--               enableCountByExample="false"-->
+<!--               enableUpdateByExample="false"-->
+<!--               enableDeleteByExample="false"-->
+<!--               enableSelectByExample="false"-->
+<!--               selectByExampleQueryId="false"-->
+
+<!--        >-->
+<!--            <columnOverride column="create_time" javaType = "java.time.LocalDateTime"/>-->
+<!--        </table>-->
+        <table schema="checkenter" tableName="tbl_wrong_address" domainObjectName="WrongAddress"
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -129,7 +139,6 @@
                selectByExampleQueryId="false"
 
         >
-            <columnOverride column="create_time" javaType = "java.time.LocalDateTime"/>
         </table>
 
     </context>

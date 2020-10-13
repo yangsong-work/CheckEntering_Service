@@ -25,4 +25,6 @@ public interface CheckAddressMapper {
 
     int insertBatch(List<CheckAddress> list);
 
+    int deleteAll();
+
 }

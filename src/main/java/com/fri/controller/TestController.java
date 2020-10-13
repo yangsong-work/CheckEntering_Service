@@ -1,6 +1,10 @@
 package com.fri.controller;
 
+import com.fri.dao.CheckAddressMapper;
+import com.fri.dao.WrongAddressMapper;
 import com.fri.exception.NoMessageException;
+import com.fri.model.CheckAddress;
+import com.fri.model.WrongAddress;
 import com.fri.pojo.bo.pinen.VerifyIDCardRequest;
 import com.fri.service.APPService;
 import com.fri.service.CheckEnterService;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,6 +28,10 @@ public class TestController {
     CheckEnterService checkEnterService;
     @Autowired
     APPService appService;
+    @Autowired
+    WrongAddressMapper wrongAddressMapper;
+    @Autowired
+    CheckAddressMapper checkAddressMapper;
     @RequestMapping("/11")
     public String getm() throws NoMessageException {
         System.out.println("aaa");
@@ -47,7 +56,14 @@ public class TestController {
 //    }
 @RequestMapping("/test")
 public String run() {
-    return  "123";
+    List<WrongAddress> wrongAddressList = wrongAddressMapper.selectAddress();
+    for(WrongAddress wrongAddress:wrongAddressList){
+        CheckAddress checkAddress = new CheckAddress();
+        checkAddress.setId(wrongAddress.getAddressId());
+        checkAddress.setValue(wrongAddress.getLevel3Address());
+        int i = checkAddressMapper.updateByPrimaryKeySelective(checkAddress);
+    }
+        return "a";
 }
 
 

@@ -3,7 +3,9 @@ package com.fri.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fri.dao.CheckAddressMapper;
+import com.fri.dao.WrongAddressMapper;
 import com.fri.model.CheckAddress;
+import com.fri.model.WrongAddress;
 import com.fri.service.XiChengService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ public class AddressUtil {
     XiChengService xiChengService;
     @Autowired
     CheckAddressMapper checkAddressMapper;
+    @Autowired
+    WrongAddressMapper wrongAddressMapper;
 
     public List<CheckAddress> checkAddress(String deivceNo,String parentId) {
         List<CheckAddress> dataBaseAddressList = new ArrayList<CheckAddress>();
@@ -105,6 +109,17 @@ public class AddressUtil {
     public void handleAddress(List<CheckAddress> list, Integer level) {
         //指定level
         for (CheckAddress address : list) {
+
+            //三级地理信息位置改变错误处理
+            if(level==3){
+                List<WrongAddress> wrongAddressList = wrongAddressMapper.selectAddress();
+                   for(WrongAddress wrongAddress:wrongAddressList){
+                       if(address.getValue().contains(wrongAddress.getKeyWord())){
+                           address.setValue(wrongAddress.getLevel3Address());
+                       }
+                   }
+            }
+
             address.setLevel(level);
         }
 

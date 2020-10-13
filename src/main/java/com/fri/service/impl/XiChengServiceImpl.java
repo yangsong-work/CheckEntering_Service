@@ -41,6 +41,8 @@ public class XiChengServiceImpl implements XiChengService {
     String appType;
     @Value("${xicheng.url}")
     String baseUrl;
+    @Value("${warn.url}")
+    String warnUrl;
     @Autowired
     Test1Mapper test1Mapper;
     @Autowired
@@ -192,7 +194,7 @@ public class XiChengServiceImpl implements XiChengService {
             requestHeaders.setContentType(type);
             requestHeaders.add("Accept", MediaType.APPLICATION_JSON.toString());
             HttpEntity<String> requestEntity = new HttpEntity<String>(jsonObject.toString(), requestHeaders);
-            String data = restTemplate.postForEntity("http://10.11.53.207:7979/terminal/request", requestEntity, String.class).getBody();
+            String data = restTemplate.postForEntity(warnUrl, requestEntity, String.class).getBody();
             returnMap = JSON.parseObject(data, Map.class);
             Map results = JSON.parseObject(returnMap.get("FWTG_NR").toString(), Map.class);
             Object data1 = results.get("data");
@@ -335,7 +337,7 @@ public class XiChengServiceImpl implements XiChengService {
      */
     @Override
     public List<CheckPersonJs4XiCheng> checkPersonJs4XiCheng(Map dataMap,String checkType) {
-        String url = "http://10.11.53.207:7979/terminal/request";
+        String url = warnUrl;
         dataMap.put("token","eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI4YThiYjU1MDVkNWUwM2E0MDE1ZWI3ZGQ5MmY2MDE2ZCIsImltZWkiOiI4Njk2NjEwMjAzMDk3OTQiLCJpYXQiOjE1ODg4MTQwMjA2MjksIm9yZ2lkIjoiMTEwMTAyNzYwMDAwIiwiYWNjb3VudCI6Ijg4ODgwMyIsInVybCI6IjEwLjExLjUzLjIwNSJ9.Zgkj88ha4Wn3yxM8eSS7_B6aumneqfjAaNLldG5vC3Q");
         dataMap.put("checkType",checkType);
         LocalDateTime time = LocalDateTime.now();
